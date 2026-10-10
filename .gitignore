@@ -1,0 +1,29 @@
+# Local secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python / Node / IDE artifacts
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.idea/
+.vscode/
+
+# Large or generated experiment artifacts belong in versioned artifact storage
+*.gguf
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.pcap
+*.pcapng
