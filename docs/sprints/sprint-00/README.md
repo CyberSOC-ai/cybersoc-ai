@@ -24,7 +24,7 @@
 | S0-T05 — Data, knowledge-source and benchmark inventory | Oussama | Anas | rag | Backlog |
 | S0-T06 — Experiment and version-tracking convention | Anas | Ahmed | llmops | Backlog |
 | S0-T07 — SOC Lab architecture and scenario plan | Achraf | Soulaiman | soc | Backlog |
-| S0-T08 — Initialize sprint documentation structure | Ahmed | Oussama | documentation | Backlog |
+| S0-T08 — Initialize sprint documentation structure | Ahmed | Oussama | documentation | Done |
 
 # 1. Ahmed
 ## Assigned tasks
@@ -43,39 +43,64 @@ Completed on 2026-10-11. The implementation was merged in [PR #65](https://githu
 - Configured public-repository protection for `main`: PRs required, zero required approvals, passing `repository-checks` CI required, branch up to date, administrators included, force pushes and deletion blocked.
 - Added CI for changed whitespace, unresolved merge conflicts and broken local Markdown file links. Application linting and tests remain part of S1-T01.
 
+### S0-T08 — Initialize sprint documentation structure
+
+Implementation completed in bootstrap commit [4ee82e2](https://github.com/CyberSOC-ai/cybersoc-ai/commit/4ee82e24a566067f9184e835a11ce404ddfd5cd0); all deliverables verified on 2026-10-11. This update records the completion evidence for [issue #8](https://github.com/CyberSOC-ai/cybersoc-ai/issues/8), to be closed when the final documentation PR merges.
+
+- Created `docs/sprints/sprint-00` through `sprint-08`, each with a tracked `README.md`.
+- Initialized fixed sections for Ahmed, Soulaiman, Anas, Achraf and Oussama, with all ten required member subsections.
+- Added shared integration sections, exit criteria verification and sprint retrospectives to every sprint README.
+- Documented individual / shared editing ownership and Issue / PR linking in every README; CDC §11.6 defines the documentation and merge rules.
+
 ## Technical approach
 
 Use a required `repository-checks` job on each PR. Require the branch to be up to date with `main`, apply protection to administrators, and block force pushes and deletion. Request the assigned reviewer; record unavailability before the author merges without approval.
+
+**S0-T08:** Use a consistent sprint template with five fixed member sections and a shared integration section. Keep future-sprint entries as placeholders until supported by validated work. Record individual work in the owner's section and integrate documentation on the related task branch.
 
 ## Files / components modified
 
 `docs/CDC.md`, root `README.md`, `.github/ISSUE_TEMPLATE/cdc-task.md`, `.github/PULL_REQUEST_TEMPLATE.md`, `.github/workflows/ci.yml`, `infrastructure/ci/check_repository.py`, and this member section.
 
+**S0-T08:** The bootstrap initialized all nine `docs/sprints/sprint-XX/README.md` files and the policy in `docs/CDC.md` §11.6. This completion PR updates only this Sprint 0 README.
+
 ## Tests / validation
 
 Repository integrity passed locally for 47 tracked text files; changed whitespace checks passed. The `repository-checks` job passed on [PR #65](https://github.com/CyberSOC-ai/cybersoc-ai/pull/65). GitHub's protection API confirmed zero required approvals, a required GitHub Actions `repository-checks` check, an up-to-date branch requirement, administrator enforcement, and blocked force pushes / deletion on `main`.
+
+**S0-T08:** Checked every sprint README against the required member headings and subsections, shared headings and editing rules; confirmed each file is tracked by Git. All nine passed. Confirmed CDC §11.6 documents ownership, same-branch documentation and Issue / PR references. Repository integrity and changed-whitespace checks also pass locally; the final PR must pass required CI before merge.
 
 ## Results / metrics
 
 Main protection is configured with 0 required approvals and 1 mandatory CI job. The initial job checks repository integrity; application linting and tests remain part of S1-T01.
 
-All three S0-T01 deliverable groups are implemented: project workflow / classification, branch / PR rules, and templates / Ready / Done definitions. The final documentation PR closes the task; this entry does not mark S0-T08 complete.
+All three S0-T01 deliverable groups are implemented: project workflow / classification, branch / PR rules, and templates / Ready / Done definitions.
+
+**S0-T08:** All four deliverable groups are implemented. Verified 9 tracked READMEs, 45 member sections, 450 required member subsections and 63 shared subsections. Future-sprint work remains unfilled until performed.
 
 ## Problems encountered
 
 Branch protection and rulesets were unavailable while the repository was private on the current GitHub plan. Ahmed made the repository public, enabling the `main` protection settings. Mandatory reviewer approval could delay merges when the reviewer was unavailable; Ahmed selected advisory reviews with mandatory CI instead.
 
+**S0-T08:** The structure already existed from the bootstrap, but its task entry remained Backlog without a completion record. Verified the existing artifacts and recorded evidence rather than recreating the templates.
+
 ## Decisions made
 
 2026-10-11: Ahmed directed that reviewer approvals remain advisory so reviewer availability does not block work. CI remains a mandatory merge gate. This replaces the earlier peer-approval requirement in CDC §11.3 and §14.
+
+**S0-T08:** Preserve the existing template structure and other members' entries. Finalize this task through a documentation PR referencing issue #8, with Oussama as the assigned reviewer under the advisory-review policy.
 
 ## Related Issues / Pull Requests
 
 [S0-T01 / Issue #1](https://github.com/CyberSOC-ai/cybersoc-ai/issues/1); [merge policy and initial CI / PR #65](https://github.com/CyberSOC-ai/cybersoc-ai/pull/65).
 
+**S0-T08:** [Issue #8](https://github.com/CyberSOC-ai/cybersoc-ai/issues/8); [bootstrap implementation commit](https://github.com/CyberSOC-ai/cybersoc-ai/commit/4ee82e24a566067f9184e835a11ce404ddfd5cd0).
+
 ## Learning outcome
 
 The task established how an issue defines the work, a linked branch isolates its changes, and a PR proposes merging into `main`. Requesting a reviewer sends a notification; the board's reviewer field alone does not request review. Passing CI is an enforced merge gate, while approval is advisory. `Closes #1` in a PR description closes the issue when merged into the default branch. Board status automation is separate from CI and should be verified before relying on automatic transitions.
+
+**S0-T08:** A consistent sprint journal makes each member's work and validation traceable while separating individual contributions from shared integration. Existing committed artifacts can satisfy a task once their requirements are verified and the completion evidence is linked to its issue and PR.
 
 
 # 2. Soulaiman
