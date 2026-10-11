@@ -45,11 +45,11 @@ Use a required `repository-checks` job on each PR. Require the branch to be up t
 
 ## Tests / validation
 
-Validate tracked text for unresolved merge conflicts and Markdown links to missing local files. CI also checks changed whitespace. Live protection settings and the PR check run provide the merge-policy acceptance evidence.
+Repository integrity passed locally for 47 tracked text files; changed whitespace checks passed. The `repository-checks` job passed on [PR #65](https://github.com/CyberSOC-ai/cybersoc-ai/pull/65). GitHub's protection API confirmed zero required approvals, a required GitHub Actions `repository-checks` check, an up-to-date branch requirement, administrator enforcement, and blocked force pushes / deletion on `main`.
 
 ## Results / metrics
 
-> To be completed from validated sprint evidence.
+Main protection is configured with 0 required approvals and 1 mandatory CI job. The initial job checks repository integrity; application linting and tests remain part of S1-T01.
 
 ## Problems encountered
 
@@ -61,7 +61,7 @@ Validate tracked text for unresolved merge conflicts and Markdown links to missi
 
 ## Related Issues / Pull Requests
 
-> To be completed from validated sprint evidence.
+[S0-T01 / Issue #1](https://github.com/CyberSOC-ai/cybersoc-ai/issues/1); [merge policy and initial CI / PR #65](https://github.com/CyberSOC-ai/cybersoc-ai/pull/65).
 
 ## Learning outcome
 
