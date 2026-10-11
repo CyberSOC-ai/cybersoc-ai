@@ -33,19 +33,19 @@ S0-T01, S0-T08
 
 ## Work completed
 
-> To be completed from validated sprint evidence.
+S0-T01: issue and PR templates, branch naming, Definitions of Ready / Done, and the GitHub project board are initialized. Updated the merge policy on 2026-10-11: reviews are advisory, PRs and passing CI are mandatory. Added the initial repository integrity CI workflow; application CI remains part of S1-T01.
 
 ## Technical approach
 
-> To be completed from validated sprint evidence.
+Use a required `repository-checks` job on each PR. Require the branch to be up to date with `main`, apply protection to administrators, and block force pushes and deletion. Request the assigned reviewer; record unavailability before the author merges without approval.
 
 ## Files / components modified
 
-> To be completed from validated sprint evidence.
+`docs/CDC.md`, root `README.md`, `.github/ISSUE_TEMPLATE/cdc-task.md`, `.github/PULL_REQUEST_TEMPLATE.md`, `.github/workflows/ci.yml`, `infrastructure/ci/check_repository.py`, and this member section.
 
 ## Tests / validation
 
-> To be completed from validated sprint evidence.
+Validate tracked text for unresolved merge conflicts and Markdown links to missing local files. CI also checks changed whitespace. Live protection settings and the PR check run provide the merge-policy acceptance evidence.
 
 ## Results / metrics
 
@@ -57,7 +57,7 @@ S0-T01, S0-T08
 
 ## Decisions made
 
-> To be completed from validated sprint evidence.
+2026-10-11: Ahmed directed that reviewer approvals remain advisory so reviewer availability does not block work. CI remains a mandatory merge gate. This replaces the earlier peer-approval requirement in CDC §11.3 and §14.
 
 ## Related Issues / Pull Requests
 

@@ -50,4 +50,4 @@ The owner updates their named section in `docs/sprints/sprint-XX/README.md` befo
 ## Learning Objective
 
 ## Definition of Done
-Follow [CDC §14](https://github.com/CyberSOC-ai/cybersoc-ai/blob/main/docs/CDC.md#14-definition-of-done), including acceptance evidence, relevant tests, passing CI, peer review, sprint documentation, linked issue closure, and experiment metadata when applicable.
+Follow [CDC §14](https://github.com/CyberSOC-ai/cybersoc-ai/blob/main/docs/CDC.md#14-definition-of-done), including acceptance evidence, relevant tests, mandatory passing CI, advisory review per CDC §11.3, sprint documentation, linked issue closure, and experiment metadata when applicable.
