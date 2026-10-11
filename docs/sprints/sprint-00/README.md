@@ -33,23 +33,23 @@ S0-T01, S0-T08
 
 ## Work completed
 
-> To be completed from validated sprint evidence.
+S0-T01: issue and PR templates, branch naming, Definitions of Ready / Done, and the GitHub project board are initialized. Updated the merge policy on 2026-10-11: reviews are advisory, PRs and passing CI are mandatory. Added the initial repository integrity CI workflow; application CI remains part of S1-T01.
 
 ## Technical approach
 
-> To be completed from validated sprint evidence.
+Use a required `repository-checks` job on each PR. Require the branch to be up to date with `main`, apply protection to administrators, and block force pushes and deletion. Request the assigned reviewer; record unavailability before the author merges without approval.
 
 ## Files / components modified
 
-> To be completed from validated sprint evidence.
+`docs/CDC.md`, root `README.md`, `.github/ISSUE_TEMPLATE/cdc-task.md`, `.github/PULL_REQUEST_TEMPLATE.md`, `.github/workflows/ci.yml`, `infrastructure/ci/check_repository.py`, and this member section.
 
 ## Tests / validation
 
-> To be completed from validated sprint evidence.
+Repository integrity passed locally for 47 tracked text files; changed whitespace checks passed. The `repository-checks` job passed on [PR #65](https://github.com/CyberSOC-ai/cybersoc-ai/pull/65). GitHub's protection API confirmed zero required approvals, a required GitHub Actions `repository-checks` check, an up-to-date branch requirement, administrator enforcement, and blocked force pushes / deletion on `main`.
 
 ## Results / metrics
 
-> To be completed from validated sprint evidence.
+Main protection is configured with 0 required approvals and 1 mandatory CI job. The initial job checks repository integrity; application linting and tests remain part of S1-T01.
 
 ## Problems encountered
 
@@ -57,11 +57,11 @@ S0-T01, S0-T08
 
 ## Decisions made
 
-> To be completed from validated sprint evidence.
+2026-10-11: Ahmed directed that reviewer approvals remain advisory so reviewer availability does not block work. CI remains a mandatory merge gate. This replaces the earlier peer-approval requirement in CDC §11.3 and §14.
 
 ## Related Issues / Pull Requests
 
-> To be completed from validated sprint evidence.
+[S0-T01 / Issue #1](https://github.com/CyberSOC-ai/cybersoc-ai/issues/1); [merge policy and initial CI / PR #65](https://github.com/CyberSOC-ai/cybersoc-ai/pull/65).
 
 ## Learning outcome
 

@@ -7,6 +7,13 @@ Closes #XX
 
 ## How to Test
 
+## Review
+- Assigned reviewer:
+- Review feedback addressed, or reviewer unavailability recorded:
+- Author's checks:
+
+Approval is advisory. The required `repository-checks` CI job must pass before merge.
+
 ## Security / Data Impact
 
 ## Experiment / Metrics Impact

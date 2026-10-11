@@ -62,7 +62,7 @@ Intelligent Cybersecurity SOC Assistant — Master Project 2026. This is the liv
 
 ## DevSecOps workflow
 
-Issue → Ready → branch → implementation → tests → Pull Request → In review → CI → peer approval → merge → sprint documentation → Done. The full Definition of Done is in [CDC §14](docs/CDC.md#14-definition-of-done).
+Issue → Ready → branch → implementation → tests → Pull Request → CI passes → merge → sprint documentation → Done. Request the assigned reviewer; approvals are advisory. If the reviewer is unavailable, record that in the PR and the author may merge after checking the changes and confirming CI passes. The full merge policy is in [CDC §11.3](docs/CDC.md#113-pull-request-flow), and the Definition of Done is in [CDC §14](docs/CDC.md#14-definition-of-done).
 
 ## Reproducibility
 

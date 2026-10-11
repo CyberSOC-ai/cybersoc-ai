@@ -591,8 +591,12 @@ main
 ### 11.3 Pull Request flow
 
 ```
-Issue → Branch → Implementation → Tests → Pull Request → Peer Review → CI → Merge
+Issue → Branch → Implementation → Tests → Pull Request → CI passes → Merge
 ```
+
+Pull Requests are required for `main`; reviewer approval is advisory and does not block merging. Request the assigned reviewer when opening a PR. If they are unavailable, record that in the PR and the author may merge after checking the changes and confirming CI passes. Reviews received should be addressed before merging.
+
+The required `repository-checks` CI job must pass, and the branch must be up to date with `main`. This requirement applies to administrators too. Force pushes and deletion of `main` are blocked. CI initially checks changed whitespace, unresolved merge conflicts and local Markdown file links; application linting and tests are added in S1-T01.
 
 ### 11.4 LLMOps metadata
 
@@ -733,7 +737,7 @@ A technical task is Done only when all applicable conditions are satisfied:
 
 - acceptance criteria met; code is on a dedicated branch; tests added / updated when relevant;
 - local checks pass; CI passes; no secrets committed;
-- Pull Request created; peer review completed; important comments resolved;
+- Pull Request created; assigned reviewer requested; feedback addressed when received, or reviewer unavailability recorded; author checks completed and mandatory CI passes before merge;
 - the relevant member section in the current sprint README is updated, plus any shared/API/architecture documentation affected by the change; linked Issue closed;
 - relevant experiment metadata stored.
 
