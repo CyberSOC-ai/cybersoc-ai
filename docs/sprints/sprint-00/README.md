@@ -17,7 +17,7 @@
 
 | Task | Owner | Reviewer | Domain | Status |
 |---|---|---|---|---|
-| S0-T01 — GitHub governance and workflow | Ahmed | Soulaiman | devops | Backlog |
+| S0-T01 — GitHub governance and workflow | Ahmed | Soulaiman | devops | Done |
 | S0-T02 — Architecture and component boundaries | Soulaiman | Anas | backend | Backlog |
 | S0-T03 — Incident, retrieval, response and trace contracts | Oussama | Ahmed | backend | Backlog |
 | S0-T04 — Security, secrets and HITL policy | Achraf | Oussama | llm-security | Backlog |
@@ -33,7 +33,15 @@ S0-T01, S0-T08
 
 ## Work completed
 
-S0-T01: issue and PR templates, branch naming, Definitions of Ready / Done, and the GitHub project board are initialized. Updated the merge policy on 2026-10-11: reviews are advisory, PRs and passing CI are mandatory. Added the initial repository integrity CI workflow; application CI remains part of S1-T01.
+### S0-T01 — GitHub governance and workflow
+
+Completed on 2026-10-11. The implementation was merged in [PR #65](https://github.com/CyberSOC-ai/cybersoc-ai/pull/65); this documentation update completes the task record. Close [issue #1](https://github.com/CyberSOC-ai/cybersoc-ai/issues/1) when the final documentation PR is merged.
+
+- Initialized issue and PR templates, Definitions of Ready / Done, and the repository workflow.
+- Documented branch naming: `feature/<issue-number>-short-name`, `fix/<issue-number>-short-name`, and `experiment/<issue-number>-short-name`.
+- Configured the [GitHub project board](https://github.com/orgs/CyberSOC-ai/projects/1) with Backlog, Ready, In progress, In review and Done statuses; CDC priorities P0–P3; all 12 domains; owner, reviewer, sprint and dependency fields. Created matching priority, domain and task-type labels.
+- Configured public-repository protection for `main`: PRs required, zero required approvals, passing `repository-checks` CI required, branch up to date, administrators included, force pushes and deletion blocked.
+- Added CI for changed whitespace, unresolved merge conflicts and broken local Markdown file links. Application linting and tests remain part of S1-T01.
 
 ## Technical approach
 
@@ -51,9 +59,11 @@ Repository integrity passed locally for 47 tracked text files; changed whitespac
 
 Main protection is configured with 0 required approvals and 1 mandatory CI job. The initial job checks repository integrity; application linting and tests remain part of S1-T01.
 
+All three S0-T01 deliverable groups are implemented: project workflow / classification, branch / PR rules, and templates / Ready / Done definitions. The final documentation PR closes the task; this entry does not mark S0-T08 complete.
+
 ## Problems encountered
 
-> To be completed from validated sprint evidence.
+Branch protection and rulesets were unavailable while the repository was private on the current GitHub plan. Ahmed made the repository public, enabling the `main` protection settings. Mandatory reviewer approval could delay merges when the reviewer was unavailable; Ahmed selected advisory reviews with mandatory CI instead.
 
 ## Decisions made
 
@@ -65,7 +75,7 @@ Main protection is configured with 0 required approvals and 1 mandatory CI job. 
 
 ## Learning outcome
 
-> To be completed from validated sprint evidence.
+The task established how an issue defines the work, a linked branch isolates its changes, and a PR proposes merging into `main`. Requesting a reviewer sends a notification; the board's reviewer field alone does not request review. Passing CI is an enforced merge gate, while approval is advisory. `Closes #1` in a PR description closes the issue when merged into the default branch. Board status automation is separate from CI and should be verified before relying on automatic transitions.
 
 
 # 2. Soulaiman
