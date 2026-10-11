@@ -94,7 +94,7 @@ Branch protection and rulesets were unavailable while the repository was private
 
 [S0-T01 / Issue #1](https://github.com/CyberSOC-ai/cybersoc-ai/issues/1); [merge policy and initial CI / PR #65](https://github.com/CyberSOC-ai/cybersoc-ai/pull/65).
 
-**S0-T08:** [Issue #8](https://github.com/CyberSOC-ai/cybersoc-ai/issues/8); [bootstrap implementation commit](https://github.com/CyberSOC-ai/cybersoc-ai/commit/4ee82e24a566067f9184e835a11ce404ddfd5cd0).
+**S0-T08:** [Issue #8](https://github.com/CyberSOC-ai/cybersoc-ai/issues/8); [bootstrap implementation commit](https://github.com/CyberSOC-ai/cybersoc-ai/commit/4ee82e24a566067f9184e835a11ce404ddfd5cd0); [completion evidence / PR #68](https://github.com/CyberSOC-ai/cybersoc-ai/pull/68).
 
 ## Learning outcome
 
