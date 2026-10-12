@@ -106,43 +106,43 @@ The task established how an issue defines the work, a linked branch isolates its
 # 2. Soulaiman
 ## Assigned tasks
 
-S0-T02
+S0-T02 — Architecture and component boundaries (reviewer: Anas).
 
 ## Work completed
 
-> To be completed from validated sprint evidence.
+2026-10-12: Prepared the [architecture and component boundaries](../../architecture/README.md). It covers component responsibilities, deployment boundaries, interface handoffs, staged investigation flows, security boundaries and the S0/S1 dependency path. Soulaiman verified the local walkthrough. Assigned-reviewer review and the PR workflow remain pending; S0-T02 is not Done.
 
 ## Technical approach
 
-> To be completed from validated sprint evidence.
+Propose a modular FastAPI application with explicit Python interfaces for inference, retrieval and orchestration. Separate the SOC lab and restricted response executor from application responsibilities. Define the No-RAG baseline first and show how retrieval and agents extend it. Detailed schemas remain S0-T03 work; security policy and lab topology remain S0-T04/S0-T07 work.
 
 ## Files / components modified
 
-> To be completed from validated sprint evidence.
+Added `docs/architecture/README.md` and updated only Soulaiman's member section in this sprint journal. No application runtime changes.
 
 ## Tests / validation
 
-> To be completed from validated sprint evidence.
+Local validation on 2026-10-12: repository integrity passed for 47 tracked text files, and `git diff --check` passed. Because the architecture document is untracked, it was checked separately for local link targets, balanced code fences, conflict markers and whitespace. Mermaid diagrams have not been render-verified. The acceptance checklist distinguishes static checks from reviewer acceptance and future runtime validation. Local checks were rerun after staging the architecture document: 48 tracked text files passed. PR CI is tracked in PR #69; its latest result should be checked before merge.
 
 ## Results / metrics
 
-> To be completed from validated sprint evidence.
+The three S0-T02 deliverable groups have draft coverage: component/service boundaries, ownership-independent interfaces and critical path. No runtime performance or integration results are claimed.
 
 ## Problems encountered
 
-> To be completed from validated sprint evidence.
+The CDC provides conceptual contract examples but leaves duplicate handling, error outcomes, baseline trace representation and some triage evaluation fields unspecified. These are explicit handoffs to S0-T03. Incident/result persistence and executor transport require later implementation decisions.
 
 ## Decisions made
 
-> To be completed from validated sprint evidence.
+Soulaiman verified the local architecture on 2026-10-12. The responsibility split was clarified: retrieval prepares evidence, inference constructs model input and generates candidate output, and the investigation pipeline coordinates their calls. Team review remains pending. Soulaiman subsequently authorized branch creation, commit, push and issue closure before merging; merge into `main` remains with Soulaiman. Task branch: `2-s0-t02-architecture-and-component-boundaries`.
 
 ## Related Issues / Pull Requests
 
-> To be completed from validated sprint evidence.
+[S0-T02 / Issue #2](https://github.com/CyberSOC-ai/cybersoc-ai/issues/2). Branch: `2-s0-t02-architecture-and-component-boundaries`. [Architecture PR #69](https://github.com/CyberSOC-ai/cybersoc-ai/pull/69) is open with Anas requested as reviewer. Issue #2 was closed as completed at Soulaiman's explicit request before merge; review and merge evidence remain pending. Closure does not imply that review, CI or merge has completed.
 
 ## Learning outcome
 
-> To be completed from validated sprint evidence.
+Architecture specifies component responsibilities and their connections; contracts specify the exact exchanged data. A repository folder need not be a separate deployed service. Documented proposals and open decisions must remain distinguishable from implemented and accepted behavior.
 
 
 # 3. Anas
