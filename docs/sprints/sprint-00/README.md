@@ -122,7 +122,7 @@ Added `docs/architecture/README.md` and updated only Soulaiman's member section 
 
 ## Tests / validation
 
-Local validation on 2026-10-12: repository integrity passed for 47 tracked text files, and `git diff --check` passed. Because the architecture document is untracked, it was checked separately for local link targets, balanced code fences, conflict markers and whitespace. Mermaid diagrams have not been render-verified. The acceptance checklist distinguishes static checks from reviewer acceptance and future runtime validation. CI has not run for this uncommitted draft.
+Local validation on 2026-10-12: repository integrity passed for 47 tracked text files, and `git diff --check` passed. Because the architecture document is untracked, it was checked separately for local link targets, balanced code fences, conflict markers and whitespace. Mermaid diagrams have not been render-verified. The acceptance checklist distinguishes static checks from reviewer acceptance and future runtime validation. Local checks were rerun after staging the architecture document: 48 tracked text files passed. PR CI is tracked in PR #69; its latest result should be checked before merge.
 
 ## Results / metrics
 
@@ -138,7 +138,7 @@ Soulaiman verified the local architecture on 2026-10-12. The responsibility spli
 
 ## Related Issues / Pull Requests
 
-[S0-T02 / Issue #2](https://github.com/CyberSOC-ai/cybersoc-ai/issues/2). Branch: `2-s0-t02-architecture-and-component-boundaries`. PR linkage and merge evidence remain pending. Issue closure before merge was explicitly requested by Soulaiman; it does not imply that review, CI or merge has completed.
+[S0-T02 / Issue #2](https://github.com/CyberSOC-ai/cybersoc-ai/issues/2). Branch: `2-s0-t02-architecture-and-component-boundaries`. [Architecture PR #69](https://github.com/CyberSOC-ai/cybersoc-ai/pull/69) is open with Anas requested as reviewer. Issue #2 was closed as completed at Soulaiman's explicit request before merge; review and merge evidence remain pending. Closure does not imply that review, CI or merge has completed.
 
 ## Learning outcome
 
