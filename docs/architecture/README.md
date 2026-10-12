@@ -1,6 +1,6 @@
 # S0-T02 — Architecture and component boundaries
 
-Status: **Locally verified by Soulaiman; pending assigned-reviewer review and PR workflow. Not implemented.**  
+Status: **Locally verified by Soulaiman; pending assigned-reviewer review and PR workflow. Not implemented.**
 Author: Soulaiman · Assigned reviewer: Anas · Draft date: 2026-10-12
 
 Source of truth: [CDC v2.2](../CDC.md), especially §§3–8, 17, 18 and 23. This document elaborates the CDC without changing its scope. Proposals below require review before being treated as team decisions.
