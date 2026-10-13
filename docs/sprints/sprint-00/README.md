@@ -255,39 +255,39 @@ S0-T03, S0-T05
 
 ## Work completed
 
-> To be completed from validated sprint evidence.
+2026-10-13 — S0-T05: Prepared knowledge/threat-intelligence and SOC-log inventories, candidate evaluation datasets, licensing notes and a Qwen/Phi/SmolLM2 shortlist with conditional memory-fit estimates. No raw datasets, feeds or model weights were acquired; review and downstream execution remain pending.
 
 ## Technical approach
 
-> To be completed from validated sprint evidence.
+S0-T05: Verify publisher/official source pages, record format/access/license/provenance and intended consumers, map lab scenarios to eligible historical logs, and define evaluation-case/held-out exclusions. Separate parameter-derived weight estimates from measured total GPU memory and actual access.
 
 ## Files / components modified
 
-> To be completed from validated sprint evidence.
+S0-T05: Expanded `datasets/README.md`; added `datasets/SOURCES.md` and `datasets/MODELS.md`; updated only Oussama’s member section here.
 
 ## Tests / validation
 
-> To be completed from validated sprint evidence.
+S0-T05: Checked all five issue deliverables against the CDC and inventory tables; reviewed official source/model/license pages on 2026-10-13. Existing repository integrity and whitespace checks passed after staging. Manually inspected changes for credentials. No download/parser tests, live authenticated feed calls, GPU-fit tests, benchmarks or hosted CI were run; no application tests are needed for this documentation-only inventory.
 
 ## Results / metrics
 
-> To be completed from validated sprint evidence.
+S0-T05: Three required knowledge sources, one intended primary IOC feed plus fallback candidate, six lab-log groups, four dataset candidates and four model candidates documented. License/access and hardware gates are explicit; no model-quality or detection metrics are claimed.
 
 ## Problems encountered
 
-> To be completed from validated sprint evidence.
+S0-T05: Team hardware capacity is undocumented. ThreatFox/URLhaus access and derived/snapshot usage must be confirmed before ingestion. Artifact storage and exact acquisition revisions remain undecided. Some NVD pages yielded no readable browser content; acquisition details are supported by its official feed page, with exact API limits deferred to acquisition-time verification.
 
 ## Decisions made
 
-> To be completed from validated sprint evidence.
+S0-T05: Plan a bounded ThreatFox snapshot for S2-T08 subject to authenticated access and allowed use, with URLhaus as a separately gated fallback. Prefer lab-built evaluation cases; external flow labels are not complete assistant ground truth. Record Qwen 3B’s research license separately from smaller Qwen checkpoints. Leave final model/storage/tracking decisions to their scheduled ADRs.
 
 ## Related Issues / Pull Requests
 
-> To be completed from validated sprint evidence.
+S0-T05: [Issue #5](https://github.com/CyberSOC-ai/cybersoc-ai/issues/5); branch `feature/issue-5-data-knowledge-benchmark-inventory`. Reviewer: Anas (`Anas-Rabih`). [Inventory evidence](../../../datasets/README.md). No PR created or issue state changed; push, PR, CI, review, merge and closure remain pending.
 
 ## Learning outcome
 
-> To be completed from validated sprint evidence.
+S0-T05: Public availability does not establish unrestricted reuse. Incident-level split/provenance prevents answer leakage; theoretical weight memory is only a lower bound and cannot establish runtime or fine-tuning fit.
 
 # Shared Sprint Integration
 
