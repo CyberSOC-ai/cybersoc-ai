@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cybersoc.invalid/contracts/v1/investigation-result.schema.json",
+  "title": "investigation-result",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "investigation_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "incident_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "trace_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "mode": {
+      "$ref": "common.schema.json#/$defs/mode"
+    },
+    "status": {
+      "enum": [
+        "ok",
+        "error"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8000
+    },
+    "triage_verdict": {
+      "enum": [
+        "true_positive",
+        "false_positive",
+        "undetermined"
+      ]
+    },
+    "risk_level": {
+      "$ref": "common.schema.json#/$defs/severity"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/evidence"
+      },
+      "maxItems": 100
+    },
+    "mitre_techniques": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^T[0-9]{4}(\\.[0-9]{3})?$"
+      },
+      "maxItems": 100,
+      "uniqueItems": true
+    },
+    "recommended_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "response-action.schema.json"
+      },
+      "maxItems": 20
+    },
+    "error": {
+      "$ref": "common.schema.json#/$defs/error"
+    }
+  },
+  "required": [
+    "schema_version",
+    "investigation_id",
+    "incident_id",
+    "trace_id",
+    "mode",
+    "status",
+    "evidence",
+    "recommended_actions"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "ok"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "summary",
+          "triage_verdict",
+          "risk_level",
+          "mitre_techniques"
+        ],
+        "not": {
+          "required": [
+            "error"
+          ]
+        }
+      },
+      "else": {
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "evidence": {
+            "maxItems": 0
+          },
+          "recommended_actions": {
+            "maxItems": 0
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "summary"
+              ]
+            },
+            {
+              "required": [
+                "triage_verdict"
+              ]
+            },
+            {
+              "required": [
+                "risk_level"
+              ]
+            },
+            {
+              "required": [
+                "mitre_techniques"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "no_rag"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "evidence": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "recommended_actions": {
+          "items": {
+            "properties": {
+              "status": {
+                "const": "proposed"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

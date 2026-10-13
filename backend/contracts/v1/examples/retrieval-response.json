@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "request_id": "RET-001",
+  "trace_id": "TRC-001",
+  "status": "ok",
+  "evidence": [
+    {
+      "evidence_id": "EVD-001",
+      "source": "mitre_attack",
+      "source_record_id": "T1110",
+      "snapshot_ref": "fixture:attack/example-v1",
+      "content": "Synthetic evidence placeholder for the authentication-failure scenario.",
+      "score": 0.91,
+      "score_kind": "cosine",
+      "retrieval_method": "vector"
+    }
+  ]
+}
