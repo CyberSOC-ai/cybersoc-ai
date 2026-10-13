@@ -194,39 +194,58 @@ S0-T04, S0-T07
 
 ## Work completed
 
-2026-10-13: Prepared [S0-T04 security, secrets and human approval policy](../../../security/README.md) for review. It defines credential handling and exposure response, least privilege, human approval bound to an immutable action, sandbox-only execution and audit failure behavior. S0-T07 remains pending. S0-T04 is not Done: reviewer acceptance, PR CI and merge remain pending.
+2026-10-13: Prepared [S0-T04 security, secrets and human approval policy](../../../security/README.md) for review. It defines credential handling and exposure response, least privilege, human approval bound to an immutable action, sandbox-only execution and audit failure behavior. S0-T07 planning work is recorded below. S0-T04 is not Done: reviewer acceptance, PR CI and merge remain pending.
+
+**S0-T07:** 2026-10-13: Prepared [S0-T07 SOC Lab architecture and scenario plan](../../../infrastructure/soc-lab/README.md) and a [scenario run record](../../../infrastructure/soc-lab/RUN_TEMPLATE.md). Covers minimum topology, traffic boundaries, target inventory, six event scenarios, two benign controls, reset/repeatability and sandbox-only response. No lab deployment or scenario execution is claimed. The local main history confirms S0-T04 merged through [PR #70](https://github.com/CyberSOC-ai/cybersoc-ai/pull/70); its implementation controls remain future work.
 
 ## Technical approach
 
 Derive explicit deny-by-default rules from CDC §§6.4 and 10 and the S0-T02 architecture. Keep model recommendations separate from human authorization and executor policy checks. Specify review scenarios and downstream implementation ownership without claiming runtime controls already exist.
 
+**S0-T07:** S0-T07: Plan a three-VM baseline (Wazuh all-in-one SOC, Linux endpoint, bounded simulation source) with optional Windows. Keep initial ingestion file-based and response disabled. Explicitly assign version/port/resource selection and runtime validation to S1; approval and restricted response to S4.
+
 ## Files / components modified
 
 Added `security/README.md` and updated Achraf's Sprint 0 section only.
+
+**S0-T07:** S0-T07: Added `infrastructure/soc-lab/README.md` and `infrastructure/soc-lab/RUN_TEMPLATE.md`; updated this member section. Preserved other members and shared sections.
 
 ## Tests / validation
 
 Local checks on 2026-10-13: staged repository integrity and changed whitespace checks passed. Manually checked the policy against both CDC S0-T04 deliverable groups and architecture handoffs, and inspected the staged changes for credential values. No automated secret scanner or runtime security tests were run; those controls are scheduled in later tasks.
 
+**S0-T07:** S0-T07 local validation on 2026-10-13: staged whitespace and repository integrity checks passed (51 tracked text files). Compared both CDC deliverable groups and S0-T04 boundaries with the plan; checked scenario coverage, handoff ownership and local Markdown links. No VM/network tests, Mermaid rendering, automated secret scan or live detection/response measurements were performed.
+
 ## Results / metrics
 
 Both policy deliverable groups are documented, with a component privilege matrix, action lifecycle rules and ten review scenarios. No runtime security effectiveness or attack-success metrics are claimed.
+
+**S0-T07:** S0-T07: Documented three required VM roles, optional Windows, six scenario plans and two benign controls. Supplied a run template that separates expected from observed outcomes. Reproducibility and performance must be established on the deployed lab.
 
 ## Problems encountered
 
 Windows denied Git metadata writes in the original GitHub Desktop checkout despite an access grant. Work was prepared in a separate workspace checkout on the task branch. GitHub issue details could not be fetched; scope was taken from the tracked CDC task table. Review and contract alignment remain pending dependencies.
 
+**S0-T07:** S0-T07: Original Git metadata write restrictions required a separate workspace checkout. Actual host capacity, image versions, addresses, configured collection/rules and live ingestion transport remain implementation decisions; no running lab evidence was available.
+
 ## Decisions made
 
 Every state-changing response needs explicit human approval and an isolated registered target. Models cannot waive approval. Changed proposals invalidate approval; unknown execution outcomes require reconciliation before a newly approved retry. The user retains merge responsibility.
 
+**S0-T07:** S0-T07: Prefer disposable VMs, isolated internal networks and LAB-01 repeated SSH failures for the MVP; use FIM as a recorded fallback. Disable Wazuh automatic response so it cannot bypass approval. Recreated/restored targets invalidate old approvals. Retain the user as merge owner.
+
 ## Related Issues / Pull Requests
 
-[S0-T04 / Issue #4](https://github.com/CyberSOC-ai/cybersoc-ai/issues/4). Branch: `feature/4-security-secrets-hitl-policy`. PR creation and assigned-reviewer review remain pending; issue closure must wait for merge. S0-T07 has no completion claim.
+[S0-T04 / Issue #4](https://github.com/CyberSOC-ai/cybersoc-ai/issues/4). Branch: `feature/4-security-secrets-hitl-policy`. PR creation and assigned-reviewer review remain pending; issue closure must wait for merge. S0-T07 review and merge remain pending.
+
+**S0-T07:** S0-T07: [Issue #7](https://github.com/CyberSOC-ai/cybersoc-ai/issues/7). Branch: `feature/7-soc-lab-architecture-scenarios`. Assigned reviewer: Soulaiman (`soulaimane-22`). PR review, CI and merge remain pending; do not mark Done until their evidence is recorded.
 
 ## Learning outcome
 
 A policy defines requirements and failure behavior; later implementation and abuse-case evidence prove whether they hold. Human approval is authorization for one exact eligible lab action, and cannot grant unrestricted execution privileges.
+
+**S0-T07:** S0-T07: A topology and scenario plan establishes what to deploy and measure. An expected event, observed Wazuh alert, normalized incident and AI judgment are separate evidence stages; simulated inputs and replayed fixtures must be labelled.
+
 
 
 # 5. Oussama
