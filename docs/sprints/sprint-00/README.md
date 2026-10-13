@@ -194,39 +194,39 @@ S0-T04, S0-T07
 
 ## Work completed
 
-> To be completed from validated sprint evidence.
+2026-10-13: Prepared [S0-T04 security, secrets and human approval policy](../../../security/README.md) for review. It defines credential handling and exposure response, least privilege, human approval bound to an immutable action, sandbox-only execution and audit failure behavior. S0-T07 remains pending. S0-T04 is not Done: reviewer acceptance, PR CI and merge remain pending.
 
 ## Technical approach
 
-> To be completed from validated sprint evidence.
+Derive explicit deny-by-default rules from CDC §§6.4 and 10 and the S0-T02 architecture. Keep model recommendations separate from human authorization and executor policy checks. Specify review scenarios and downstream implementation ownership without claiming runtime controls already exist.
 
 ## Files / components modified
 
-> To be completed from validated sprint evidence.
+Added `security/README.md` and updated Achraf's Sprint 0 section only.
 
 ## Tests / validation
 
-> To be completed from validated sprint evidence.
+Local checks on 2026-10-13: staged repository integrity and changed whitespace checks passed. Manually checked the policy against both CDC S0-T04 deliverable groups and architecture handoffs, and inspected the staged changes for credential values. No automated secret scanner or runtime security tests were run; those controls are scheduled in later tasks.
 
 ## Results / metrics
 
-> To be completed from validated sprint evidence.
+Both policy deliverable groups are documented, with a component privilege matrix, action lifecycle rules and ten review scenarios. No runtime security effectiveness or attack-success metrics are claimed.
 
 ## Problems encountered
 
-> To be completed from validated sprint evidence.
+Windows denied Git metadata writes in the original GitHub Desktop checkout despite an access grant. Work was prepared in a separate workspace checkout on the task branch. GitHub issue details could not be fetched; scope was taken from the tracked CDC task table. Review and contract alignment remain pending dependencies.
 
 ## Decisions made
 
-> To be completed from validated sprint evidence.
+Every state-changing response needs explicit human approval and an isolated registered target. Models cannot waive approval. Changed proposals invalidate approval; unknown execution outcomes require reconciliation before a newly approved retry. The user retains merge responsibility.
 
 ## Related Issues / Pull Requests
 
-> To be completed from validated sprint evidence.
+[S0-T04 / Issue #4](https://github.com/CyberSOC-ai/cybersoc-ai/issues/4). Branch: `feature/4-security-secrets-hitl-policy`. PR creation and assigned-reviewer review remain pending; issue closure must wait for merge. S0-T07 has no completion claim.
 
 ## Learning outcome
 
-> To be completed from validated sprint evidence.
+A policy defines requirements and failure behavior; later implementation and abuse-case evidence prove whether they hold. Human approval is authorization for one exact eligible lab action, and cannot grant unrestricted execution privileges.
 
 
 # 5. Oussama
