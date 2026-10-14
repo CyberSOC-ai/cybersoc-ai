@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0.0",
+  "investigation_id": "INV-001",
+  "incident_id": "INC-001",
+  "trace_id": "TRC-001",
+  "mode": "vector",
+  "status": "ok",
+  "summary": "Synthetic case for contract validation, not an observed investigation.",
+  "triage_verdict": "undetermined",
+  "risk_level": "high",
+  "evidence": [
+    {
+      "evidence_id": "EVD-001",
+      "source": "mitre_attack",
+      "source_record_id": "T1110",
+      "snapshot_ref": "fixture:attack/example-v1",
+      "content": "Synthetic evidence placeholder for the authentication-failure scenario.",
+      "score": 0.91,
+      "score_kind": "cosine",
+      "retrieval_method": "vector"
+    }
+  ],
+  "mitre_techniques": [
+    "T1110"
+  ],
+  "recommended_actions": [
+    {
+      "schema_version": "1.0.0",
+      "action_id": "ACT-001",
+      "incident_id": "INC-001",
+      "revision": 1,
+      "action_type": "block_ip",
+      "target": "linux-01",
+      "target_inventory_revision": "inventory-v1",
+      "environment_id": "lab-example",
+      "policy_version": "policy-example-v1",
+      "arguments": {
+        "source_ip": "192.0.2.10",
+        "port": 22,
+        "protocol": "tcp",
+        "duration_seconds": 60
+      },
+      "reason": "Synthetic lab proposal only",
+      "expected_effect": "Temporarily deny test-source SSH traffic",
+      "risks": "Could interrupt the test session",
+      "rollback_plan": "Remove only the scoped rule after expiry",
+      "requires_approval": true,
+      "idempotency_key": "ACT-001-r1",
+      "status": "proposed"
+    }
+  ]
+}

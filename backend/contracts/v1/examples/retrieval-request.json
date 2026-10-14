@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "request_id": "RET-001",
+  "trace_id": "TRC-001",
+  "mode": "vector",
+  "query": "Repeated SSH authentication failures",
+  "top_k": 5,
+  "filters": {
+    "sources": [
+      "mitre_attack"
+    ]
+  }
+}

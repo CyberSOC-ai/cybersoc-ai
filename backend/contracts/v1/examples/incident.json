@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "incident_id": "INC-001",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "source": "wazuh",
+  "source_event_id": "WAZUH-001",
+  "description": "Synthetic repeated SSH authentication failures",
+  "severity": "high",
+  "entities": [
+    {
+      "type": "host",
+      "value": "linux-01"
+    },
+    {
+      "type": "ip",
+      "value": "192.0.2.10"
+    }
+  ],
+  "raw_event_ref": "fixture:LAB-01/run-001",
+  "ingestion_kind": "synthetic"
+}

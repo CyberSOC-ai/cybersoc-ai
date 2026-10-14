@@ -255,15 +255,25 @@ S0-T03, S0-T05
 
 ## Work completed
 
+2026-10-13 — S0-T03: Implemented six versioned interchange schemas plus common definitions and synthetic examples for normalized incidents, retrieval requests/responses, investigations, response actions and baseline/agent traces. Local implementation is complete; assigned review, PR CI and integration remain pending.
+
+2026-10-14 — S0-T03 correction: Audited all seven regex patterns and fixed strict end-of-string validation, added five regression test methods, and enabled contract tests in the existing CI job.
+
 2026-10-13 — S0-T05: Prepared knowledge/threat-intelligence and SOC-log inventories, candidate evaluation datasets, licensing notes and a Qwen/Phi/SmolLM2 shortlist with conditional memory-fit estimates. No raw datasets, feeds or model weights were acquired; review and downstream execution remain pending.
 
 2026-10-14 — S0-T05 correction: Added explicit ThreatFox access/use evidence gaps and per-model hardware-compatibility status. Both partially verified requirements remain partial.
 
 ## Technical approach
 
+S0-T03: Use JSON Schema Draft 2020-12 with closed objects, bounded inputs, explicit versions/errors and local reference registration. Document incident duplicate/replay rules, provenance and score semantics, approval binding, action lifecycle and trace correlations. Distinguish schema checks from server authorization and relational validation.
+
 S0-T05: Verify publisher/official source pages, record format/access/license/provenance and intended consumers, map lab scenarios to eligible historical logs, and define evaluation-case/held-out exclusions. Separate parameter-derived weight estimates from measured total GPU memory and actual access.
 
 ## Files / components modified
+
+S0-T03: Added `backend/contracts/README.md`, seven schemas and six examples under `backend/contracts/v1/`, and `tests/contracts/test_contracts.py` with `tests/contracts/requirements.txt`. Updated only Oussama’s member section here.
+
+2026-10-14 correction: Modified `common.schema.json`, `investigation-result.schema.json`, `response-action.schema.json`, the contract test suite and README, `.github/workflows/ci.yml`, and this member section only.
 
 S0-T05: Expanded `datasets/README.md`; added `datasets/SOURCES.md` and `datasets/MODELS.md`; updated only Oussama’s member section here.
 
@@ -271,15 +281,25 @@ S0-T05: Expanded `datasets/README.md`; added `datasets/SOURCES.md` and `datasets
 
 ## Tests / validation
 
+S0-T03: 12 unittest methods passed using jsonschema 4.26.0 and format checking; parameterized checks cover required fields/versions, invalid timestamps, bounded retrieval, provenance, failure semantics, unsafe action fields, lifecycle records and trace forms. Existing repository integrity and whitespace checks passed after staging. Manually inspected changes for credentials. No runtime authorization, executor, GPU, integration or hosted CI tests are claimed.
+
+2026-10-14: New regression tests reproduced the original defect (five methods, 11 reported failures). After correction, all 17 methods pass locally on Python 3.14; repository integrity and whitespace checks pass. CI targets Python 3.12; hosted CI has not run. Valid boundary values and malformed IDs, MITRE IDs, hashes, commit/digest values and UTC suffixes are covered.
+
 S0-T05: Checked all five issue deliverables against the CDC and inventory tables; reviewed official source/model/license pages on 2026-10-13. Existing repository integrity and whitespace checks passed after staging. Manually inspected changes for credentials. No download/parser tests, live authenticated feed calls, GPU-fit tests, benchmarks or hosted CI were run; no application tests are needed for this documentation-only inventory.
 
 2026-10-14: Rechecked official ThreatFox API/terms, documented six outstanding access/use checks, and reviewed all four candidates as unverified on team hardware. Memory accounting separates ideal weights from cache/runtime/training costs. Repository integrity and whitespace checks pass. No feed access, downloads, model execution or benchmarks were performed.
 
 ## Results / metrics
 
+S0-T03: Six interchange contracts, one shared definition schema, six synthetic examples and 12 passing test methods. Documentation maps all three issue deliverable groups to evidence. No SOC effectiveness or runtime security metrics were measured.
+
 S0-T05: Three required knowledge sources, one intended primary IOC feed plus fallback candidate, six lab-log groups, four dataset candidates and four model candidates documented. License/access and hardware gates are explicit; no model-quality or detection metrics are claimed.
 
 ## Problems encountered
+
+S0-T03: Sandbox restrictions required approved Git metadata writes and network access for a temporary test environment. Cross-filesystem worktree moves were unsupported, so untouched worktrees were recreated under `/tmp`. Runtime identity, storage, target registry and authorization remain later-task responsibilities.
+
+2026-10-14: Python’s `$` anchor admitted final newlines. The correction uses the ECMAScript/Python-compatible `(?![\s\S])` end assertion. Runtime relational/security checks remain downstream work.
 
 S0-T05: Team hardware capacity is undocumented. ThreatFox/URLhaus access and derived/snapshot usage must be confirmed before ingestion. Artifact storage and exact acquisition revisions remain undecided. Some NVD pages yielded no readable browser content; acquisition details are supported by its official feed page, with exact API limits deferred to acquisition-time verification.
 
@@ -287,13 +307,19 @@ S0-T05: Team hardware capacity is undocumented. ThreatFox/URLhaus access and der
 
 ## Decisions made
 
+S0-T03: JSON Schema format approved by Oussama. Preserve source severity versus assessed risk; distinguish empty retrieval from dependency failure; reject approval-waiver/command fields; initial block_ip is a typed proposal only. Specify RFC 8785/SHA-256 proposal binding for later S4 implementation. No application architecture or deployment service is changed.
+
 S0-T05: Plan a bounded ThreatFox snapshot for S2-T08 subject to authenticated access and allowed use, with URLhaus as a separately gated fallback. Prefer lab-built evaluation cases; external flow labels are not complete assistant ground truth. Record Qwen 3B’s research license separately from smaller Qwen checkpoints. Leave final model/storage/tracking decisions to their scheduled ADRs.
 
 ## Related Issues / Pull Requests
 
+S0-T03: [Issue #3](https://github.com/CyberSOC-ai/cybersoc-ai/issues/3); branch `feature/issue-3-incident-retrieval-response-trace-contracts`. Reviewer: Ahmed (`ElrhAhmed`). [Contract evidence](../../../backend/contracts/README.md). No PR created or issue state changed; push, PR, CI, review, merge and closure remain pending.
+
 S0-T05: [Issue #5](https://github.com/CyberSOC-ai/cybersoc-ai/issues/5); branch `feature/issue-5-data-knowledge-benchmark-inventory`. Reviewer: Anas (`Anas-Rabih`). [Inventory evidence](../../../datasets/README.md). No PR created or issue state changed; push, PR, CI, review, merge and closure remain pending.
 
 ## Learning outcome
+
+S0-T03: A schema makes component messages independently verifiable; it cannot prove an authenticated human approved an exact registered target. Versioned contracts, explicit failures and provenance reduce integration ambiguity without granting execution privileges.
 
 S0-T05: Public availability does not establish unrestricted reuse. Incident-level split/provenance prevents answer leakage; theoretical weight memory is only a lower bound and cannot establish runtime or fine-tuning fit.
 
