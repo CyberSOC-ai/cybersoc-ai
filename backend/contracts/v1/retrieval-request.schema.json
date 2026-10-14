@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cybersoc.invalid/contracts/v1/retrieval-request.schema.json",
+  "title": "retrieval-request",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "request_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "trace_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "mode": {
+      "enum": [
+        "vector",
+        "graph",
+        "hybrid"
+      ]
+    },
+    "query": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "top_k": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "filters": {
+      "type": "object",
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "mitre_attack",
+              "cve",
+              "cwe",
+              "threat_intel",
+              "soc_log",
+              "graph"
+            ]
+          },
+          "maxItems": 6,
+          "uniqueItems": true
+        },
+        "snapshot_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "maxItems": 20,
+          "uniqueItems": true
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "request_id",
+    "trace_id",
+    "mode",
+    "query",
+    "top_k",
+    "filters"
+  ],
+  "additionalProperties": false
+}

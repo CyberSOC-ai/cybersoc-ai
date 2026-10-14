@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "trace_id": "TRC-001",
+  "incident_id": "INC-001",
+  "workflow": "baseline",
+  "mode": "vector",
+  "versions": {
+    "model": "fixture-model-v1",
+    "prompt": "fixture-prompt-v1",
+    "dataset": "fixture-dataset-v1",
+    "configuration": "fixture-config-v1",
+    "commit": "0f04a2a8ee916d50158893ba79ff763fc3bbde0b"
+  },
+  "started_at": "2026-10-13T12:00:00Z",
+  "finished_at": "2026-10-13T12:00:01Z",
+  "status": "ok",
+  "steps": [
+    {
+      "step": 1,
+      "component": "retrieval",
+      "tool": "vector_retrieval",
+      "input_ref": "fixture:RET-001",
+      "output_ref": "fixture:EVD-001",
+      "status": "ok",
+      "latency_ms": 412
+    }
+  ]
+}

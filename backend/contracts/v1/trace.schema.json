@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cybersoc.invalid/contracts/v1/trace.schema.json",
+  "title": "trace",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "trace_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "incident_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "workflow": {
+      "enum": [
+        "baseline",
+        "single_agent",
+        "multi_agent"
+      ]
+    },
+    "mode": {
+      "$ref": "common.schema.json#/$defs/mode"
+    },
+    "versions": {
+      "$ref": "common.schema.json#/$defs/versions"
+    },
+    "started_at": {
+      "$ref": "common.schema.json#/$defs/utc"
+    },
+    "finished_at": {
+      "$ref": "common.schema.json#/$defs/utc"
+    },
+    "status": {
+      "enum": [
+        "ok",
+        "error"
+      ]
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "component": {
+            "enum": [
+              "normalizer",
+              "backend",
+              "inference",
+              "retrieval",
+              "agent",
+              "approval",
+              "executor"
+            ]
+          },
+          "agent": {
+            "enum": [
+              "triage",
+              "investigation",
+              "rag",
+              "knowledge_graph",
+              "threat_intelligence",
+              "response"
+            ]
+          },
+          "tool": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "input_ref": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "output_ref": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "status": {
+            "enum": [
+              "ok",
+              "error"
+            ]
+          },
+          "latency_ms": {
+            "type": "number",
+            "minimum": 0
+          },
+          "error": {
+            "$ref": "common.schema.json#/$defs/error"
+          }
+        },
+        "required": [
+          "step",
+          "component",
+          "input_ref",
+          "status",
+          "latency_ms"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "component": {
+                  "const": "agent"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "agent"
+              ]
+            },
+            "else": {
+              "not": {
+                "required": [
+                  "agent"
+                ]
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "error"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "error"
+              ]
+            },
+            "else": {
+              "required": [
+                "output_ref"
+              ],
+              "not": {
+                "required": [
+                  "error"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "maxItems": 1000
+    },
+    "error": {
+      "$ref": "common.schema.json#/$defs/error"
+    }
+  },
+  "required": [
+    "schema_version",
+    "trace_id",
+    "incident_id",
+    "workflow",
+    "mode",
+    "versions",
+    "started_at",
+    "finished_at",
+    "status",
+    "steps"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "error"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "error"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "error"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "workflow": {
+            "const": "baseline"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "steps": {
+            "items": {
+              "properties": {
+                "component": {
+                  "not": {
+                    "const": "agent"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
