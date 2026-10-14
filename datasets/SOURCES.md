@@ -20,7 +20,7 @@ If the primary is unavailable, evaluate URLhaus under its own source/use require
 
 ## ThreatFox readiness review — 2026-10-14
 
-**Partially verified:** the official API and [terms](https://abuse.ch/terms-of-use/)
+**Sprint 2 readiness remains unverified:** the official API and [terms](https://abuse.ch/terms-of-use/)
 were reviewed again; no authenticated request or permission confirmation was
 performed. ThreatFox remains an intended source, not an ingestion-ready feed.
 
@@ -32,6 +32,8 @@ performed. ThreatFox remains an intended source, not an ingestion-ready feed.
 | Snapshot and derived use | Retention, normalization, embeddings and structured-store use not confirmed | Record applicable permission/terms for each intended use; obtain provider clarification if ambiguous |
 | Sharing and redistribution | No raw/derived publication permission verified | Determine permitted private-team, report/demo and public artifact sharing; preserve required notices and restrict unapproved exports |
 | Review record | No acquisition-time approval evidence | Capture dated terms/API references, permitted-use scope and reviewer disposition in the snapshot manifest; resolve ambiguity before ingestion |
+
+Sprint 0 requires this source inventory and documented access/use requirements, not authenticated API execution. The six checks above are future Sprint 2 gates and must be resolved before real-feed ingestion.
 
 Owner: Ahmed (S2-T08); source/snapshot decision: ADR-008. Neither API reachability
 nor an account alone establishes permitted derived use. A fallback requires its

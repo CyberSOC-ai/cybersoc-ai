@@ -1,71 +1,93 @@
 # SLM shortlist and hardware-fit requirements
 
-Checked: 2026-10-13 · S0-T05 inventory input to S1-T03 / ADR-002.
-No model is selected, downloaded or benchmarked. Available team GPU/VRAM is not documented. This is a reproducible candidate shortlist with conditional fit estimates, not measured compatibility or quality. Recheck official cards/licenses and pin immutable model/tokenizer revisions before use.
+Checked: 2026-10-14 · S0-T05 inventory input to S1-T03 / ADR-002.
+No model is selected, downloaded or benchmarked. Verified laptop capacity and a documented inference-memory assessment are recorded below; successful runtime compatibility and quality remain experimentally unverified. Recheck official cards/licenses and pin immutable model/tokenizer revisions before use.
 
 ## Candidate matrix
 
 | Exact candidate / official card | Parameters | License / notice obligations | Weight-only GiB: FP16 / INT8 / INT4 | Intended consideration |
 |---|---:|---|---:|---|
-| [Qwen/Qwen2.5-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct) | 1.54B | Apache-2.0; retain license/notices and mark modifications when distributing | 2.87 / 1.43 / 0.72 | Small Qwen baseline candidate; an unquantized short-context run is a candidate for an 8 GiB GPU |
-| [Qwen/Qwen2.5-3B-Instruct](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct) | 3.09B | [Qwen Research License](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct/blob/main/LICENSE), **not Apache-2.0**; research/evaluation only, commercial license separately; retain agreement/attribution and modification notices | 5.76 / 2.88 / 1.44 | Larger Qwen comparison, research restrictions must be accepted; prefer 16 GiB for initial unquantized trial |
-| [microsoft/Phi-4-mini-instruct](https://huggingface.co/microsoft/Phi-4-mini-instruct) | 3.8B | MIT; retain copyright/license notices | 7.08 / 3.54 / 1.77 | Required Phi-family comparison candidate; 16 GiB short-context trial or separately validated quantized run on lower VRAM |
-| [HuggingFaceTB/SmolLM2-1.7B-Instruct](https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct) | 1.7B | Apache-2.0; retain license/notices and mark modifications when distributing | 3.17 / 1.58 / 0.79 | Additional compact family; low-resource/CPU feasibility candidate; an 8 GiB short-context GPU trial is plausible |
+| [Qwen/Qwen2.5-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct) | 1.54B | Apache-2.0; retain license/notices and mark modifications when distributing | 2.87 / 1.43 / 0.72 | Small Qwen comparison candidate; local 8-bit / 4-bit inference is estimated feasible under the budgets below |
+| [Qwen/Qwen2.5-3B-Instruct](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct) | 3.09B | [Qwen Research License](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct/blob/main/LICENSE), **not Apache-2.0**; research/evaluation only, commercial license separately; retain agreement/attribution and modification notices | 5.76 / 2.88 / 1.44 | Larger Qwen comparison; local 4-bit fit is conditional; research restrictions must be accepted |
+| [microsoft/Phi-4-mini-instruct](https://huggingface.co/microsoft/Phi-4-mini-instruct) | 3.8B | MIT; retain copyright/license notices | 7.08 / 3.54 / 1.77 | Required Phi-family comparison candidate; local 4-bit fit requires a more memory-efficient configuration than the conservative estimate below |
+| [HuggingFaceTB/SmolLM2-1.7B-Instruct](https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct) | 1.7B | Apache-2.0; retain license/notices and mark modifications when distributing | 3.17 / 1.58 / 0.79 | Additional compact family; local 4-bit inference is estimated feasible; 8-bit fit is conditional |
 
 License labels, sizes and model roles come from the linked publisher cards; memory/fit figures are our estimates. Qwen's official 1.5B and 3B cards report 32,768-token context for these exact checkpoints; this is not a requirement to use the maximum. Phi's card reports 128K context and hardware-specific attention guidance. SmolLM2's card documents English-focused limitations. None of the publisher general benchmarks proves SOC task quality or safe response behavior.
 
 The Qwen 3B license additionally imposes conditions on redistributed derivatives and models improved using its materials/output; inspect the complete license before publishing fine-tuned artifacts. The smaller Qwen license cannot be assumed to apply to the 3B checkpoint. Keep quantized derivative license/provenance together with the original model license.
 
-## Memory estimates and conditional fit
+## Verified development hardware — 2026-10-14
 
-Weight storage lower bound:
+Evidence: hardware measurements supplied by Oussama on October 14, 2026. This laptop is available for local project development and model evaluation; these measurements were not repeated by this documentation change.
+
+| Resource | Measured capacity / state |
+|---|---|
+| GPU | NVIDIA GeForce RTX 3050 Laptop GPU |
+| VRAM | 4096 MiB total; 523 MiB used; 3573 MiB available (3.489 GiB) |
+| NVIDIA driver | 610.57.04 |
+| CUDA | Driver-reported version 13.3; this does not establish an installed CUDA toolkit or compatible framework build |
+| System RAM | 15 GiB total; 5.1 GiB used; approximately 10 GiB available |
+| Swap | 15 GiB; not included in usable RAM or VRAM budgets |
+
+Free memory is a dated observation and must be checked before runs. CPU model, OS, installed toolkit/framework, quantization and attention backend remain to be recorded in S1-T03. Driver information alone does not prove runtime compatibility.
+
+## Assessment assumptions and reproducible accounting
+
+- One model and one request at a time; batch size 1; inference only, without gradients or training allocations.
+- Maximum 2048 input tokens **including the chat template and all prompt content**, plus 256 generated tokens: 2304 total cached tokens. No maximum-context or concurrent serving claim.
+- Full per-layer FP16 KV cache, including both keys and values; no cache quantization or offload assumed. KV size follows each publisher configuration, not the weight precision.
+- Ideal weights use parameter counts from the candidate matrix. Conservative quantized-weight estimates leave the tied vocabulary embedding/output matrix in FP16 and add 10% to the remaining quantized weights for scales, metadata and mixed-precision effects. This is an explicit planning allowance, not a measured checkpoint size or universal upper bound; other retained FP16 layers can increase it.
+- Add **0.5–1.0 GiB** for activations, CUDA/framework allocations, attention workspace and allocator behavior. This assumes memory-efficient attention and bounded loading without a second full GPU copy. Eager attention, full-prompt logits, loading peaks or a different runtime can exceed it; the range is not a guarantee.
+- Reserve **512 MiB** of the measured free VRAM for headroom, in addition to the existing 523 MiB usage. Model-process budget: `(3573 - 512) / 1024 = 2.989 GiB`. Estimated totals below exclude existing usage and reserved headroom and are compared with this budget.
+- No CPU offload in the table. Approximately 10 GiB available RAM makes CPU/offload trials possible to investigate, but does not prove load-time RAM fit, acceptable latency or runtime support. Swap is not a performance or capacity guarantee.
 
 ```text
-GiB = parameter_count × bits_per_parameter / 8 / 2^30
+ideal_weights_GiB = parameters * (weight_bits / 8) / 2^30
+embedding_parameters = vocabulary_size * hidden_size  # tied matrix counted once
+quantized_weights_GiB = ((parameters - embedding_parameters) * (weight_bits / 8)
+                         * 1.10 + embedding_parameters * 2) / 2^30
+KV_GiB = 2 * layers * KV_heads * head_dimension * batch * cached_tokens
+         * cache_bytes_per_element / 2^30
+estimated_process_GiB = estimated_weights_GiB + KV_GiB + runtime_allowance_GiB
 ```
 
-These estimates assume every parameter has the named precision. Actual quantized checkpoints add scales/metadata and can retain embeddings or other layers at higher precision. Loading may create transient copies. The totals exclude KV cache, activations, framework/driver allocations and workspace, and therefore are not minimum total VRAM guarantees.
+Architecture inputs were checked against the publisher configuration files on 2026-10-14. These mutable references must be pinned to immutable revisions before execution; only public metadata was read, no weights downloaded.
 
-| Available resource, if confirmed | Candidate experiments / gate |
-|---|---|
-| CPU only | Trial small Qwen/SmolLM2 behind a compatible CPU runtime; verify RAM and latency; report CPU results separately from GPU results |
-| 4 GiB VRAM | Quantized small-model feasibility only after backend support and measured peak memory checks; no FP16 or Phi fit guarantee |
-| 8 GiB VRAM | Trial short-context batch-1 FP16 Qwen 1.5B / SmolLM2; trial larger candidates only with separately validated quantization/offload; do not mix offloaded timing with GPU-only comparisons |
-| 16 GiB VRAM | Candidate for batch-1 short-context unquantized runs of all shortlisted models; verify actual peaks and available headroom before admitting any model |
-| Larger / cloud GPU | Extend context/batch experiments only under recorded budgets and a consistent environment; account access, GPU type, quotas and availability remain unverified |
+| Model / official configuration | Layers | KV heads | Head dimension | Vocabulary × hidden size | FP16 KV at 2304 tokens |
+|---|---:|---:|---:|---|---:|
+| [Qwen 1.5B](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct/raw/main/config.json) | 28 | 2 | 128 | 151936 × 1536 | 0.062 GiB |
+| [Qwen 3B](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct/raw/main/config.json) | 36 | 2 | 128 | 151936 × 2048 | 0.079 GiB |
+| [Phi-4-mini](https://huggingface.co/microsoft/Phi-4-mini-instruct/raw/main/config.json) | 32 | 8 | 128 | 200064 × 3072 | 0.281 GiB |
+| [SmolLM2 1.7B](https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct/raw/main/config.json) | 24 | 32 | 64 | 49152 × 2048 | 0.422 GiB |
 
-Start feasibility checks with batch 1, at most 2048 input tokens and 256 output tokens. These are proposed setup budgets, not benchmark protocol definitions. KV-cache memory grows with sequence length, batch size, layers, KV heads, head dimension and cache dtype; theoretical maximum context can exhaust otherwise adequate VRAM. Measure peak allocated/reserved memory and generation failures; reduce context/batch before changing model precision. Do not treat an out-of-memory run as a missing sample.
+## Per-model inference compatibility assessment
 
-Inference fit does not imply QLoRA/training fit: gradients, optimizer states, adapters and training activations need separate S5-T06 measurements. The S0 shortlist does not promise training feasibility.
+**Theoretical weight fit** compares ideal weight storage with measured free VRAM (3.489 GiB), without runtime costs or headroom. **Estimated inference fit** compares the conservative process range with the 2.989 GiB budget. **Experimentally verified fit: none**, for every configuration below. No model has been downloaded, loaded, executed or benchmarked; no peak-memory, throughput, latency or SOC-quality measurements exist.
 
-## Hardware compatibility evidence — 2026-10-14
+| Model | Weight precision | Ideal weights (GiB) | Theoretical weight fit | Estimated process (GiB) | Estimated inference fit on this laptop |
+|---|---|---:|---|---|---|
+| Qwen 1.5B | FP16 | 2.87 | Yes | 3.43–3.93 | Does not fit budget; weight fit alone is misleading |
+| Qwen 1.5B | 8-bit | 1.43 | Yes | 2.34–2.84 | Estimated feasible within assumed range |
+| Qwen 1.5B | 4-bit | 0.72 | Yes | 1.67–2.17 | Estimated feasible within assumed range |
+| Qwen 3B | FP16 | 5.76 | No | 6.33–6.83 | Does not fit |
+| Qwen 3B | 8-bit | 2.88 | Yes | 4.01–4.51 | Does not fit despite ideal weight fit |
+| Qwen 3B | 4-bit | 1.44 | Yes | 2.58–3.08 | Conditional; upper estimate exceeds budget |
+| Phi-4-mini | FP16 | 7.08 | No | 7.86–8.36 | Does not fit |
+| Phi-4-mini | 8-bit | 3.54 | No | 5.19–5.69 | Does not fit |
+| Phi-4-mini | 4-bit | 1.77 | Yes | 3.56–4.06 | Does not fit conservative assumptions; alternative configuration needed |
+| SmolLM2 1.7B | FP16 | 3.17 | Yes | 4.09–4.59 | Does not fit despite ideal weight fit |
+| SmolLM2 1.7B | 8-bit | 1.58 | Yes | 2.75–3.25 | Conditional; upper estimate exceeds budget |
+| SmolLM2 1.7B | 4-bit | 0.79 | Yes | 1.93–2.43 | Estimated feasible within assumed range |
 
-**Partially verified:** publisher parameter counts/licenses and calculated
-weight sizes are documented. No shortlisted model has verified compatibility
-with a recorded team machine. All four candidates remain **unverified on team
-hardware**, including the smaller models; the 4/8/16 GiB rows are hypothetical
-trial tiers, not evidence of GPUs we own or successful runs.
+Rounded display values are not admission thresholds. Conditional rows require lower measured overhead, reduced context, a suitable quantization layout or CPU offload before claiming fit. No quantized artifact/backend is selected or verified here.
 
-| Memory component | Requirement / evidence status |
-|---|---|
-| Weights | FP16/INT8/INT4 figures above are idealized calculations; actual checkpoint size and quantization overhead unmeasured |
-| KV cache | Depends on token count, batch, layers, KV heads, head dimension and cache precision; not included in weight figures |
-| Runtime overhead | Activations, allocator reservations, attention workspace and temporary loading copies are additional and unmeasured |
-| Total inference memory | Must fit available free VRAM/RAM with headroom at the recorded workload; no measured total or fit result exists |
-| Fine-tuning | Training activations, gradients, optimizer/adapter state require a separate assessment; inference estimates do not verify QLoRA fit |
+Phi's large embedding table makes quantization layout particularly significant. If a compatible 4-bit artifact quantizes **all** parameters with a 10% storage allowance, its alternative estimate is `1.770 * 1.10 + 0.281 + (0.5–1.0) = 2.73–3.23 GiB`: still conditional at 2304 tokens. Reducing total cached tokens to 1280 (1024 input + 256 output) makes that alternative approximately 2.60–3.10 GiB. This is a sensitivity calculation, not evidence that such an artifact or runtime works. CPU offload or a larger GPU remains a possible S1 comparison path; Phi is retained in the shortlist.
 
-Before marking the hardware-fit requirement verified, the S1-T03 owner must
-record GPU model/count, total and free VRAM, CPU/RAM, driver/OS/runtime versions,
-model/tokenizer revision, precision/quantization and attention backend. A later
-bounded feasibility check must record input/output lengths, batch size,
-offloading, peak allocated/reserved memory, successful generation or explicit
-failure, and remaining headroom. Publisher-tested GPUs are not evidence of our
-hardware. Hardware inventory alone also does not prove runtime compatibility.
+## Sprint 0 completion and future validation boundary
 
-Until that record exists, exact total memory requirements, attention support,
-quantization compatibility and usable context length are unknown. No model
-weights were downloaded, model execution performed or expensive benchmark run
-for this correction. ADR-002 remains a future evidence-based selection.
+This documented hardware compatibility assessment supplies the S0-T05 licence/memory-fit evidence against an available machine. It does not certify experimental compatibility, choose a final model or claim training fit. **Final selection remains ADR-002**, after S1 evaluation. QLoRA/training memory requires separate S5-T06 assessment.
+
+S1-T03 must record the full environment, pinned model/tokenizer and quantized-artifact revisions, precision/backend, actual input/output lengths, batch, offload settings, peak allocated/reserved GPU memory, device-level usage, successful generation or explicit failure, and remaining headroom. Loading peaks and host RAM must also be checked. Record out-of-memory failures explicitly. Baseline metrics and reproducibility follow S0-T06/S1-T02 conventions; the official environment freeze remains S5-T01.
 
 ## Runtime and benchmark handoff
 

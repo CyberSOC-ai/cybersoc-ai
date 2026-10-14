@@ -261,7 +261,9 @@ S0-T03, S0-T05
 
 2026-10-13 — S0-T05: Prepared knowledge/threat-intelligence and SOC-log inventories, candidate evaluation datasets, licensing notes and a Qwen/Phi/SmolLM2 shortlist with conditional memory-fit estimates. No raw datasets, feeds or model weights were acquired; review and downstream execution remain pending.
 
-2026-10-14 — S0-T05 correction: Added explicit ThreatFox access/use evidence gaps and per-model hardware-compatibility status. Both partially verified requirements remain partial.
+2026-10-14 — S0-T05 correction: Added explicit ThreatFox access/use evidence gaps and per-model hardware-compatibility status. Both requirements were recorded as partial at that time.
+
+2026-10-14 — S0-T05 hardware assessment: Recorded Oussama’s measured RTX 3050 Laptop (4096 MiB total / 3573 MiB free VRAM), driver 610.57.04, driver-reported CUDA 13.3 and 15 GiB RAM (~10 GiB available; 15 GiB swap). Assessed all four candidates at FP16, 8-bit and 4-bit. Documented hardware fit completes the Sprint 0 assessment scope; runtime fit remains unverified. ThreatFox access verification belongs to S2-T08. No final model selected, downloads or benchmarks performed.
 
 ## Technical approach
 
@@ -287,7 +289,9 @@ S0-T03: 12 unittest methods passed using jsonschema 4.26.0 and format checking; 
 
 S0-T05: Checked all five issue deliverables against the CDC and inventory tables; reviewed official source/model/license pages on 2026-10-13. Existing repository integrity and whitespace checks passed after staging. Manually inspected changes for credentials. No download/parser tests, live authenticated feed calls, GPU-fit tests, benchmarks or hosted CI were run; no application tests are needed for this documentation-only inventory.
 
-2026-10-14: Rechecked official ThreatFox API/terms, documented six outstanding access/use checks, and reviewed all four candidates as unverified on team hardware. Memory accounting separates ideal weights from cache/runtime/training costs. Repository integrity and whitespace checks pass. No feed access, downloads, model execution or benchmarks were performed.
+2026-10-14 (earlier correction): Rechecked official ThreatFox API/terms, documented six outstanding access/use checks, and reviewed all four candidates as unverified on team hardware. Memory accounting separates ideal weights from cache/runtime/training costs. Repository integrity and whitespace checks pass. No feed access, downloads, model execution or benchmarks were performed.
+
+2026-10-14 — S0-T05 assessment validation: Re-read Issue #5 and CDC §§14/17; checked publisher configuration metadata and recalculated all 12 configurations. Assumptions: batch 1, 2048 input + 256 output tokens, FP16 KV cache, conservative quantized-weight overhead, 0.5–1 GiB runtime allowance and 512 MiB reserved headroom. No model execution, measured-fit or quality results. Local repository integrity passed (69 tracked text files), and changed-whitespace checks passed. PR #73’s repository-checks passed; follow-up [PR #74 checks](https://github.com/CyberSOC-ai/cybersoc-ai/pull/74/checks) must pass on its final head before merge.
 
 ## Results / metrics
 
@@ -295,15 +299,17 @@ S0-T03: Six interchange contracts, one shared definition schema, six synthetic e
 
 S0-T05: Three required knowledge sources, one intended primary IOC feed plus fallback candidate, six lab-log groups, four dataset candidates and four model candidates documented. License/access and hardware gates are explicit; no model-quality or detection metrics are claimed.
 
+S0-T05 hardware assessment: Qwen 1.5B at 8-bit/4-bit and SmolLM2 at 4-bit are estimated feasible. Qwen 3B at 4-bit and SmolLM2 at 8-bit are conditional. All FP16 configurations exceed the inference budget. Phi 4-bit exceeds the conservative budget; an alternative quantization layout, reduced context, offload or larger GPU needs S1 evaluation. No configuration has experimentally verified fit.
+
 ## Problems encountered
 
 S0-T03: Sandbox restrictions required approved Git metadata writes and network access for a temporary test environment. Cross-filesystem worktree moves were unsupported, so untouched worktrees were recreated under `/tmp`. Runtime identity, storage, target registry and authorization remain later-task responsibilities.
 
 2026-10-14: Python’s `$` anchor admitted final newlines. The correction uses the ECMAScript/Python-compatible `(?![\s\S])` end assertion. Runtime relational/security checks remain downstream work.
 
-S0-T05: Team hardware capacity is undocumented. ThreatFox/URLhaus access and derived/snapshot usage must be confirmed before ingestion. Artifact storage and exact acquisition revisions remain undecided. Some NVD pages yielded no readable browser content; acquisition details are supported by its official feed page, with exact API limits deferred to acquisition-time verification.
+S0-T05 (initial inventory): Team hardware capacity was undocumented; the October 14 hardware assessment resolves this inventory gap. ThreatFox/URLhaus access and derived/snapshot usage must be confirmed before ingestion. Artifact storage and exact acquisition revisions remain undecided. Some NVD pages yielded no readable browser content; acquisition details are supported by its official feed page, with exact API limits deferred to acquisition-time verification.
 
-2026-10-14: Project feed credentials/use permissions and machine inventory/peak memory evidence are unavailable. Documentation describes required evidence without claiming these checks passed.
+2026-10-14 (earlier correction): Project feed credentials/use permissions and machine inventory/peak memory evidence were unavailable. Machine capacity is now documented; peak-memory evidence remains future S1 work and authenticated feed/use verification remains future S2 work.
 
 ## Decisions made
 
@@ -311,11 +317,13 @@ S0-T03: JSON Schema format approved by Oussama. Preserve source severity versus 
 
 S0-T05: Plan a bounded ThreatFox snapshot for S2-T08 subject to authenticated access and allowed use, with URLhaus as a separately gated fallback. Prefer lab-built evaluation cases; external flow labels are not complete assistant ground truth. Record Qwen 3B’s research license separately from smaller Qwen checkpoints. Leave final model/storage/tracking decisions to their scheduled ADRs.
 
+S0-T05 scope: Accept a documented hardware assessment for Sprint 0; defer actual runtime validation/benchmarking to S1-T03/S1-T07 and final selection to ADR-002. ThreatFox authenticated access, rights confirmation and ingestion are S2-T08 work. Do not merge this follow-up or close Issue #5 without Oussama’s approval.
+
 ## Related Issues / Pull Requests
 
 S0-T03: [Issue #3](https://github.com/CyberSOC-ai/cybersoc-ai/issues/3); branch `feature/issue-3-incident-retrieval-response-trace-contracts`. Reviewer: Ahmed (`ElrhAhmed`). [Contract evidence](../../../backend/contracts/README.md). No PR created or issue state changed; push, PR, CI, review, merge and closure remain pending.
 
-S0-T05: [Issue #5](https://github.com/CyberSOC-ai/cybersoc-ai/issues/5); branch `feature/issue-5-data-knowledge-benchmark-inventory`. Reviewer: Anas (`Anas-Rabih`). [Inventory evidence](../../../datasets/README.md). No PR created or issue state changed; push, PR, CI, review, merge and closure remain pending.
+S0-T05: [Issue #5](https://github.com/CyberSOC-ai/cybersoc-ai/issues/5); original inventory merged in [PR #73](https://github.com/CyberSOC-ai/cybersoc-ai/pull/73) at 2026-10-14 00:42:50 UTC, commit `aed2ee844a19d59bb92c665223fe554d0b029e7e`. Its [repository-checks job](https://github.com/CyberSOC-ai/cybersoc-ai/actions/runs/38491624307/job/115617906822) passed at 00:42:00 UTC. Reviewer Anas (`Anas-Rabih`) was requested; no review was recorded at this follow-up check. [Inventory evidence](../../../datasets/README.md). Hardware-assessment follow-up branch: `feature/issue-5-hardware-compatibility`; [follow-up PR #74](https://github.com/CyberSOC-ai/cybersoc-ai/pull/74) is open with Anas requested as reviewer; feedback remains pending. Its [CI checks](https://github.com/CyberSOC-ai/cybersoc-ai/pull/74/checks) are tracked separately from PR #73. Issue #5 remains open; merge and closure require Oussama’s approval.
 
 ## Learning outcome
 
