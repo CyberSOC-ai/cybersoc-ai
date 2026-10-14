@@ -38,6 +38,35 @@ Start feasibility checks with batch 1, at most 2048 input tokens and 256 output 
 
 Inference fit does not imply QLoRA/training fit: gradients, optimizer states, adapters and training activations need separate S5-T06 measurements. The S0 shortlist does not promise training feasibility.
 
+## Hardware compatibility evidence — 2026-10-14
+
+**Partially verified:** publisher parameter counts/licenses and calculated
+weight sizes are documented. No shortlisted model has verified compatibility
+with a recorded team machine. All four candidates remain **unverified on team
+hardware**, including the smaller models; the 4/8/16 GiB rows are hypothetical
+trial tiers, not evidence of GPUs we own or successful runs.
+
+| Memory component | Requirement / evidence status |
+|---|---|
+| Weights | FP16/INT8/INT4 figures above are idealized calculations; actual checkpoint size and quantization overhead unmeasured |
+| KV cache | Depends on token count, batch, layers, KV heads, head dimension and cache precision; not included in weight figures |
+| Runtime overhead | Activations, allocator reservations, attention workspace and temporary loading copies are additional and unmeasured |
+| Total inference memory | Must fit available free VRAM/RAM with headroom at the recorded workload; no measured total or fit result exists |
+| Fine-tuning | Training activations, gradients, optimizer/adapter state require a separate assessment; inference estimates do not verify QLoRA fit |
+
+Before marking the hardware-fit requirement verified, the S1-T03 owner must
+record GPU model/count, total and free VRAM, CPU/RAM, driver/OS/runtime versions,
+model/tokenizer revision, precision/quantization and attention backend. A later
+bounded feasibility check must record input/output lengths, batch size,
+offloading, peak allocated/reserved memory, successful generation or explicit
+failure, and remaining headroom. Publisher-tested GPUs are not evidence of our
+hardware. Hardware inventory alone also does not prove runtime compatibility.
+
+Until that record exists, exact total memory requirements, attention support,
+quantization compatibility and usable context length are unknown. No model
+weights were downloaded, model execution performed or expensive benchmark run
+for this correction. ADR-002 remains a future evidence-based selection.
+
 ## Runtime and benchmark handoff
 
 S1-T03 must verify tokenizer/chat template, checkpoint revision, supported runtime/attention backend and structured-output behavior. Qwen cards identify support in Transformers from 4.37; Phi's card describes integration in 4.49 and an eager-attention alternative for older GPUs. These are publisher compatibility notes, not the project's future dependency pins. Choose maintained compatible versions and test on the actual environment. Avoid remote-code execution by default; if a checkpoint/runtime requires it, inspect the pinned code and obtain review before enabling it. Do not copy provider examples granting arbitrary tool privileges.

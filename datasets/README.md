@@ -32,3 +32,14 @@ Sanitize before ingestion, prompting, tracing and sharing. Never commit sensitiv
 Validation: checked coverage against all five issue deliverables and CDC S0-T05; inspected official source/model pages on 2026-10-13; local Markdown links and whitespace checked with the existing repository checks after staging. No live feed-access, GPU-fit, parser, performance or model-quality test is claimed. This documentation task does not add application tests that would merely assert its text.
 
 Remaining gates: actual GPU capacity, authenticated feed access and allowed derived/snapshot use, artifact storage, chosen source/model revisions, lab collection, reviewed labels and split protocol. Peer review, authorized PR, CI, merge and issue closure remain pending; the issue must not be called Done from this inventory alone.
+
+## Partial requirements reviewed — 2026-10-14
+
+The source inventory names ThreatFox, but authenticated access and allowed
+snapshot/derived/publication use are still unverified. SOURCES.md now lists each
+outstanding check, owner and required evidence. The model shortlist records
+licenses and weight estimates; available team GPU capacity and actual runtime
+fit are still unverified for every candidate. MODELS.md now separates calculated
+weight storage, additional memory components and future compatibility evidence.
+Neither partial requirement is upgraded to complete by documenting its gap.
+No models/datasets were downloaded and no benchmarks were run.

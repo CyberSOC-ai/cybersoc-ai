@@ -18,6 +18,27 @@ The official ThreatFox API documentation reports expiry of indicators older than
 
 If the primary is unavailable, evaluate URLhaus under its own source/use requirements and record selection in ADR-008. If neither source is accessible/permitted, report S2-T08 blocked; a synthetic local IOC set can test adapters but cannot satisfy a real-feed ingestion claim. No raw IOC snapshot redistribution is authorized by this inventory.
 
+## ThreatFox readiness review — 2026-10-14
+
+**Partially verified:** the official API and [terms](https://abuse.ch/terms-of-use/)
+were reviewed again; no authenticated request or permission confirmation was
+performed. ThreatFox remains an intended source, not an ingestion-ready feed.
+
+| Outstanding check | Current evidence / status | Evidence required before S2-T08 ingestion |
+|---|---|---|
+| Account and credentials | No project account/key access verified | Ahmed confirms an authorized account and secret provisioning; record a credential reference, never its value |
+| API access and limits | Public documentation only; live access untested | A later bounded authenticated request, response/status metadata and agreed request budget; no credentials in logs |
+| Project eligibility | Academic project intent documented; provider eligibility not confirmed | Record project use, users and any commercial distribution plans against current terms |
+| Snapshot and derived use | Retention, normalization, embeddings and structured-store use not confirmed | Record applicable permission/terms for each intended use; obtain provider clarification if ambiguous |
+| Sharing and redistribution | No raw/derived publication permission verified | Determine permitted private-team, report/demo and public artifact sharing; preserve required notices and restrict unapproved exports |
+| Review record | No acquisition-time approval evidence | Capture dated terms/API references, permitted-use scope and reviewer disposition in the snapshot manifest; resolve ambiguity before ingestion |
+
+Owner: Ahmed (S2-T08); source/snapshot decision: ADR-008. Neither API reachability
+nor an account alone establishes permitted derived use. A fallback requires its
+own completed checks. This correction records unresolved requirements without
+claiming to satisfy feed readiness; no feed/data was downloaded or account
+created as part of this review.
+
 ## Lab logs for retrieval
 
 The [lab scenario catalog](../infrastructure/soc-lab/README.md#3-scenario-catalog) defines stimuli and expected observations, not collected data. Wazuh owns detection; CyberSOC AI consumes and investigates alerts.

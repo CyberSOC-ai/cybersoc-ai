@@ -257,6 +257,8 @@ S0-T03, S0-T05
 
 2026-10-13 — S0-T05: Prepared knowledge/threat-intelligence and SOC-log inventories, candidate evaluation datasets, licensing notes and a Qwen/Phi/SmolLM2 shortlist with conditional memory-fit estimates. No raw datasets, feeds or model weights were acquired; review and downstream execution remain pending.
 
+2026-10-14 — S0-T05 correction: Added explicit ThreatFox access/use evidence gaps and per-model hardware-compatibility status. Both partially verified requirements remain partial.
+
 ## Technical approach
 
 S0-T05: Verify publisher/official source pages, record format/access/license/provenance and intended consumers, map lab scenarios to eligible historical logs, and define evaluation-case/held-out exclusions. Separate parameter-derived weight estimates from measured total GPU memory and actual access.
@@ -265,9 +267,13 @@ S0-T05: Verify publisher/official source pages, record format/access/license/pro
 
 S0-T05: Expanded `datasets/README.md`; added `datasets/SOURCES.md` and `datasets/MODELS.md`; updated only Oussama’s member section here.
 
+2026-10-14 correction: Updated `datasets/README.md`, `datasets/SOURCES.md`, `datasets/MODELS.md` and this member section only.
+
 ## Tests / validation
 
 S0-T05: Checked all five issue deliverables against the CDC and inventory tables; reviewed official source/model/license pages on 2026-10-13. Existing repository integrity and whitespace checks passed after staging. Manually inspected changes for credentials. No download/parser tests, live authenticated feed calls, GPU-fit tests, benchmarks or hosted CI were run; no application tests are needed for this documentation-only inventory.
+
+2026-10-14: Rechecked official ThreatFox API/terms, documented six outstanding access/use checks, and reviewed all four candidates as unverified on team hardware. Memory accounting separates ideal weights from cache/runtime/training costs. Repository integrity and whitespace checks pass. No feed access, downloads, model execution or benchmarks were performed.
 
 ## Results / metrics
 
@@ -276,6 +282,8 @@ S0-T05: Three required knowledge sources, one intended primary IOC feed plus fal
 ## Problems encountered
 
 S0-T05: Team hardware capacity is undocumented. ThreatFox/URLhaus access and derived/snapshot usage must be confirmed before ingestion. Artifact storage and exact acquisition revisions remain undecided. Some NVD pages yielded no readable browser content; acquisition details are supported by its official feed page, with exact API limits deferred to acquisition-time verification.
+
+2026-10-14: Project feed credentials/use permissions and machine inventory/peak memory evidence are unavailable. Documentation describes required evidence without claiming these checks passed.
 
 ## Decisions made
 
