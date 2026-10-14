@@ -257,6 +257,8 @@ S0-T03, S0-T05
 
 2026-10-13 — S0-T03: Implemented six versioned interchange schemas plus common definitions and synthetic examples for normalized incidents, retrieval requests/responses, investigations, response actions and baseline/agent traces. Local implementation is complete; assigned review, PR CI and integration remain pending.
 
+2026-10-14 — S0-T03 correction: Audited all seven regex patterns and fixed strict end-of-string validation, added five regression test methods, and enabled contract tests in the existing CI job.
+
 ## Technical approach
 
 S0-T03: Use JSON Schema Draft 2020-12 with closed objects, bounded inputs, explicit versions/errors and local reference registration. Document incident duplicate/replay rules, provenance and score semantics, approval binding, action lifecycle and trace correlations. Distinguish schema checks from server authorization and relational validation.
@@ -265,9 +267,13 @@ S0-T03: Use JSON Schema Draft 2020-12 with closed objects, bounded inputs, expli
 
 S0-T03: Added `backend/contracts/README.md`, seven schemas and six examples under `backend/contracts/v1/`, and `tests/contracts/test_contracts.py` with `tests/contracts/requirements.txt`. Updated only Oussama’s member section here.
 
+2026-10-14 correction: Modified `common.schema.json`, `investigation-result.schema.json`, `response-action.schema.json`, the contract test suite and README, `.github/workflows/ci.yml`, and this member section only.
+
 ## Tests / validation
 
 S0-T03: 12 unittest methods passed using jsonschema 4.26.0 and format checking; parameterized checks cover required fields/versions, invalid timestamps, bounded retrieval, provenance, failure semantics, unsafe action fields, lifecycle records and trace forms. Existing repository integrity and whitespace checks passed after staging. Manually inspected changes for credentials. No runtime authorization, executor, GPU, integration or hosted CI tests are claimed.
+
+2026-10-14: New regression tests reproduced the original defect (five methods, 11 reported failures). After correction, all 17 methods pass locally on Python 3.14; repository integrity and whitespace checks pass. CI targets Python 3.12; hosted CI has not run. Valid boundary values and malformed IDs, MITRE IDs, hashes, commit/digest values and UTC suffixes are covered.
 
 ## Results / metrics
 
@@ -276,6 +282,8 @@ S0-T03: Six interchange contracts, one shared definition schema, six synthetic e
 ## Problems encountered
 
 S0-T03: Sandbox restrictions required approved Git metadata writes and network access for a temporary test environment. Cross-filesystem worktree moves were unsupported, so untouched worktrees were recreated under `/tmp`. Runtime identity, storage, target registry and authorization remain later-task responsibilities.
+
+2026-10-14: Python’s `$` anchor admitted final newlines. The correction uses the ECMAScript/Python-compatible `(?![\s\S])` end assertion. Runtime relational/security checks remain downstream work.
 
 ## Decisions made
 

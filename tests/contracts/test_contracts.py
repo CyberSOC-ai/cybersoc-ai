@@ -77,6 +77,66 @@ class ContractsTest(unittest.TestCase):
         for kind, value in (('domain', 'invalid domain'), ('hash', 'not-a-digest')):
             self.mutate('incident', ['entities', 1], {'type': kind, 'value': value})
 
+    def test_strict_identifier_boundaries(self):
+        for value in ('A', 'A' * 128, 'INC-001.v1:source'):
+            record = deepcopy(self.examples['incident'])
+            record['incident_id'] = value
+            self.validators['incident'].validate(record)
+        for suffix in ('\n', '\r', '\r\n', '\u2028', '\u2029', ' ', '\t'):
+            with self.subTest(suffix=repr(suffix)):
+                self.mutate('incident', ['incident_id'], 'INC-001' + suffix)
+                self.mutate('retrieval-response', ['evidence', 0, 'evidence_id'], 'EVD-001' + suffix)
+        for value in ('', 'A' * 129, 'INC\n001', '_INC-001'):
+            self.mutate('incident', ['incident_id'], value)
+
+    def test_strict_mitre_technique_boundaries(self):
+        for value in ('T1110', 'T1110.001'):
+            record = deepcopy(self.examples['investigation-result'])
+            record['mitre_techniques'] = [value]
+            self.validators['investigation-result'].validate(record)
+        for value in ('T1110\n', 'T1110.001\n', 'T1110\r\n', 'T1110\u2028',
+                      ' T1110', 'T1110 ', 'T1110x001', 'T111', 'T11100', 'T1110.01'):
+            with self.subTest(value=repr(value)):
+                self.mutate('investigation-result', ['mitre_techniques'], [value])
+
+    def test_strict_hash_boundaries(self):
+        for length in (32, 40, 64):
+            for letter in ('a', 'A'):
+                valid = letter * length
+                record = deepcopy(self.examples['incident'])
+                record['entities'] = [{'type': 'hash', 'value': valid}]
+                self.validators['incident'].validate(record)
+                for suffix in ('\n', '\r\n', '\u2028', ' '):
+                    with self.subTest(length=length, suffix=repr(suffix)):
+                        self.mutate('incident', ['entities'], [{'type': 'hash', 'value': valid + suffix}])
+        for value in ('a' * 31, 'a' * 33, 'a' * 63, 'a' * 65, 'g' * 64, 'a' * 32 + '\n' + 'a' * 32):
+            self.mutate('incident', ['entities'], [{'type': 'hash', 'value': value}])
+
+    def test_strict_digest_and_commit_boundaries(self):
+        for suffix in ('\n', '\r\n', '\u2028', ' '):
+            self.mutate('trace', ['versions', 'commit'], 'a' * 40 + suffix)
+            record = self.approved_action()
+            record['approval']['proposal_digest'] = 'a' * 64 + suffix
+            self.assertInvalid('response-action', record)
+        for length in (39, 41):
+            self.mutate('trace', ['versions', 'commit'], 'a' * length)
+        for value in ('a' * 63, 'a' * 65, 'A' * 64, 'g' * 64):
+            record = self.approved_action()
+            record['approval']['proposal_digest'] = value
+            self.assertInvalid('response-action', record)
+
+    def test_strict_utc_suffix(self):
+        # Test the schema pattern without format checks too: the end assertion
+        # must reject trailing content independently of the optional checker.
+        utc = self.schemas['common']['$defs']['utc']
+        validator = Draft202012Validator(utc)
+        validator.validate('2026-10-14T12:00:00Z')
+        for suffix in ('\n', '\r', '\r\n', '\u2028', '\u2029', ' ', 'x'):
+            value = '2026-10-14T12:00:00Z' + suffix
+            with self.subTest(suffix=repr(suffix)):
+                self.assertTrue(list(validator.iter_errors(value)))
+                self.mutate('incident', ['timestamp'], value)
+
     def test_bounded_typed_retrieval(self):
         for value in (0, 101, 1.5, True):
             self.mutate('retrieval-request', ['top_k'], value)

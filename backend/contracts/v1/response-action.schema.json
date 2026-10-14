@@ -128,7 +128,7 @@
         },
         "proposal_digest": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
         },
         "audit_ref": {
           "type": "string",

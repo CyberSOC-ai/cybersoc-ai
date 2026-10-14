@@ -86,3 +86,28 @@ The contract suite checks all schema definitions, valid examples, required field
 | Agent trajectory contract | Trace schema/example and baseline/single-/multi-agent tests |
 | Validation and affected documentation | This README, test suite and Oussama's sprint journal |
 | Definition of Done | Local artifacts delivered; assigned review, authorized PR/CI/merge and issue closure remain pending |
+
+## Regex audit and CI correction — 2026-10-14
+
+Audited all seven `pattern` occurrences: shared IDs, evidence IDs, UTC suffix,
+MD5/SHA-1/SHA-256 entity hashes, Git commit SHA, MITRE technique IDs and proposal
+digests. Replaced each final `$` with `(?![\s\S])`, a negative lookahead that
+requires the actual end of the string. It is compatible with JSON Schema's
+ECMAScript regex dialect and Python's validator; no Python-only end anchor is
+used. Existing start anchors and character/length restrictions remain intact.
+All seven patterns were also checked with Node's ECMAScript regex engine using
+valid controls and trailing newline, CRLF, Unicode separator and whitespace cases.
+UTC still requires format checking for date validity; its regex enforces the
+terminal `Z` independently. This is a correction to the unmerged v1 draft.
+
+Five regression methods cover newline/CRLF/Unicode line separators, whitespace,
+invalid characters and lengths, with valid boundary controls for IDs, MITRE
+techniques, all supported hash lengths, commit/digest forms and UTC timestamps.
+The new tests reproduced the defect before correction. The full suite now has
+17 test methods.
+
+The existing `repository-checks` GitHub Actions job installs the pinned contract
+test dependency on Python 3.12 and runs the full suite after repository checks.
+Existing PR/main triggers, read-only workflow permissions and the required job
+name remain unchanged. Hosted CI execution remains pending an authorized push
+and PR; local test results are not a hosted CI result.

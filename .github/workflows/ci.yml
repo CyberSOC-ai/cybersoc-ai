@@ -25,3 +25,11 @@ jobs:
           fi
       - name: Check repository integrity
         run: python3 infrastructure/ci/check_repository.py
+      - name: Set up Python for contract tests
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install contract test dependencies
+        run: python -m pip install -r tests/contracts/requirements.txt
+      - name: Run contract tests
+        run: python -B -m unittest discover -s tests/contracts -v

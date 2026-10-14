@@ -51,7 +51,7 @@
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^T[0-9]{4}(\\.[0-9]{3})?$"
+        "pattern": "^T[0-9]{4}(\\.[0-9]{3})?(?![\\s\\S])"
       },
       "maxItems": 100,
       "uniqueItems": true
