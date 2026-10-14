@@ -291,7 +291,7 @@ S0-T05: Checked all five issue deliverables against the CDC and inventory tables
 
 2026-10-14 (earlier correction): Rechecked official ThreatFox API/terms, documented six outstanding access/use checks, and reviewed all four candidates as unverified on team hardware. Memory accounting separates ideal weights from cache/runtime/training costs. Repository integrity and whitespace checks pass. No feed access, downloads, model execution or benchmarks were performed.
 
-2026-10-14 — S0-T05 assessment validation: Re-read Issue #5 and CDC §§14/17; checked publisher configuration metadata and recalculated all 12 configurations. Assumptions: batch 1, 2048 input + 256 output tokens, FP16 KV cache, conservative quantized-weight overhead, 0.5–1 GiB runtime allowance and 512 MiB reserved headroom. No model execution, measured-fit or quality results. PR #73’s repository-checks passed; this follow-up requires its own documentation checks and hosted CI.
+2026-10-14 — S0-T05 assessment validation: Re-read Issue #5 and CDC §§14/17; checked publisher configuration metadata and recalculated all 12 configurations. Assumptions: batch 1, 2048 input + 256 output tokens, FP16 KV cache, conservative quantized-weight overhead, 0.5–1 GiB runtime allowance and 512 MiB reserved headroom. No model execution, measured-fit or quality results. Local repository integrity passed (69 tracked text files), and changed-whitespace checks passed. PR #73’s repository-checks passed; follow-up [PR #74 checks](https://github.com/CyberSOC-ai/cybersoc-ai/pull/74/checks) must pass on its final head before merge.
 
 ## Results / metrics
 
@@ -307,7 +307,7 @@ S0-T03: Sandbox restrictions required approved Git metadata writes and network a
 
 2026-10-14: Python’s `$` anchor admitted final newlines. The correction uses the ECMAScript/Python-compatible `(?![\s\S])` end assertion. Runtime relational/security checks remain downstream work.
 
-S0-T05 (initial inventory): Team hardware capacity was undocumented; the October 14 hardware assessment below resolves this inventory gap. ThreatFox/URLhaus access and derived/snapshot usage must be confirmed before ingestion. Artifact storage and exact acquisition revisions remain undecided. Some NVD pages yielded no readable browser content; acquisition details are supported by its official feed page, with exact API limits deferred to acquisition-time verification.
+S0-T05 (initial inventory): Team hardware capacity was undocumented; the October 14 hardware assessment resolves this inventory gap. ThreatFox/URLhaus access and derived/snapshot usage must be confirmed before ingestion. Artifact storage and exact acquisition revisions remain undecided. Some NVD pages yielded no readable browser content; acquisition details are supported by its official feed page, with exact API limits deferred to acquisition-time verification.
 
 2026-10-14 (earlier correction): Project feed credentials/use permissions and machine inventory/peak memory evidence were unavailable. Machine capacity is now documented; peak-memory evidence remains future S1 work and authenticated feed/use verification remains future S2 work.
 
@@ -323,7 +323,7 @@ S0-T05 scope: Accept a documented hardware assessment for Sprint 0; defer actual
 
 S0-T03: [Issue #3](https://github.com/CyberSOC-ai/cybersoc-ai/issues/3); branch `feature/issue-3-incident-retrieval-response-trace-contracts`. Reviewer: Ahmed (`ElrhAhmed`). [Contract evidence](../../../backend/contracts/README.md). No PR created or issue state changed; push, PR, CI, review, merge and closure remain pending.
 
-S0-T05: [Issue #5](https://github.com/CyberSOC-ai/cybersoc-ai/issues/5); original inventory merged in [PR #73](https://github.com/CyberSOC-ai/cybersoc-ai/pull/73) at 2026-10-14 00:42:50 UTC, commit `aed2ee844a19d59bb92c665223fe554d0b029e7e`. Its [repository-checks job](https://github.com/CyberSOC-ai/cybersoc-ai/actions/runs/38491624307/job/115617906822) passed at 00:42:00 UTC. Reviewer Anas (`Anas-Rabih`) was requested; no review was recorded at this follow-up check. [Inventory evidence](../../../datasets/README.md). Hardware-assessment follow-up branch: `feature/issue-5-hardware-compatibility`; follow-up PR, reviewer disposition and CI evidence must be recorded before Done. Issue #5 remains open; merge and closure require Oussama’s approval.
+S0-T05: [Issue #5](https://github.com/CyberSOC-ai/cybersoc-ai/issues/5); original inventory merged in [PR #73](https://github.com/CyberSOC-ai/cybersoc-ai/pull/73) at 2026-10-14 00:42:50 UTC, commit `aed2ee844a19d59bb92c665223fe554d0b029e7e`. Its [repository-checks job](https://github.com/CyberSOC-ai/cybersoc-ai/actions/runs/38491624307/job/115617906822) passed at 00:42:00 UTC. Reviewer Anas (`Anas-Rabih`) was requested; no review was recorded at this follow-up check. [Inventory evidence](../../../datasets/README.md). Hardware-assessment follow-up branch: `feature/issue-5-hardware-compatibility`; [follow-up PR #74](https://github.com/CyberSOC-ai/cybersoc-ai/pull/74) is open with Anas requested as reviewer; feedback remains pending. Its [CI checks](https://github.com/CyberSOC-ai/cybersoc-ai/pull/74/checks) are tracked separately from PR #73. Issue #5 remains open; merge and closure require Oussama’s approval.
 
 ## Learning outcome
 
