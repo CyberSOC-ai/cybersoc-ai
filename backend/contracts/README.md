@@ -71,7 +71,7 @@ Run from the feature worktree root:
 
 ```sh
 python3 -m venv /tmp/cybersoc-contracts-venv
-/tmp/cybersoc-contracts-venv/bin/python -m pip install -r tests/contracts/requirements.txt
+/tmp/cybersoc-contracts-venv/bin/python -m pip install -r requirements.txt
 /tmp/cybersoc-contracts-venv/bin/python -B -m unittest discover -s tests/contracts -v
 python3 -B infrastructure/ci/check_repository.py
 git diff --check

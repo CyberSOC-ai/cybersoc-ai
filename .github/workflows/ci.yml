@@ -13,23 +13,20 @@ jobs:
     name: repository-checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Check changed whitespace
+      - name: Scan for secrets
+        uses: gitleaks/gitleaks-action@v3
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: |
-          if [ -n "$BASE_SHA" ] && [ "$BASE_SHA" != "0000000000000000000000000000000000000000" ]; then
-            git diff --check "$BASE_SHA" HEAD
-          fi
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+          GITLEAKS_ENABLE_COMMENTS: "false"
       - name: Check repository integrity
         run: python3 infrastructure/ci/check_repository.py
-      - name: Set up Python for contract tests
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install contract test dependencies
-        run: python -m pip install -r tests/contracts/requirements.txt
+      - name: Build development image
+        run: docker compose build dev
+      - name: Check Python code
+        run: docker compose run --rm -T dev ruff check --no-cache .
       - name: Run contract tests
-        run: python -B -m unittest discover -s tests/contracts -v
+        run: docker compose run --rm -T dev python -B -m unittest discover -s tests/contracts -v

@@ -66,6 +66,8 @@ Issue → Ready → branch → implementation → tests → Pull Request → CI 
 
 ## Reproducibility
 
+[Development setup and checks](docs/development.md): Docker prerequisites, build and test commands, configuration, secret scanning and troubleshooting.
+
 > To be completed from validated sprint evidence.
 
 ## Team
