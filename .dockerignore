@@ -1,0 +1,5 @@
+**
+!requirements.txt
+!infrastructure/
+!infrastructure/docker/
+!infrastructure/docker/Dockerfile.dev
