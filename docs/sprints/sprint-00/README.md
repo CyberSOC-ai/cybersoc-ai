@@ -180,7 +180,7 @@ Propose MLflow in ADR-010 based on documented experiment/tracing capabilities, w
 
 ## Related Issues / Pull Requests
 
-[Issue #6](https://github.com/CyberSOC-ai/cybersoc-ai/issues/6). Branch: `feature/6-experiment-version-tracking`. Assigned reviewer: Ahmed (`ElrhAhmed`). PR link will be recorded after creation; merge stays with Anas. [Conventions](../../../experiments/README.md), [metric protocol](../../../experiments/METRICS.md), [ADR-010](../../adr/ADR-010.md).
+[Issue #6](https://github.com/CyberSOC-ai/cybersoc-ai/issues/6). Branch: `feature/6-experiment-version-tracking`. Assigned reviewer: Ahmed (`ElrhAhmed`). [PR #76](https://github.com/CyberSOC-ai/cybersoc-ai/pull/76) is open with Ahmed (`ElrhAhmed`) requested as reviewer; hosted CI is tracked in the PR checks. Merge stays with Anas. [Conventions](../../../experiments/README.md), [metric protocol](../../../experiments/METRICS.md), [ADR-010](../../adr/ADR-010.md).
 
 ## Learning outcome
 
