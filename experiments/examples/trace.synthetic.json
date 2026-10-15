@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0.0",
+  "trace_id": "TRC-S0T06-synthetic-001",
+  "incident_id": "INC-S0T06-synthetic-001",
+  "workflow": "baseline",
+  "mode": "no_rag",
+  "versions": {
+    "model": "not_applicable",
+    "prompt": "not_applicable",
+    "dataset": "synthetic-s0t06-v1",
+    "configuration": "CFG-S0T06-example-v1",
+    "commit": "954dcc4f2ac9c87444926e36c5021a20310e7d01"
+  },
+  "started_at": "2026-10-15T23:00:00Z",
+  "finished_at": "2026-10-15T23:00:01Z",
+  "status": "ok",
+  "steps": [
+    {
+      "step": 1,
+      "component": "backend",
+      "input_ref": "synthetic:input-001",
+      "output_ref": "synthetic:output-001",
+      "status": "ok",
+      "latency_ms": 0
+    }
+  ]
+}
