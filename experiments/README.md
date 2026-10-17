@@ -34,6 +34,8 @@ The JSON files are fill-in templates, not new service contracts or schema valida
 
 SHA-256 identifies bytes, not permission, truth or safety. Store checksum manifests alongside artifacts and verify on acquisition/use. Use immutable references in official records; mutable aliases such as `latest` may be convenience labels only. Never replace an upstream revision with the Git commit of this project.
 
+Dataset and split manifest hashes must cover every case's content (inputs, expected labels and evaluator context), directly or through recorded per-case content hashes, not only IDs or paths. Verify the manifests and all referenced case content against those hashes before scoring.
+
 ## Experiment record and environment
 
 The experiment template covers all CDC §11.4 fields, including model, tokenizer, prompt, dataset/split, embedding/chunking, retrieval/graph, inference, workflow, judge, trace references, UTC time and code SHA. Official records identify the input/output artifacts, their hashes, execution status, case counts and comparison baseline.

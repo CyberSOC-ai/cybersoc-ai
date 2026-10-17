@@ -9,7 +9,15 @@
     "attempted": null,
     "valid": null,
     "failed": null,
+    "not_attempted": null,
+    "not_attempted_reasons": {},
     "eligible_by_metric": {}
+  },
+  "claim_counts": {
+    "total": null,
+    "supported": null,
+    "unsupported": null,
+    "unjudged": null
   },
   "metrics": [],
   "metric_entry_format": {
@@ -32,5 +40,6 @@
     "ref": null
   },
   "conclusion": null,
+  "remaining_null_reasons": {},
   "limitations": []
 }
