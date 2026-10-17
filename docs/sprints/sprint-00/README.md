@@ -152,39 +152,39 @@ S0-T06
 
 ## Work completed
 
-> To be completed from validated sprint evidence.
+2026-10-15: Prepared experiment/version conventions, experiment/environment/result templates, metric and split rules, a synthetic trace walkthrough and ADR-010 proposing MLflow. [Issue #6](https://github.com/CyberSOC-ai/cybersoc-ai/issues/6) remains open; review, hosted CI and merge are pending. No model run, tracking deployment or measured benchmark is claimed.
 
 ## Technical approach
 
-> To be completed from validated sprint evidence.
+Read CDC §§6.5/8/9.8/11.4/14, current dataset inventory and existing closed v1 trace contract. Use immutable upstream revisions and content digests, separate experiment/run/trace identities, retain per-case denominators/failures and preserve development/test separation at incident-group level. Primary papers and official documentation support the [research rationale](../../../experiments/RESEARCH.md).
 
 ## Files / components modified
 
-> To be completed from validated sprint evidence.
+Added documentation, JSON templates and synthetic examples under `experiments/`; filled `docs/adr/ADR-010.md`; added `tests/contracts/test_experiment_examples.py`; updated only this member section. CDC, existing contracts, workflow and dependencies are unchanged.
 
 ## Tests / validation
 
-> To be completed from validated sprint evidence.
+[Validation evidence](../../../experiments/VALIDATION.md): 19 unittest methods pass locally on Python 3.12.14, including 2 new fixture-integration checks; Ruff 0.14.14, tracked-file integrity/link and whitespace checks pass. Five JSON files parse; synthetic trace validates offline against existing v1 and correlates to its manifest. Three one-off incompatible-trace controls are rejected. Manual arithmetic and sensitive-data inspection completed; no local Gitleaks or Docker build was run. Hosted CI remains separate.
 
 ## Results / metrics
 
-> To be completed from validated sprint evidence.
+All five issue deliverable groups map to documented artifacts in the [acceptance table](../../../experiments/README.md#acceptance-and-verification). There are no measured model, retrieval, security, performance or MLflow results. Synthetic timings are constructed fixtures.
 
 ## Problems encountered
 
-> To be completed from validated sprint evidence.
+CDC uses both train/test and development/test terminology, gives ADR-010 two sprint deadlines, and leaves No-RAG support evidence, zero-claim scoring and some action matching semantics unspecified. Proposed clarifications are explicit and require review; shared CDC and contract files were not rewritten.
 
 ## Decisions made
 
-> To be completed from validated sprint evidence.
+Propose MLflow in ADR-010 based on documented experiment/tracing capabilities, with portable JSON manifests and no deployment in S0-T06. Preserve trace schema v1 and link additional metadata externally. Propose training as a development subset, null/reason for undefined metrics and typed argument checks for action correctness. Tool choice and protocol remain reviewable proposals.
 
 ## Related Issues / Pull Requests
 
-> To be completed from validated sprint evidence.
+[Issue #6](https://github.com/CyberSOC-ai/cybersoc-ai/issues/6). Branch: `feature/6-experiment-version-tracking`. Assigned reviewer: Ahmed (`ElrhAhmed`). [PR #76](https://github.com/CyberSOC-ai/cybersoc-ai/pull/76) is open with Ahmed (`ElrhAhmed`) requested as reviewer; hosted CI is tracked in the PR checks. Merge stays with Anas. [Conventions](../../../experiments/README.md), [metric protocol](../../../experiments/METRICS.md), [ADR-010](../../adr/ADR-010.md).
 
 ## Learning outcome
 
-> To be completed from validated sprint evidence.
+A reproducible experiment needs exact inputs, configuration and environment, plus honest failure/eligibility counts. Context support differs from factual correctness and security. A schema-valid trace does not prove a correct decision, a deployed tracker or reproducible model results.
 
 
 # 4. Achraf

@@ -1,0 +1,56 @@
+{
+  "record_version": "1.0.0",
+  "record_kind": "template",
+  "environment_id": null,
+  "classification": "exploratory",
+  "captured_at": null,
+  "hardware": {
+    "cpu": null,
+    "cpu_threads": null,
+    "ram_mib": null,
+    "gpu": null,
+    "gpu_count": null,
+    "vram_total_mib": null,
+    "vram_available_mib": null
+  },
+  "software": {
+    "os": null,
+    "python": null,
+    "gpu_driver": null,
+    "cuda_runtime": null,
+    "pytorch": null,
+    "serving_engine": null,
+    "serving_version": null,
+    "flash_attention_version": null,
+    "dependency_lock_ref": null,
+    "dependency_lock_sha256": null,
+    "container_digest": null
+  },
+  "randomness": {
+    "python_seed": null,
+    "numpy_seed": null,
+    "torch_seed": null,
+    "generation_seed": null,
+    "deterministic_algorithms": null,
+    "cudnn_benchmark": null
+  },
+  "measurement": {
+    "boundary": null,
+    "streaming": null,
+    "clock": null,
+    "accelerator_synchronization": null,
+    "warmup_count": null,
+    "repetition_count": null,
+    "cache_state": null,
+    "batch_size": null,
+    "concurrency": null,
+    "input_tokens": null,
+    "max_output_tokens": null,
+    "token_count_method": null,
+    "tracing_enabled": null,
+    "memory_scope": null,
+    "memory_unit": "MiB"
+  },
+  "remaining_null_reasons": {},
+  "limitations": []
+}

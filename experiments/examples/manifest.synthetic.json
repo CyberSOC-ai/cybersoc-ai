@@ -1,0 +1,24 @@
+{
+  "record_version": "1.0.0",
+  "record_kind": "synthetic_walkthrough",
+  "synthetic_example": true,
+  "experiment_id": "EXP-S0T06-walkthrough-v1",
+  "run_id": "RUN-20261015T230000Z-synthetic001",
+  "execution_status": "not_run",
+  "trace_id": "TRC-S0T06-synthetic-001",
+  "trace_ref": "trace.synthetic.json",
+  "versions": {
+    "model": "not_applicable",
+    "prompt": "not_applicable",
+    "dataset": "synthetic-s0t06-v1",
+    "configuration": "CFG-S0T06-example-v1",
+    "commit": "954dcc4f2ac9c87444926e36c5021a20310e7d01"
+  },
+  "measured_metrics": [],
+  "limitations": [
+    "All times, references and step values are constructed fixtures, not observed execution.",
+    "Commit identifies the inspected base tree, not a model run.",
+    "Model and prompt are not_applicable because no inference occurred.",
+    "No real dataset, split, MLflow deployment or GPU benchmark is validated."
+  ]
+}

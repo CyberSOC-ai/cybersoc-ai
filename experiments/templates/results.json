@@ -1,0 +1,45 @@
+{
+  "record_version": "1.0.0",
+  "record_kind": "template",
+  "synthetic_example": false,
+  "run_id": null,
+  "execution_status": "not_run",
+  "counts": {
+    "intended": null,
+    "attempted": null,
+    "valid": null,
+    "failed": null,
+    "not_attempted": null,
+    "not_attempted_reasons": {},
+    "eligible_by_metric": {}
+  },
+  "claim_counts": {
+    "total": null,
+    "supported": null,
+    "unsupported": null,
+    "unjudged": null
+  },
+  "metrics": [],
+  "metric_entry_format": {
+    "name": null,
+    "value": null,
+    "unit": null,
+    "numerator": null,
+    "denominator": null,
+    "aggregation": null,
+    "null_reason": null
+  },
+  "per_case_ref": null,
+  "claim_judgements_ref": null,
+  "human_agreement_ref": null,
+  "failures_ref": null,
+  "trace_manifest_ref": null,
+  "uncertainty": {
+    "method": null,
+    "grouping_unit": null,
+    "ref": null
+  },
+  "conclusion": null,
+  "remaining_null_reasons": {},
+  "limitations": []
+}
