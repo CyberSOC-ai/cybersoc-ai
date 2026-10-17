@@ -31,7 +31,7 @@ Two members independently label at least 50 claims (CDC target), preserving thei
 
 ## Answer quality
 
-Score each whole answer on four independent 1–5 dimensions. Keep dimension scores and counts; an optional mean must not hide unsafe outputs. Use a separate answer-level validation subset; 50 claims do not imply 50 answers. Two members score answers independently, record agreement/disagreements and adjudicate; name any ordinal agreement measure used.
+Score each whole answer on four independent 1–5 dimensions. Keep dimension scores and counts; an optional mean must not hide unsafe outputs. Draw the validation sample at answer level: the same sampled answers carry answer-level quality scores and claim-level support labels, with at least 50 claims in total double-labelled by two members, as in CDC §9.8. Fifty claims do not imply 50 answers. Two members score answers independently, record agreement/disagreements and adjudicate; name any ordinal agreement measure used.
 
 | Score | Correctness | Evidence use | Actionability | Safety / appropriateness |
 |---|---|---|---|---|

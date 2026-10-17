@@ -2,7 +2,7 @@
 
 Owner: Anas · Reviewer: Ahmed · Date: 2026-10-15 · [Issue #6](https://github.com/CyberSOC-ai/cybersoc-ai/issues/6)
 
-Status: implemented documentation proposal; review, hosted CI and merge pending.
+Status: 2026-10-17: [PR #76](https://github.com/CyberSOC-ai/cybersoc-ai/pull/76) merged at `18ee4dcd2e853603e86f1538d4a8f9b4d86afb69`; [merge CI](https://github.com/CyberSOC-ai/cybersoc-ai/actions/runs/39063140796) passed and [issue #6](https://github.com/CyberSOC-ai/cybersoc-ai/issues/6) is closed. Ahmed was requested as reviewer; no submitted GitHub review is recorded as of this check. ADR-010 remains Proposed; team acceptance and the teammate usability exercise remain pending.
 Authority: [CDC §§6.5, 8, 9.8, 11.4, 14](../docs/CDC.md), [contracts](../backend/contracts/README.md), [inventory](../datasets/README.md), and [security policy](../security/README.md).
 This task defines conventions and templates. Dataset construction / executable scoring belong to S1-T02, official environment freeze to S5-T01, tracing/dashboard deployment to S5-T03. No model, dataset, tracking server or GPU benchmark has been run here.
 

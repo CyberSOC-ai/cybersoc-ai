@@ -24,8 +24,12 @@ Stage the intended new files before the repository integrity check, which inspec
 - Reviewed the 12 worked metric examples by arithmetic/policy inspection; no executable metric evaluator is delivered in S0-T06.
 - Checked the diff for accidental modifications to contracts, CDC, other member sections and runtime configuration. Manual sensitive-data review found only constructed fixtures, public URLs and provenance references. No local Gitleaks executable was available; the hosted secret scan remains separate evidence.
 
+## Verified merge and CI status
+
+The merge CI run passed repository integrity, secret scanning, the development-image build, Ruff and all 19 contract tests. This is hosted evidence, separate from the local checks dated above.
+
 ## Limits and remaining gates
 
-PR CI, assigned reviewer feedback and merge are pending. The task remains open. MLflow deployment, real dataset/group leakage checks, teammate usability exercise, judge calibration, model runs, GPU memory/performance, audit behavior and benchmark reproducibility have not been executed. Documentation and synthetic schema checks do not establish those outcomes.
+2026-10-17: [PR #76](https://github.com/CyberSOC-ai/cybersoc-ai/pull/76) merged at `18ee4dcd2e853603e86f1538d4a8f9b4d86afb69`; [merge CI](https://github.com/CyberSOC-ai/cybersoc-ai/actions/runs/39063140796) passed and [issue #6](https://github.com/CyberSOC-ai/cybersoc-ai/issues/6) is closed. Ahmed was requested as reviewer; no submitted GitHub review is recorded as of this check. ADR-010 remains Proposed; team acceptance and the teammate usability exercise remain pending. MLflow deployment, real dataset/group leakage checks, teammate usability exercise, judge calibration, model runs, GPU memory/performance, audit behavior and benchmark reproducibility have not been executed. Documentation and synthetic schema checks do not establish those outcomes.
 
 Protocol clarifications requiring review: No-RAG evidence eligibility, zero-claim/incomplete-judge handling, training within development, answer-level versus claim-level annotation units, and action argument matching. They are visible in the proposed protocol, with CDC and interchange schemas unchanged.
