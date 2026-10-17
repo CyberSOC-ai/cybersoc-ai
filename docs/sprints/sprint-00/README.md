@@ -152,7 +152,7 @@ S0-T06
 
 ## Work completed
 
-2026-10-15: Prepared experiment/version conventions, experiment/environment/result templates, metric and split rules, a synthetic trace walkthrough and ADR-010 proposing MLflow. [Issue #6](https://github.com/CyberSOC-ai/cybersoc-ai/issues/6) remains open; review, hosted CI and merge are pending. No model run, tracking deployment or measured benchmark is claimed.
+2026-10-15: Prepared experiment/version conventions, experiment/environment/result templates, metric and split rules, a synthetic trace walkthrough and ADR-010 proposing MLflow. 2026-10-17: [PR #76](https://github.com/CyberSOC-ai/cybersoc-ai/pull/76) merged at `18ee4dcd2e853603e86f1538d4a8f9b4d86afb69`; [merge CI](https://github.com/CyberSOC-ai/cybersoc-ai/actions/runs/39063140796) passed and [issue #6](https://github.com/CyberSOC-ai/cybersoc-ai/issues/6) is closed. Ahmed was requested as reviewer; no submitted GitHub review is recorded as of this check. ADR-010 remains Proposed; team acceptance and the teammate usability exercise remain pending. No model run, tracking deployment or measured benchmark is claimed.
 
 ## Technical approach
 
@@ -164,7 +164,7 @@ Added documentation, JSON templates and synthetic examples under `experiments/`;
 
 ## Tests / validation
 
-[Validation evidence](../../../experiments/VALIDATION.md): 19 unittest methods pass locally on Python 3.12.14, including 2 new fixture-integration checks; Ruff 0.14.14, tracked-file integrity/link and whitespace checks pass. Five JSON files parse; synthetic trace validates offline against existing v1 and correlates to its manifest. Three one-off incompatible-trace controls are rejected. Manual arithmetic and sensitive-data inspection completed; no local Gitleaks or Docker build was run. Hosted CI remains separate.
+[Validation evidence](../../../experiments/VALIDATION.md): 19 unittest methods pass locally on Python 3.12.14, including 2 new fixture-integration checks; Ruff 0.14.14, tracked-file integrity/link and whitespace checks pass. Five JSON files parse; synthetic trace validates offline against existing v1 and correlates to its manifest. Three one-off incompatible-trace controls are rejected. Manual arithmetic and sensitive-data inspection completed; no local Gitleaks or Docker build was run. [Merge CI](https://github.com/CyberSOC-ai/cybersoc-ai/actions/runs/39063140796) passed on 2026-10-17, including 19 contract tests, Ruff, repository integrity, secret scanning and the development-image build; this is separate hosted evidence.
 
 ## Results / metrics
 
@@ -180,7 +180,7 @@ Propose MLflow in ADR-010 based on documented experiment/tracing capabilities, w
 
 ## Related Issues / Pull Requests
 
-[Issue #6](https://github.com/CyberSOC-ai/cybersoc-ai/issues/6). Branch: `feature/6-experiment-version-tracking`. Assigned reviewer: Ahmed (`ElrhAhmed`). [PR #76](https://github.com/CyberSOC-ai/cybersoc-ai/pull/76) is open with Ahmed (`ElrhAhmed`) requested as reviewer; hosted CI is tracked in the PR checks. Merge stays with Anas. [Conventions](../../../experiments/README.md), [metric protocol](../../../experiments/METRICS.md), [ADR-010](../../adr/ADR-010.md).
+[Issue #6](https://github.com/CyberSOC-ai/cybersoc-ai/issues/6). Branch: `feature/6-experiment-version-tracking`. Assigned reviewer: Ahmed (`ElrhAhmed`). [PR #76](https://github.com/CyberSOC-ai/cybersoc-ai/pull/76) merged on 2026-10-17 at `18ee4dcd2e853603e86f1538d4a8f9b4d86afb69`; merge CI passed and issue #6 is closed. Ahmed (`ElrhAhmed`) was requested as reviewer; no submitted GitHub review is recorded as of 2026-10-17. ADR-010 remains Proposed. [Conventions](../../../experiments/README.md), [metric protocol](../../../experiments/METRICS.md), [ADR-010](../../adr/ADR-010.md).
 
 ## Learning outcome
 
