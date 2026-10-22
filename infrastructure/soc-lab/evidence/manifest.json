@@ -1,0 +1,20 @@
+{
+  "description": "Byte-preserved user lab evidence, not a full benchmark manifest",
+  "files": [
+    {
+      "path": "lab01-run01-alert.json",
+      "bytes": 1921,
+      "sha256": "1e5a3eff5750b216a5651ea525b7fc20215295b705976e109876793552ebc9dd"
+    },
+    {
+      "path": "lab01-run01-dashboard.png",
+      "bytes": 132600,
+      "sha256": "7d05d5fe4215dec9ce9cdd705831ba3649abc73bae99a747ed62db062c164860"
+    },
+    {
+      "path": "lab01-run02-alert.json",
+      "bytes": 1921,
+      "sha256": "349aaf47d80b45508f2d4ca0d26d062fb13f88b7a03446f8e6a9d8dde645ee12"
+    }
+  ]
+}
