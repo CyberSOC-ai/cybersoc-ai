@@ -18,7 +18,7 @@
 |---|---|---|---|---|
 | S1-T01 — Reproducible local environment + Docker + basic CI | Ahmed | Achraf | devops | In progress |
 | S1-T02 — Evaluation dataset v1 and evaluation protocol | Anas | Oussama | ai-slm | Ready (pilot; S1-T02 incomplete) |
-| S1-T03 — Baseline SLM runner | Soulaiman | Anas | ai-slm | In progress (local) |
+| S1-T03 — Baseline SLM runner | Soulaiman | Anas | ai-slm | In review |
 | S1-T04 — FastAPI core + incident ingestion | Oussama | Soulaiman | backend | Backlog |
 | S1-T05 — SOC Lab MVP | Achraf | Ahmed | soc | Backlog |
 | S1-T06 — SOC alert normalizer | Ahmed | Oussama | soc | Backlog |
@@ -126,7 +126,7 @@ Soulaiman authorized publication on the isolated task branch; he will request An
 
 ## Related Issues / Pull Requests
 
-[S1-T03 / #11](https://github.com/CyberSOC-ai/cybersoc-ai/issues/11); input pilot [PR #78](https://github.com/CyberSOC-ai/cybersoc-ai/pull/78), part of [#10](https://github.com/CyberSOC-ai/cybersoc-ai/issues/10). Coordination target: Oussama's open [PR #79](https://github.com/CyberSOC-ai/cybersoc-ai/pull/79). No S1-T03 PR exists; #11 is not closed.
+[S1-T03 / #11](https://github.com/CyberSOC-ai/cybersoc-ai/issues/11); input pilot [PR #78](https://github.com/CyberSOC-ai/cybersoc-ai/pull/78), part of [#10](https://github.com/CyberSOC-ai/cybersoc-ai/issues/10). Coordination target: Oussama's open [PR #79](https://github.com/CyberSOC-ai/cybersoc-ai/pull/79). [S1-T03 PR #81](https://github.com/CyberSOC-ai/cybersoc-ai/pull/81) is open from `feature/11-baseline-slm-runner` into `main`. Soulaiman will request Anas's review. No merge or review approval is claimed; #11 remains open.
 
 ## Learning outcome
 

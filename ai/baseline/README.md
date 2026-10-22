@@ -2,7 +2,7 @@
 
 Owner: Soulaiman · Reviewer: Anas · [Issue #11](https://github.com/CyberSOC-ai/cybersoc-ai/issues/11).
 
-Implementation on `feature/11-baseline-slm-runner`, authorized by Soulaiman for branch publication and PR review. Task completion is not claimed. See the [S1 journal](../../docs/sprints/sprint-01/README.md) for actual validation and remaining work.
+Implementation on `feature/11-baseline-slm-runner`, authorized by Soulaiman for branch publication and PR review. Review: [PR #81](https://github.com/CyberSOC-ai/cybersoc-ai/pull/81); Soulaiman will request Anas's review. Task completion is not claimed. See the [S1 journal](../../docs/sprints/sprint-01/README.md) for actual validation and remaining work.
 
 ## What runs
 
