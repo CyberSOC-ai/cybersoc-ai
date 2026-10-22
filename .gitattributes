@@ -1,0 +1,2 @@
+# Keep the versioned inference prompt byte-stable across Windows/Linux checkouts.
+ai/baseline/prompt.txt text eol=lf

@@ -1,0 +1,20 @@
+{
+  "artifact_repo": "bartowski/microsoft_Phi-4-mini-instruct-GGUF",
+  "runtime_version": "b11827",
+  "max_input_tokens": 3072,
+  "quantization": "Q4_K_M",
+  "max_output_tokens": 512,
+  "upstream_revision": "cfbefacb99257ffa30c83adab238a50856ac3083",
+  "timeout_seconds": 180,
+  "artifact_revision": "7ff82c2aaa4dde30121698a973765f39be5288c0",
+  "context_tokens": 4096,
+  "runtime_executable": ".local/runtime/b11827/llama-server.exe",
+  "seed": 42,
+  "publisher_id": "microsoft/Phi-4-mini-instruct",
+  "runtime_sha256": "316dd7ee9edefc15bf0d1ade4171323496f900dbedc33aaecc70437fc37facab",
+  "port": 8087,
+  "model_file": ".local/models/phi-4-mini-instruct-q4_k_m.gguf",
+  "model_sha256": "01999f17c39cc3074afae5e9c539bc82d45f2dd7faa3917c66cbef76fce8c0c2",
+  "threads": 6,
+  "upstream_revision_note": "Inspected upstream HEAD, not verified conversion origin; artifact revision identifies executed weights"
+}

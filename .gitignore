@@ -17,6 +17,8 @@ build/
 .mypy_cache/
 .idea/
 .vscode/
+.local/
+.ruff_cache/
 
 # Large or generated experiment artifacts belong in versioned artifact storage
 *.gguf
