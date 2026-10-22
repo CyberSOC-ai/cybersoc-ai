@@ -17,7 +17,7 @@
 | Task | Owner | Reviewer | Domain | Status |
 |---|---|---|---|---|
 | S1-T01 — Reproducible local environment + Docker + basic CI | Ahmed | Achraf | devops | In progress |
-| S1-T02 — Evaluation dataset v1 and evaluation protocol | Anas | Oussama | ai-slm | In progress |
+| S1-T02 — Evaluation dataset v1 and evaluation protocol | Anas | Oussama | ai-slm | Ready (pilot; S1-T02 incomplete) |
 | S1-T03 — Baseline SLM runner | Soulaiman | Anas | ai-slm | Backlog |
 | S1-T04 — FastAPI core + incident ingestion | Oussama | Soulaiman | backend | Backlog |
 | S1-T05 — SOC Lab MVP | Achraf | Ahmed | soc | Backlog |
@@ -149,9 +149,28 @@ P11/P13/P14 into G-SSH and P12 into G-FIM. Incident inputs and gold decisions,
 actions and evidence are unchanged.
 
 S1-T02 is NOT done: the frozen test split, two-person claim labelling and peer
-review are NOT done. Status: In progress. No judge model, human claim annotations
-or measured model performance is claimed. PR #78 is Part of #10, submitted for
-peer review; merging remains Anas's decision.
+review are NOT done. Status: Ready for baseline integration (pilot only); the full
+S1-T02 task remains incomplete. No judge model, human claim annotations or measured
+model performance is claimed. PR #78 is Part of #10. Anas authorized merging the
+pilot without waiting for Oussama's review due to time constraints. This owner
+decision does not constitute peer approval or completion of the project Definition
+of Done. All labels retain pending_review / needs_review=true.
+
+### Remaining work and dependencies
+
+- Anas: prepare separate test cases, keep template families disjoint from development,
+  obtain label review, then freeze test membership and record versioned hashes.
+- Soulaiman (#11): produce baseline answers on the development incidents using the
+  documented runner interface; this pilot is ready for that integration.
+- Two independent annotators: label all baseline development answers and their claims,
+  covering at least 50 claims. Extend with more answers if needed; preserve original
+  ratings, calculate agreement and adjudicate disagreements.
+- Oussama: review the 14 labels, protocol drafts and scoring; resolve findings before
+  claiming peer-reviewed benchmark readiness.
+- Team: choose and record judge model/provider/revision/decoding/retry policy, then
+  validate the judge against the adjudicated human annotations.
+
+Do not close #10 or publish pilot scores as final benchmark results.
 
 ## Technical approach
 
@@ -222,7 +241,9 @@ feature/10-soc-eval-v1. Owner Anas; peer reviewer Oussama (@Ossel14).
 The [S1-T03 handoff](../../../datasets/evaluation/soc-eval-v1/README.md#for-s1-t03-baseline-runner)
 lets Soulaiman (@soulaimane-22) use this pilot for [#11](https://github.com/CyberSOC-ai/cybersoc-ai/issues/11).
 Labels await peer review; do not tune on these cases or publish scores as final
-benchmark results. Issue #10 remains open; this work does not merge PR #78.
+benchmark results. Issue #10 remains open. Anas authorized PR #78 to be merged
+for pilot integration without waiting for peer review; the review request remains
+outstanding.
 
 ## Learning outcome
 
