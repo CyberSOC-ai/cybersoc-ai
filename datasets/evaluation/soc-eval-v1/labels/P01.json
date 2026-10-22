@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "dataset_version": "soc-eval-v1-pilot.2",
+  "dataset_version": "soc-eval-v1-pilot.3",
   "protocol_version": "S1T02-pilot-v2",
   "case_id": "P01",
   "incident_id": "INC-PILOT-001",
@@ -73,7 +73,7 @@
     "items": []
   },
   "rationale": "The repeated source is outside the account access record; the repeated failures did not establish a session or interrupt service. Required containment follows the owner-selected fixed pilot runner policy; execution authorization is not granted.",
-  "label_author": "Codex-drafted; Anas review pending",
+  "label_author": "Anas",
   "label_reviewer": "Oussama",
   "adjudication_status": "pending_review",
   "needs_review": true

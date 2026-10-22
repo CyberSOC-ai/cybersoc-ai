@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "dataset_version": "soc-eval-v1-pilot.2",
+  "dataset_version": "soc-eval-v1-pilot.3",
   "protocol_version": "S1T02-pilot-v2",
   "case_id": "P04",
   "incident_id": "INC-PILOT-004",
@@ -39,7 +39,7 @@
     "items": []
   },
   "rationale": "Raw successful authentication contradicts the normalized failure outcome; the complete window shows no failed access or service impact.",
-  "label_author": "Codex-drafted; Anas review pending",
+  "label_author": "Anas",
   "label_reviewer": "Oussama",
   "adjudication_status": "pending_review",
   "needs_review": true

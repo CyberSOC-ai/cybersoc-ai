@@ -82,5 +82,6 @@ Sources: [P13](../inputs/P13.json), [P11](../inputs/P11.json),
 
 ## Agreement reporting
 
-Ordinal agreement measure for 1–5 quality scores: TBD - owner decision.
-Nominal claim-support agreement does not select an ordinal measure for this rubric.
+Ordinal agreement measure for 1–5 quality scores: quadratic weighted Cohen's kappa,
+selected by Anas. Use original paired ratings before adjudication; report raw
+agreement too. Null means expected disagreement is zero, not perfect reliability.

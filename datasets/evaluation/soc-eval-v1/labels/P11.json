@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0.0",
-  "dataset_version": "soc-eval-v1-pilot.2",
+  "dataset_version": "soc-eval-v1-pilot.3",
   "protocol_version": "S1T02-pilot-v2",
   "case_id": "P11",
   "incident_id": "INC-PILOT-011",
-  "group_id": "G-SSH-SESSION",
+  "group_id": "G-SSH",
   "split": "development",
   "verdict": "true_positive",
   "false_positive_type": null,
@@ -83,7 +83,7 @@
     "items": []
   },
   "rationale": "The successful source is outside the account access registry; an interactive authenticated session executed commands after the failure burst. Required containment follows the owner-selected fixed pilot runner policy; execution authorization is not granted.",
-  "label_author": "Codex-drafted; Anas review pending",
+  "label_author": "Anas",
   "label_reviewer": "Oussama",
   "adjudication_status": "pending_review",
   "needs_review": true

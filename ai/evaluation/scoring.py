@@ -236,3 +236,24 @@ def cohens_kappa(rater_a, rater_b):
         else:
             result['kappa'] = (matches*n-expected_matches)/(n*n-expected_matches)
     return result
+
+
+def weighted_kappa(rater_a, rater_b):
+    """Owner-selected quadratic weighted Cohen's kappa on fixed ordinal scores 1–5.
+
+    Weights are squared distance / 16. Original paired ratings only; no imputation.
+    """
+    if len(rater_a) != len(rater_b):
+        raise ValueError('weighted_kappa: rater lengths differ')
+    if any(type(v) is not int or not 1 <= v <= 5 for v in list(rater_a) + list(rater_b)):
+        raise ValueError('weighted_kappa: ratings must be integers 1–5; no missing ratings')
+    n = len(rater_a)
+    a, b = Counter(rater_a), Counter(rater_b)
+    observed_sum = sum((x-y)**2 for x, y in zip(rater_a, rater_b))
+    expected_sum = sum(a[x]*b[y]*(x-y)**2 for x in range(1, 6) for y in range(1, 6))
+    reason = 'no_paired_ratings' if not n else 'zero_expected_disagreement' if not expected_sum else None
+    return {'kappa': 1-observed_sum*n/expected_sum if reason is None else None,
+            'raw_agreement': _ratio(sum(x == y for x, y in zip(rater_a, rater_b)), n),
+            'n': n, 'weighting': 'quadratic', 'categories': [1, 2, 3, 4, 5],
+            'observed_disagreement': _ratio(observed_sum, 16*n),
+            'expected_disagreement': _ratio(expected_sum, 16*n*n), 'reason': reason}

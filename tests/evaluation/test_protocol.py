@@ -103,3 +103,33 @@ class ProtocolTest(unittest.TestCase):
         self.assertEqual(annotation['answer_annotations'], [], 'annotation.template.json: human ratings fabricated')
         for key in ('original_annotation_refs','original_annotator_labels','adjudicated_labels','disagreement_reasons'):
             self.assertEqual(adjudication[key], [], f'adjudication.template.json: {key} must be empty')
+
+    def test_readme_runner_example_executes_without_labels_in_predictor(self):
+        from unittest.mock import patch
+        from ai.evaluation.loader import load_model_inputs
+        from ai.evaluation.validation import validators
+        text = (DATASET/'README.md').read_text()
+        example = text.split('```python\n', 1)[1].split('```', 1)[0]
+        self.assertEqual(len(example.splitlines()), 15, 'README.md: runner example must contain 15 lines')
+        incident_keys = set(load_model_inputs(DATASET)[0])
+        seen = []
+        def runner(incident, policy):
+            iid = incident['incident_id']
+            self.assertEqual(set(incident), incident_keys, f'{iid}: predictor received evaluator metadata')
+            self.assertEqual(policy, read_json(PROTOCOL/'runner-policy.json'), f'{iid}: runner policy differs')
+            seen.append(iid)
+            return {'schema_version':'1.0.0', 'investigation_id':'DUMMY-'+iid,
+                    'incident_id':iid, 'trace_id':'TRACE-'+iid, 'mode':'no_rag',
+                    'status':'ok', 'summary':'Dummy predictor; no model was run.',
+                    'triage_verdict':'undetermined', 'risk_level':incident['severity'],
+                    'mitre_techniques':[], 'evidence':[], 'recommended_actions':[]}
+        namespace = {'runner':runner}
+        with patch.object(Path, 'cwd', return_value=ROOT):
+            exec(compile(example, 'README.md', 'exec'), namespace)
+        self.assertEqual(len(set(seen)), 14, 'README.md: did not run 14 distinct development incidents')
+        self.assertEqual(set(namespace['predictions']), set(seen), 'README.md: predictions not keyed by incident_id')
+        validator = validators(ROOT, DATASET)['investigation-result']
+        for iid, result in namespace['predictions'].items():
+            self.assertEqual(list(validator.iter_errors(result)), [], f'{iid}: dummy result invalid')
+        self.assertEqual(namespace['scores']['counts']['valid'], 14, 'README.md: scorer rejected dummy results')
+        self.assertEqual(namespace['scores']['counts']['failed'], 0, 'README.md: dummy outputs failed')

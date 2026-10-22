@@ -9,7 +9,7 @@
       "const": "1.0.0"
     },
     "dataset_version": {
-      "const": "soc-eval-v1-pilot.2"
+      "const": "soc-eval-v1-pilot.3"
     },
     "protocol_version": {
       "const": "S1T02-pilot-v2"

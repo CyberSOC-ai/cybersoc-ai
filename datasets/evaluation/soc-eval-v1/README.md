@@ -1,6 +1,6 @@
 # soc-eval-v1 — SYNTHETIC PILOT
 
-Release: `soc-eval-v1-pilot.2`. Part of #10; owner Anas, assigned reviewer
+Release: `soc-eval-v1-pilot.3`. Part of #10; owner Anas, assigned reviewer
 Oussama. All 14 cases are development-only, `test` is empty and
 `test_frozen` is false. This does not complete S1-T02.
 
@@ -9,10 +9,9 @@ These small fixtures were assistant-authored for Anas from the
 from a deployed SOC. They are not evidence of real SOC performance. No model,
 judge, human double-labelling or response execution is claimed. The
 [inventory](../../SOURCES.md) requirement for collected cases remains outstanding.
-All labels are pending review; naming Oussama assigns review, it does not record
-review completion. Each label records `label_author: Codex-drafted; Anas review pending`. It becomes
-`Anas` only after the owner reviews that specific case; no such review is claimed.
-All current labels remain pending_review / needs_review=true.
+Anas has reviewed and approved all 14 cases; label_author is now `Anas`.
+Oussama's peer review has not happened. All labels retain reviewer Oussama,
+`pending_review` and `needs_review=true`; none is accepted.
 
 ## Layout and boundaries
 
@@ -25,7 +24,7 @@ All current labels remain pending_review / needs_review=true.
 - [splits.json](splits.json): membership, groups, complete case digests and freeze flag.
 - [manifest.json](manifest.json): component and case hashes, split-file hash,
   declared severity and MITRE scoring universes.
-- [guidelines/labeling.md](guidelines/labeling.md): provisional policy and proposed grouping merges.
+- [guidelines/labeling.md](guidelines/labeling.md): label policy and approved grouping rule.
 - [protocol/](protocol/README.md): faithfulness, prompt templates, rubric and action matching.
 - [validation/](validation/README.md): empty sampling/annotation/adjudication templates.
 
@@ -43,20 +42,17 @@ There are 6 proposed true positives and 8 false positives, all informational.
 Gold severity counts: informational 8, medium 4, high 2. Low is reserved for real
 incidents of minor impact; this release has no low or critical cases.
 
-P01-P05 share `G-SSH`, P06-P07 `G-FIM`, P08-P09 `G-ACCOUNT`, and P10
-`G-POWERSHELL`; P01/P02 are two views of the same episode. New synthetic variants
-P11-P14 use `G-SSH-SESSION`, `G-FIM-WINDOW`, `G-SSH-SCANNER`, `G-SSH-REPLAY`.
-There are 8 authored groups; shared scenario types still limit independence.
-The [grouping proposal](guidelines/labeling.md#grouping-proposal--not-applied) would
-merge these into four template families. Approval: TBD - owner decision.
-No group IDs or memberships have changed in this delivery.
+P01-P05, P11, P13 and P14 share `G-SSH`; P06/P07/P12 share `G-FIM`;
+P08/P09 share `G-ACCOUNT`; P10 is `G-POWERSHELL`. P01/P02 are views of one
+episode. The [grouping rule](guidelines/labeling.md#grouping-rule) merges shared
+template families in pilot.3, yielding four groups. Shared families limit independence.
 P11/P13 extend LAB-01 beyond its live exercise limits: these are authored variations,
 not collected runs or instructions to execute those counts.
 
 Input `severity` is detector severity; evaluator `gold_severity` maps to result
 `risk_level`. The manifest severity universe is informational, medium, high;
 MITRE universe is T1078, T1110.001, T1136.001. Empty MITRE sets have reasons.
-No source snapshot or human mapping review is claimed for the updated mappings.
+Anas approved the mappings; Oussama peer review and source-snapshot verification remain pending.
 All retrieval relevance remains `not_labelled`, with reasons.
 
 Only P01/P02/P11 require block_ip; the common
@@ -70,11 +66,17 @@ operational authorization is pending. No account-disable adapter is invented.
 [scoring.py](../../../ai/evaluation/scoring.py) now include faithfulness accounting
 and Cohen's kappa with raw agreement and disagreement counts. Protocol documentation
 references the authority rather than replacing its metric definitions. Ordinal
-agreement for the 1–5 quality ratings: TBD - owner decision.
+agreement for the 1–5 quality ratings is quadratic weighted Cohen's kappa, as
+selected by Anas; expected disagreement of zero yields null.
 
-## Runner integration
+## For S1-T03 (baseline runner)
 
-The injected `runner(incident, policy)` returns a full investigation-result object.
+Soulaiman's injected `runner(incident, policy)` returns one contract-valid
+investigation-result object per incident, with `mode: "no_rag"`, empty `evidence`,
+and proposed actions only. The 15-line example below runs from the repository
+root; supply that callable (a dummy predictor exercises this exact example in tests).
+Load incidents with `load_model_inputs`; never read labels or context in model code.
+The fixed fields live in [runner-policy.json](protocol/runner-policy.json).
 The runner must fill action target_inventory_revision, environment_id,
 policy_version, generated IDs/idempotency keys and status `proposed` from the fixed
 policy/config, never from labels; incident_id comes from the input. Pass the same
@@ -97,6 +99,10 @@ manifest = read_json(path / "manifest.json")
 scores = score_cases(cases, predictions, manifest["severity_universe"],
                      manifest["mitre_universe"], validators(root, path)["investigation-result"])
 ```
+
+This is a 14-development-case pilot only. Labels await Oussama's review; there is
+no test split. Do not tune on these cases or publish these scores as final
+benchmark numbers. The evaluator scores predictions keyed by incident_id.
 
 Case-ID keys remain supported. Unknown IDs, duplicate incident IDs in the case
 collection, and duplicate predictions (including case/incident aliases) raise a
@@ -128,7 +134,7 @@ expected_manifest_sha256=...)` checks it. Without that argument verification che
 internal consistency only, not authorization to replace all data and checksums.
 `build_manifests` returns split bytes and manifest without writing; it refuses
 frozen/nonempty test splits. Explicitly save its outputs only for an updated pilot
-release, then validate and verify. This release is pilot.2 / S1T02-pilot-v2.
+release, then validate and verify. This release is pilot.3 / S1T02-pilot-v2.
 
 Raw hashes detect whitespace-only changes too. Verification is read-only and
 rejects missing/unlisted case files; it never updates checksums. Changed labels,
@@ -162,13 +168,14 @@ licensing remains a team decision; no third-party records were copied.
 **Motivation:** provide repeatable interfaces for the baseline runner and evaluation
 software while lab collection is incomplete. No real SOC performance is established.
 
-**Composition:** 14 cases, 8 existing groups; 6 proposed true positives and 8 false
+**Composition:** 14 cases, 4 template-family groups; 6 proposed true positives and 8 false
 positives. All are development-only, with no low/critical assessed severity or test
-split. The eight groups must not be assumed independent construction families.
+split. Cases within each of the four groups share construction families.
 
-**Provenance and labelling:** assistant-drafted from catalog scenarios, unreviewed;
+**Provenance and labelling:** assistant-drafted from catalog scenarios, reviewed and approved by Anas;
 inputs are synthetic observations, not collected logs. Anas is the task owner and
-Oussama the assigned reviewer; these roles do not establish completed annotation.
+Oussama the assigned peer reviewer, whose review remains pending. Case review is
+not two-person claim annotation or judge validation.
 Author integrity is explicit in each label. No case facts or verdicts changed here.
 
 **Exclusions:** unresolved incidents, real collected logs, reviewed retrieval
@@ -188,7 +195,10 @@ line is a local data-quality check, not a metric or project acceptance threshold
 Small size and synthetic prose limit generalization even when shortcuts stay below
 that line. No new threshold, confidence method, random seed or sample size is chosen.
 
-**Pending owner choices:** sample size beyond the CDC minimum of 50 claims,
-answer-selection method/seed, ordinal agreement measure, grouping approval and judge
-configuration: TBD - owner decision. See the [validation guide](validation/README.md)
-and [faithfulness guide](protocol/faithfulness.md) before real evaluation.
+**Validation coverage:** label all baseline development answers without a sampling
+seed; extend with more answers if needed to reach the CDC minimum of 50 claims.
+See the [validation guide](validation/README.md). Original independent ratings are
+preserved before adjudication; no human claim annotations exist yet.
+
+**Unselected judge:** model/provider/revision/decoding/retry policy:
+TBD - team decision. See the [faithfulness guide](protocol/faithfulness.md).

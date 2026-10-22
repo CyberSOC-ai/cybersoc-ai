@@ -199,7 +199,7 @@ class DatasetIntegrityTest(unittest.TestCase):
             cid = label['case_id']
             self.assertEqual(label['adjudication_status'], 'pending_review', f'{cid}: human review must not be invented')
             self.assertTrue(label['needs_review'], f'{cid}: review flag must remain true')
-            self.assertEqual((label['label_author'], label['label_reviewer']), ('Codex-drafted; Anas review pending', 'Oussama'),
+            self.assertEqual((label['label_author'], label['label_reviewer']), ('Anas', 'Oussama'),
                              f'{cid}: owner/reviewer assignment differs')
         splits = read_json(DATASET / 'splits.json')
         self.assertFalse(splits['test_frozen'], 'splits.json: pilot must not claim a frozen test')
@@ -208,7 +208,7 @@ class DatasetIntegrityTest(unittest.TestCase):
         self.assertEqual(dict(counts), {'true_positive': 6, 'false_positive': 8},
                          'P01-P14: class balance differs from authored pilot')
         groups = {label['group_id'] for label in labels}
-        self.assertEqual(len(groups), 8, 'P01-P14: expected eight authored groups')
+        self.assertEqual(len(groups), 4, 'P01-P14: expected four approved template families')
         print(f"\nPilot development: cases={len(labels)}, groups={len(groups)}, "
               f"true_positive={counts['true_positive']}, false_positive={counts['false_positive']}", flush=True)
         print('Gold severities: ' + json.dumps(dict(sorted(Counter(label['gold_severity'] for label in labels).items()))), flush=True)

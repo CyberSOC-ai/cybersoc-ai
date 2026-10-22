@@ -55,15 +55,15 @@ correctness and safety separate from contextual support.
 
 ## Human validation
 
-Use the [empty templates and pending sampling decisions](../validation/README.md) on development
-answers from #11. Two people independently annotate the same sampled answers for
+Use the [empty templates and approved answer coverage](../validation/README.md) on development
+answers from #11. Two people independently annotate the all baseline development answers for
 quality and their atomic claims for support; preserve both originals, then
 adjudicate. Report Cohen's kappa and raw agreement for support before adjudication. Ordinal
-agreement measure for quality: TBD - owner decision. No independent annotations or validation evidence
+agreement measure for quality: quadratic weighted Cohen's kappa (owner-selected). No independent annotations or validation evidence
 exist yet; these examples/templates cannot substitute for them.
 
 ## Unselected configuration
 
 Judge model/provider, immutable revision, decoding settings and retry policy:
-TBD - owner decision. The JSON configuration leaves those parameters null with
+TBD - team decision. The JSON configuration leaves those parameters null with
 status not_selected. No values or operational retry limits are chosen here.

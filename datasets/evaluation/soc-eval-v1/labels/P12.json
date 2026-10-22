@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0.0",
-  "dataset_version": "soc-eval-v1-pilot.2",
+  "dataset_version": "soc-eval-v1-pilot.3",
   "protocol_version": "S1T02-pilot-v2",
   "case_id": "P12",
   "incident_id": "INC-PILOT-012",
-  "group_id": "G-FIM-WINDOW",
+  "group_id": "G-FIM",
   "split": "development",
   "verdict": "true_positive",
   "false_positive_type": null,
@@ -48,7 +48,7 @@
     "items": []
   },
   "rationale": "The existing record does not cover the observed actor or time; the edit affects inert text without observed service impact.",
-  "label_author": "Codex-drafted; Anas review pending",
+  "label_author": "Anas",
   "label_reviewer": "Oussama",
   "adjudication_status": "pending_review",
   "needs_review": true

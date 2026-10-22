@@ -137,108 +137,100 @@ S1-T03
 ## Assigned tasks
 
 S1-T02 (evaluation dataset and protocol), S1-T07 (No-RAG end-to-end baseline).
-S1-T07 has not been executed in this work; runner/lab integration remains pending.
+S1-T07 runner/lab integration has not been executed in this work.
 
 ## Work completed
 
-2026-10-22 — S1-T02 Stage C Part 1: prepared protocol drafts, claim-support scoring,
-Cohen's kappa, prompt rendering and empty validation templates for the existing
-14-case synthetic pilot. Corrected label_author to "Codex-drafted; Anas review pending"
-on all cases. Every label remains pending_review / needs_review=true. Group IDs,
-case facts and expected decisions are unchanged; grouping merges are proposals only.
+2026-10-22 — Delivered the synthetic pilot dataset, scoring tools and protocol
+drafts. Released soc-eval-v1-pilot.3 after Anas reviewed and approved all 14 cases.
+Set label_author to Anas; Oussama's peer review is still pending. Every label keeps
+pending_review / needs_review=true. Applied the approved template-family merges:
+P11/P13/P14 into G-SSH and P12 into G-FIM. Incident inputs and gold decisions,
+actions and evidence are unchanged.
 
-S1-T02 is NOT done: the frozen test split, owner/peer review and real two-person
-double-labelling remain pending. PR #78 stays draft, Part of #10. No judge model,
-human annotation, model answer set or completed validation study is claimed.
+S1-T02 is NOT done: the frozen test split, two-person claim labelling and peer
+review are NOT done. Status: In progress. No judge model, human claim annotations
+or measured model performance is claimed. PR #78 is Part of #10, submitted for
+peer review; merging remains Anas's decision.
 
 ## Technical approach
 
-Reference [METRICS.md](../../../experiments/METRICS.md) for metric authority. Add
-faithfulness accounting and nominal agreement to the existing scorer; retain raw
-agreement and disagreement counts. Quote candidate and evidence in a delimited
-JSON data block; reject evaluator metadata at the prompt interface. Hash every
-protocol/validation asset over exact bytes and verify tampering.
-
-Use empty templates preserving original annotator decisions beside future
-adjudicated labels. The CDC minimum is 50 claims on sampled development answers
-from #11. Sample size beyond that minimum, selection method/seed and ordinal
-agreement measure: TBD - owner decision. No sampler or additional statistical
-threshold is implemented in this revised scope.
+Reference [METRICS.md](../../../experiments/METRICS.md) for scoring authority.
+Retain nominal Cohen's kappa and raw agreement; implement owner-selected quadratic
+weighted Cohen's kappa for ordinal 1–5 scores, null for zero expected disagreement.
+Hash metadata changes and all protocol/validation assets with existing tooling.
+Keep candidate text in quoted untrusted prompt blocks and labels out of model code.
+Execute the README's 15-line baseline-runner example with a contract-valid dummy
+predictor; no model is involved.
 
 ## Files / components modified
 
-- [Dataset README](../../../datasets/evaluation/soc-eval-v1/README.md), label_author
-  fields, [guidelines](../../../datasets/evaluation/soc-eval-v1/guidelines/labeling.md),
+- [Dataset README](../../../datasets/evaluation/soc-eval-v1/README.md), approved
+  author/group/version metadata, [guidelines](../../../datasets/evaluation/soc-eval-v1/guidelines/labeling.md),
   [manifest](../../../datasets/evaluation/soc-eval-v1/manifest.json) and split hashes.
-- [Protocol](../../../datasets/evaluation/soc-eval-v1/protocol/README.md): faithfulness,
-  extraction/judge prompts, unselected judge configuration, pending-review quality
-  reference examples and implemented proposal-matching guide.
-- [Validation templates](../../../datasets/evaluation/soc-eval-v1/validation/README.md):
-  empty sample, independent annotation and adjudication records.
-- [Scorer](../../../ai/evaluation/scoring.py), [renderer](../../../ai/evaluation/prompts.py),
-  hashing/asset verification and [evaluation tests](../../../tests/evaluation/).
-- Only this member section and the S1-T02 row in this sprint journal.
+- [Protocol](../../../datasets/evaluation/soc-eval-v1/protocol/README.md) agreement
+  documentation and [validation templates](../../../datasets/evaluation/soc-eval-v1/validation/README.md).
+- [Scorer](../../../ai/evaluation/scoring.py) and [evaluation tests](../../../tests/evaluation/).
+- Only this member section and the S1-T02 status row in the sprint journal.
 
 ## Tests / validation
 
-Cloud sandbox, no Docker: installed pinned requirements; ran evaluation unittest
-discovery (41 tests passed), contract discovery (19 tests passed), Ruff (passed)
-and repository integrity/local Markdown links (158 tracked text files checked;
-passed). Real output and hosted CI are recorded in PR #78.
-Tests cover exact faithfulness suppression boundaries, a hand-computed kappa table,
-quoted injection data, rejection of evaluator metadata, empty annotation templates,
-protocol tampering and all existing dataset/scorer tests. Mutations use temporary
-copies; tests do not write into the dataset.
-
-An initial run after the scope change could not import jsonschema or locate Ruff;
-reinstalling requirements resolved the environment failure before the passing run.
-Software tests do not establish label validity or model-level injection resistance.
+Cloud sandbox, no Docker: installed pinned requirements; evaluation discovery:
+43 tests passed; contracts discovery: 19 tests passed. Ruff passed. Repository
+integrity and local Markdown links passed: 158 tracked text files checked.
+Real output and hosted CI are recorded in PR #78. New tests check a hand-computed
+weighted-kappa example, invalid and degenerate ratings, and the actual README
+example using incident-ID predictions. Existing integrity, oracle, shortcut,
+faithfulness, nominal-kappa and prompt-boundary tests also passed. Mutations use
+temporary copies, never the dataset. Software tests are not peer review or human
+claim-validation evidence.
 
 ## Results / metrics
 
-Current composition: 14 synthetic development cases, 6 proposed true positives,
-8 false positives, 8 existing groups and no test split. Shortcut accuracy: ticket
-7/14, wording 8/14, detector severity 5/14; action exact match: never-act 11/14,
-always-block 9/14. The 0.80 line is a local data-quality check, not a metric or
-project acceptance threshold. Arithmetic fixtures give faithfulness 0.8 for eight
-supported, one unsupported and one unjudged claim; nominal kappa 0.4 and raw
-agreement 0.7 for the 20-pair fixture. These are not human/model measurements.
+Composition: 14 synthetic development cases, 6 true positives, 8 false positives,
+four template-family groups, no test split. Gold severity: informational 8,
+medium 4, high 2. Shortcut verdict accuracy: ticket 7/14, wording 8/14; detector
+severity accuracy 5/14; action exact match: never-act 11/14, always-block 9/14.
+The 0.80 line is a local data-quality check, not a project metric or acceptance
+threshold. The arithmetic fixture [1,2,3] versus [1,3,3] gives quadratic weighted
+kappa 0.8 and raw agreement 2/3; these are software fixtures, not human results.
 
 ## Problems encountered
 
-The current eight groups include variants of shared template families. The proposed
-merge yields four groups but has not been applied without owner approval. The earlier
-unpushed broader scope was withdrawn when the owner restricted this stage. No sampler,
-Wilson/bootstrap threshold or ordinal measure was retained. Real model answers and
-independent annotations are unavailable in this work. Sandbox dependencies required
-reinstalling before validation could run.
+The pilot has no frozen test split, collected lab evidence, real baseline answer
+set or independent claim annotations. Shared template families limit independence.
+Peer review remains outstanding. Empty templates and prompt boundary tests do not
+establish judge validity or model-level injection resistance.
 
 ## Decisions made
 
-Keep case facts, expected decisions, groups and pending-review status unchanged.
-Only the requested authorship correction changes label content. The author becomes
-Anas only after owner review of that case. Ordinal agreement, grouping approval,
-sampling choices beyond the CDC minimum and judge configuration: TBD - owner decision.
-Judge configuration stays null/not_selected. Reference examples are pending review;
-empty templates are not validation evidence. Proposal scoring does not establish
-execution safety. Git does not enforce evaluator-only label access.
+Apply the rule that cases sharing a scenario template family or describing the
+same episode share a group_id; preserve other groups. Anas approved all cases;
+Oussama has not reviewed them, so nothing is accepted. Label ALL baseline answers
+on development cases with no sampling seed. If their claims total fewer than the
+CDC minimum of 50, extend with more answers; never reduce the minimum. Preserve
+original independent ratings before adjudication. Use quadratic weighted Cohen's
+kappa for ordinal scores. Judge model/provider/revision/decoding/retry policy:
+TBD - team decision. Configuration remains null/not_selected. Proposal scoring
+does not establish execution safety. Git does not enforce evaluator-only access.
 
 ## Related Issues / Pull Requests
 
 [Issue #10 / S1-T02](https://github.com/CyberSOC-ai/cybersoc-ai/issues/10),
-[Draft PR #78](https://github.com/CyberSOC-ai/cybersoc-ai/pull/78), branch
-feature/10-soc-eval-v1. Owner Anas; assigned reviewer Oussama. Development answers
-for human labelling depend on [#11](https://github.com/CyberSOC-ai/cybersoc-ai/issues/11).
-The PR records local output, change history and hosted CI. No issue closure or
-completed peer review is asserted.
+[PR #78](https://github.com/CyberSOC-ai/cybersoc-ai/pull/78), branch
+feature/10-soc-eval-v1. Owner Anas; peer reviewer Oussama (@Ossel14).
+The [S1-T03 handoff](../../../datasets/evaluation/soc-eval-v1/README.md#for-s1-t03-baseline-runner)
+lets Soulaiman (@soulaimane-22) use this pilot for [#11](https://github.com/CyberSOC-ai/cybersoc-ai/issues/11).
+Labels await peer review; do not tune on these cases or publish scores as final
+benchmark results. Issue #10 remains open; this work does not merge PR #78.
 
 ## Learning outcome
 
-Hash checks establish artifact identity, not truth or completed review. Contextual
-faithfulness differs from correctness; agreement uses independent original ratings
-before adjudication. Claims within one answer are not independent samples. An author
-field must identify drafting honestly. Unspecified study-design choices stay explicit
-owner decisions rather than silently chosen thresholds.
+Owner approval, peer review and two-person claim annotation are distinct evidence.
+Grouping records construction dependence; hashes establish identity, not truth.
+Contextual support differs from correctness. Claims within an answer are not
+independent samples. Quadratic weighting makes ordinal disagreement explicit,
+while a zero expected disagreement gives no usable kappa estimate.
 
 
 # 4. Achraf

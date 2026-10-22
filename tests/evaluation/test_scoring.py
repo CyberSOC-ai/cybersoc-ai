@@ -158,3 +158,24 @@ class FaithfulnessAndAgreementTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class WeightedKappaTest(unittest.TestCase):
+    def test_quadratic_hand_computed_and_boundaries(self):
+        from ai.evaluation.scoring import weighted_kappa
+        # A=[1,2,3], B=[1,3,3]: squared observed sum=1;
+        # independent cross-pair squared sum=15; 1-(1/3)/(15/9)=0.8.
+        result = weighted_kappa([1, 2, 3], [1, 3, 3])
+        self.assertAlmostEqual(result['kappa'], .8, msg='UNIT-weighted: hand-computed kappa differs')
+        self.assertEqual(result['raw_agreement'], 2/3, 'UNIT-weighted: raw agreement differs')
+        self.assertEqual(result['observed_disagreement'], 1/48, 'UNIT-weighted: wrong observed weights')
+        self.assertEqual(result['expected_disagreement'], 15/144, 'UNIT-weighted: wrong expected weights')
+        self.assertEqual(weighted_kappa([1, 5], [1, 5])['kappa'], 1, 'UNIT-weighted: perfect agreement differs')
+        self.assertEqual(weighted_kappa([1, 5], [5, 1])['kappa'], -1, 'UNIT-weighted: opposite ratings differ')
+        constant = weighted_kappa([5], [5])
+        self.assertIsNone(constant['kappa'], 'UNIT-weighted: zero expected disagreement must be null')
+        self.assertEqual(constant['reason'], 'zero_expected_disagreement', 'UNIT-weighted: missing null reason')
+        self.assertIsNone(weighted_kappa([], [])['kappa'], 'UNIT-weighted: empty ratings must be null')
+        for a, b in [([1], []), ([0], [1]), ([6], [1]), ([True], [1]), ([1.0], [1]), ([None], [1])]:
+            with self.assertRaises(ValueError, msg='UNIT-weighted: invalid paired ratings accepted'):
+                weighted_kappa(a, b)

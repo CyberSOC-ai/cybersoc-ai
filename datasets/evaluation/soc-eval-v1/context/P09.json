@@ -2,7 +2,7 @@
   "case_id": "P09",
   "incident_id": "INC-PILOT-009",
   "group_id": "G-ACCOUNT",
-  "dataset_version": "soc-eval-v1-pilot.2",
+  "dataset_version": "soc-eval-v1-pilot.3",
   "synthetic": true,
   "synthetic_example": true,
   "scenario_id": "LAB-03",

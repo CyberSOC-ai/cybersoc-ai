@@ -6,25 +6,23 @@ labelling happens on DEVELOPMENT answers after the [baseline runner (#11)](https
 produces them. No model answers, human annotations, agreement results or adjudications
 exist in this directory. Empty templates are not validation evidence.
 
-## Sample decisions pending owner input
+## Owner-approved answer coverage
 
-The CDC minimum is at least 50 claims double-labelled by two people. METRICS draws
-the sample at answer level: the same sampled answers receive whole-answer quality
-ratings and claim-level support labels. Record both distinct answer count and claim
-count. Claims within an answer are not independent observations.
+Label ALL answers the baseline produces on development cases, with no sampling
+seed. Both people independently score the same whole answers and their atomic
+claims. The CDC minimum remains at least 50 claims in total: if the pilot yields
+fewer, extend the set with more answers; never reduce the claim minimum. Record
+both distinct answer count and total claim count. Claims within an answer are
+not independent observations. Fifty claims are not proof of sufficient reliability.
 
-- Sample size beyond the CDC minimum (answers and total claims): TBD - owner decision.
-- Answer-selection method and any random seed: TBD - owner decision.
-- Ordinal agreement measure for 1–5 quality scores: TBD - owner decision.
-
-There is no automatic sampler in this delivery. Do not treat the minimum claim count
-as a fixed number of answers or evidence of sufficient statistical reliability.
-Ask Anas to specify these choices before sampling or ordinal-agreement reporting.
+For ordinal 1–5 quality scores, report quadratic weighted Cohen's kappa before
+adjudication, alongside raw agreement. Nominal support labels use plain Cohen's
+kappa as specified in METRICS. No answers or annotations are fabricated here.
 
 ## Empty record templates and preservation
 
 - [sample.template.json](sample.template.json): source run, immutable dataset and
-  extraction digests, pending sampling choices, answer IDs and claim IDs. Fill
+  extraction digests, approved coverage policy, answer IDs and claim IDs. Fill
   distinct_answers/claim_count only from actual selected answers.
 - [annotation.template.json](annotation.template.json): one separate original record
   per annotator. Each answer_annotations row contains answer_id, four quality_scores
