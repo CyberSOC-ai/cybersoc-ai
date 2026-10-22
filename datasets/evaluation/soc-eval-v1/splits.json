@@ -56,22 +56,22 @@
     {
       "case_id": "P11",
       "group_id": "G-SSH-SESSION",
-      "sha256": "f60497edad9603615e13a9e06ea8e1fed697d35dbbaea32aa08f7c6a8b28cf74"
+      "sha256": "3f9a9316494c0b28a9c8b833f4cdac5398f7cc6e8aa5eaa047af68e0e4e849ce"
     },
     {
       "case_id": "P12",
       "group_id": "G-FIM-WINDOW",
-      "sha256": "90c79dfd8fd13ae9c7a77b046d94ffa1550083740dc9833f072d07167bd16175"
+      "sha256": "f5ab2f1af13af3099e200c5b3338e3706d42f4f0bc7e3ccc97da4a99cd1db890"
     },
     {
       "case_id": "P13",
       "group_id": "G-SSH-SCANNER",
-      "sha256": "fac05544cffa75308b5fbeb3ab62c5de4a5d37462389e8411aa526d3e37a7f01"
+      "sha256": "ece675bca9886006ae45b317b4c6af8eb8ca8a28b92c95b96575f35c8c909798"
     },
     {
       "case_id": "P14",
       "group_id": "G-SSH-REPLAY",
-      "sha256": "7957b6a0ec5b0c588e2623f30ffe22c453f154d5f0e7c657d888e1f7a35ba45a"
+      "sha256": "4e2c5c43194bbdb6d86bdca4058deb9e82baad03e63006a5da63864fddba207f"
     }
   ],
   "test": []

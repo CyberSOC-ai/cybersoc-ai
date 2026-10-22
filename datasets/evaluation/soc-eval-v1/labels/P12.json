@@ -20,7 +20,16 @@
       "statement": "The existing record does not cover the observed actor or time.",
       "locator": {
         "json_pointer": "/description",
-        "quoted_substring": "Change FIX-112 covers lab-operator during 15:00..15:10Z, not lab-temp at 15:40Z"
+        "quoted_substring": "Change FIX-112: actor=lab-operator; permitted window=15:00..15:10Z"
+      }
+    },
+    {
+      "id": "P12-E3",
+      "supports": "verdict",
+      "statement": "The observed write was performed by lab-temp at 15:40Z.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Audit actor=lab-temp; write time=15:40:00Z; one write"
       }
     },
     {

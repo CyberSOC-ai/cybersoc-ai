@@ -3,7 +3,7 @@
   "status": "synthetic_pilot_pending_review",
   "synthetic_example": true,
   "hash_scheme": "soc-eval-json-v1",
-  "splits_sha256": "30ff7285338d9935957e93f8dd41d620caa576fa0fba40403520d9443fef2d81",
+  "splits_sha256": "8bdd0c0b82add2bc3e350c898fea376332afcbec4e39921f5723d6c3630aa7d5",
   "runner_policy": {
     "path": "protocol/runner-policy.json",
     "sha256": "c2ef7685a7762b7c6fc72fe7f272f6918134780a2d92773a7cb08de5c043a02e",
@@ -212,7 +212,7 @@
     },
     {
       "case_id": "P11",
-      "sha256": "f60497edad9603615e13a9e06ea8e1fed697d35dbbaea32aa08f7c6a8b28cf74",
+      "sha256": "3f9a9316494c0b28a9c8b833f4cdac5398f7cc6e8aa5eaa047af68e0e4e849ce",
       "inputs": {
         "path": "inputs/P11.json",
         "sha256": "19ae5c9176ae63cdd9a087d7a58bcb1d27b5a884405617b34578bdaf99fcb198",
@@ -220,8 +220,8 @@
       },
       "labels": {
         "path": "labels/P11.json",
-        "sha256": "725b30df4b10b21b237d32dc0ffb840c3822d0465708d26bf74be94dc1c033dc",
-        "raw_sha256": "d483b2773c311b2a7a29932c0b8c72d6497c628bc9cf52672dcced3108890865"
+        "sha256": "35be3eac8a93f0a9aaf5f42e6df95533d574625ec6d085e40aacd201b700860c",
+        "raw_sha256": "9d0e34538186097c2a993426edd90b3369b3da8621087b1fb17e5da6eb60ebb2"
       },
       "context": {
         "path": "context/P11.json",
@@ -231,16 +231,16 @@
     },
     {
       "case_id": "P12",
-      "sha256": "90c79dfd8fd13ae9c7a77b046d94ffa1550083740dc9833f072d07167bd16175",
+      "sha256": "f5ab2f1af13af3099e200c5b3338e3706d42f4f0bc7e3ccc97da4a99cd1db890",
       "inputs": {
         "path": "inputs/P12.json",
-        "sha256": "3deb5532a760c9741f8b2b29bea70f50030cdf98ee49c27028ae24cbdf89cf2d",
-        "raw_sha256": "c596a1d6f35530516edd7cc3a7ba1cc41daa2f27fa6689c167ac6face26fd6a5"
+        "sha256": "57e35b153ab27f96d168dab48c464639c9cf7eb119bde994990eddfa03eda2b1",
+        "raw_sha256": "d59570ec1062dcb8102cf0ed2fda94b0c05539dafbe40e1756fb52a9347fea9d"
       },
       "labels": {
         "path": "labels/P12.json",
-        "sha256": "11dbfe1aa5eb1e87e743720659fc3fffb4b44532844495598e0434791ed236f1",
-        "raw_sha256": "9463897811c38e824e5fc10e83650f245551cd921b64168542a2f836b833d56e"
+        "sha256": "c15599f69e7ef669969fe8afc085f0c029f9789b2831f7b84c059c4924b09883",
+        "raw_sha256": "55e110f3c21653c881d159a3907ee681fe09f7f6a4735902cb84b9a7fbf16f86"
       },
       "context": {
         "path": "context/P12.json",
@@ -250,16 +250,16 @@
     },
     {
       "case_id": "P13",
-      "sha256": "fac05544cffa75308b5fbeb3ab62c5de4a5d37462389e8411aa526d3e37a7f01",
+      "sha256": "ece675bca9886006ae45b317b4c6af8eb8ca8a28b92c95b96575f35c8c909798",
       "inputs": {
         "path": "inputs/P13.json",
-        "sha256": "b73b088937e57cdfd5e7f81c07f5eb2d10f48085d41802e6d9cfcd25c35b4c3d",
-        "raw_sha256": "62108d5c941f1c45b48a611255911705b3ba59e88758370d65780f85f8fc9023"
+        "sha256": "8119beb3bf06d09701cb26e2d5590913e0a38ed0e5a99554cda5bfaceb92c4f3",
+        "raw_sha256": "f81af878f80e46592d3d5d5d473d7eaba8b6fa4d7fb4d5033c622dbbd84ac1f9"
       },
       "labels": {
         "path": "labels/P13.json",
-        "sha256": "b42336b51a86a5345355b7d2a4f8af3c26d62db038afa71ecf0533533c486d87",
-        "raw_sha256": "cafaeabb2b28ca66a39d246c815bce6abd3fa34a94fceef157cf7695af3e0dc9"
+        "sha256": "f09a4c45289c2dfaaed1d4f80108148d1b057267d9e3b38926ed9aa38123b5af",
+        "raw_sha256": "914f8f655e7493c3417bb2e0a0539eaf163ca3bad8c73599c06461ea95bd810f"
       },
       "context": {
         "path": "context/P13.json",
@@ -269,11 +269,11 @@
     },
     {
       "case_id": "P14",
-      "sha256": "7957b6a0ec5b0c588e2623f30ffe22c453f154d5f0e7c657d888e1f7a35ba45a",
+      "sha256": "4e2c5c43194bbdb6d86bdca4058deb9e82baad03e63006a5da63864fddba207f",
       "inputs": {
         "path": "inputs/P14.json",
-        "sha256": "ed8cfc15eb81bcd5b4adcfac06020f55957b51a25f899e02d609eb5c2a9fd1a0",
-        "raw_sha256": "e62f9ded0965214f3298d8b64c84da0d322b07f2a6cc3c03346afa5fd221a1d3"
+        "sha256": "279c719d2c6af51042379618a494e809e1baeda82eae7bb9e82e472c39447b02",
+        "raw_sha256": "1b413645fb7546ac29d2ef89747e6e83a4c6dd271736f2d74402249c71b9e709"
       },
       "labels": {
         "path": "labels/P14.json",

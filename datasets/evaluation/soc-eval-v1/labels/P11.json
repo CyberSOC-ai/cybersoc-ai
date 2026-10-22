@@ -13,7 +13,7 @@
     "T1110.001",
     "T1078"
   ],
-  "mitre_reason": "Accepted password and commands in the same authenticated lab-admin session evidence valid-account use after password guessing.",
+  "mitre_reason": "Accepted password and commands in the same authenticated lab-admin session evidence valid-account use after password guessing. The T1110.001 method mapping is probable, not certain, pending human review.",
   "required_actions": [
     {
       "action_type": "block_ip",

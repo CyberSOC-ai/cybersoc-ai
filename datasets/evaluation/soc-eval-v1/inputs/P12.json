@@ -4,7 +4,7 @@
   "timestamp": "2026-10-13T15:40:00Z",
   "source": "synthetic-wazuh-fixture",
   "source_event_id": "EVT-PILOT-012",
-  "description": "linux-01 syscheck 15:40:00Z /srv/lab-fixtures/banner.txt old=\"training banner A\" new=\"training banner C\". Audit actor=lab-temp; one write. Change FIX-112 covers lab-operator during 15:00..15:10Z, not lab-temp at 15:40Z. File ACL lists lab-operator only. Inert text not executed; no service interruption or network origin. Monitoring healthy.",
+  "description": "linux-01 syscheck 15:40:00Z /srv/lab-fixtures/banner.txt old=\"training banner A\" new=\"training banner C\". Audit actor=lab-temp; write time=15:40:00Z; one write. Change FIX-112: actor=lab-operator; permitted window=15:00..15:10Z. Effective write-right holders at 15:40Z: lab-operator (file owner) and lab-temp (temporary fixture-editors group membership); all other users read-only. Inert text not executed; no service interruption or network origin. Monitoring healthy.",
   "severity": "low",
   "entities": [
     {
