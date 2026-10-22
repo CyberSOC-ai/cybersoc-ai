@@ -1,0 +1,58 @@
+{
+  "dataset_version": "soc-eval-v1-pilot.1",
+  "hash_scheme": "soc-eval-json-v1",
+  "test_frozen": false,
+  "development": [
+    {
+      "case_id": "P01",
+      "group_id": "G-SSH",
+      "sha256": "1ff0d19c5083d5dc58046af1d66cbede675f575d3d91bf0c0c2b044e93bd47b5"
+    },
+    {
+      "case_id": "P02",
+      "group_id": "G-SSH",
+      "sha256": "2e67bd50e899029846dfd937ad3627cec047495c51a4a5aa3adbd0fc9220b845"
+    },
+    {
+      "case_id": "P03",
+      "group_id": "G-SSH",
+      "sha256": "2fdaac971ba823937bf5ca7547a264415848e9dd7ec682b34a48886e53199fef"
+    },
+    {
+      "case_id": "P04",
+      "group_id": "G-SSH",
+      "sha256": "61e582947215472d7df49a42fd780fdcf271332069912addef84064248dca445"
+    },
+    {
+      "case_id": "P05",
+      "group_id": "G-SSH",
+      "sha256": "2db659437b56c8229dd05e530b707ec2773de56f45ddf23361f7b66da39b2214"
+    },
+    {
+      "case_id": "P06",
+      "group_id": "G-FIM",
+      "sha256": "664143dfd82c99e364b282f76b2cbfc6609c7f20ed2098cc20713f5a0892144a"
+    },
+    {
+      "case_id": "P07",
+      "group_id": "G-FIM",
+      "sha256": "96d2efef9f3df53b6927034f78b1341f3646266f4fe777a5a342a90a29e0681c"
+    },
+    {
+      "case_id": "P08",
+      "group_id": "G-ACCOUNT",
+      "sha256": "b532413cc3990c6ff1937cd85e66823f1c6a2d79d90b68c3610410b6d4ae6209"
+    },
+    {
+      "case_id": "P09",
+      "group_id": "G-ACCOUNT",
+      "sha256": "55b56669515464eb1d204d16560507abc6847c3895c765787ead72ca69e940b5"
+    },
+    {
+      "case_id": "P10",
+      "group_id": "G-POWERSHELL",
+      "sha256": "573f364108c3cc28e2fc665c2689f5cf4eb3f2b3dca64cc77b7b2bee18147fad"
+    }
+  ],
+  "test": []
+}

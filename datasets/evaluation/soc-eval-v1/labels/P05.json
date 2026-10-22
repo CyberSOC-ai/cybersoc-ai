@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.1",
+  "protocol_version": "S1T02-pilot-v1",
+  "case_id": "P05",
+  "incident_id": "INC-PILOT-005",
+  "group_id": "G-SSH",
+  "split": "development",
+  "verdict": "false_positive",
+  "false_positive_type": "benign_trigger",
+  "gold_severity": "informational",
+  "mitre_techniques": [],
+  "mitre_reason": "No supported adversarial technique in the stated authorized or detector-error context; mapping awaits human review.",
+  "required_actions": [],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P05-E1",
+      "statement": "Primary observation supporting the proposed triage decision.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "one success, zero failures, no correlated alert"
+      }
+    },
+    {
+      "id": "P05-E2",
+      "statement": "Complete incident context for authorization, impact and response scope.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "linux-01 sshd 11:00:00Z Accepted publickey for lab-operator from 192.0.2.22 port 50318; destination 10.77.0.20 tcp/22. Session closed 11:01Z. Operator/source/window match FIX-105 approval. Full window: one success, zero failures, no correlated alert and no service impact. This exported control event was routed to the triage fixture queue."
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The approved successful SSH control has no correlated detection or adverse impact, supporting a benign control and informational assessed severity.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

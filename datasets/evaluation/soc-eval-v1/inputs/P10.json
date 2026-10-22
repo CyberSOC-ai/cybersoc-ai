@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "incident_id": "INC-PILOT-010",
+  "timestamp": "2026-10-13T14:00:00Z",
+  "source": "synthetic-wazuh-fixture",
+  "source_event_id": "EVT-PILOT-010",
+  "description": "windows-01 process alert 14:00:00Z image=powershell.exe parent=explorer.exe user=lab-operator. Script text: Write-Output \"LAB-MARKER\"; captured output LAB-MARKER, exit=0. FIX-110 authorizes this one local audit-channel check. Complete process/network window: no downloads, child process, persistence or outbound connection. Custom fixture rule triggers on any PowerShell start; no adverse effect.",
+  "severity": "medium",
+  "entities": [
+    {
+      "type": "host",
+      "value": "windows-01"
+    },
+    {
+      "type": "process",
+      "value": "powershell.exe"
+    },
+    {
+      "type": "user",
+      "value": "lab-operator"
+    }
+  ],
+  "ingestion_kind": "synthetic"
+}

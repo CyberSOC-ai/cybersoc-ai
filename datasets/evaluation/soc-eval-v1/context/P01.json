@@ -1,0 +1,32 @@
+{
+  "case_id": "P01",
+  "incident_id": "INC-PILOT-001",
+  "group_id": "G-SSH",
+  "dataset_version": "soc-eval-v1-pilot.1",
+  "synthetic": true,
+  "synthetic_example": true,
+  "scenario_id": "LAB-01",
+  "template_family": "G-SSH",
+  "source_commit": "cac377a973c64ba0cc0003df89b62d4a4556640e",
+  "catalog_path": "infrastructure/soc-lab/README.md",
+  "authored_on": "2026-10-22",
+  "provenance": "Assistant-authored for Anas from the approved catalog scenarios; not collected or executed; human review pending.",
+  "fixture_inventory": {
+    "endpoint_id": "linux-01",
+    "inventory_revision": "fixture-inventory-pilot-v1",
+    "environment_id": "synthetic-pilot",
+    "operational_allowlist": false,
+    "note": "Logical endpoint from the lab plan; fictional fixture only, not a registered operational allowlist or execution authorization."
+  },
+  "limitations": [
+    "All observations and event times are authored synthetic data.",
+    "Assigned author/reviewer fields do not assert independent human annotation or review."
+  ],
+  "episode_id": "SYNTH-SSH-001",
+  "mitre_reference": {
+    "url": "https://attack.mitre.org/techniques/T1110/",
+    "technique_version": "2.8",
+    "checked_on": "2026-10-22",
+    "snapshot_status": "Public technique page checked; no STIX corpus snapshot acquired; human mapping review pending."
+  }
+}

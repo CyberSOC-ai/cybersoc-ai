@@ -1,0 +1,209 @@
+{
+  "dataset_version": "soc-eval-v1-pilot.1",
+  "status": "synthetic_pilot_pending_review",
+  "synthetic_example": true,
+  "hash_scheme": "soc-eval-json-v1",
+  "splits_sha256": "3b4e816bdbcad928e0e769392a5bcbd28598402aae50a27a1d942a1936993eed",
+  "severity_universe": [
+    "informational",
+    "low",
+    "medium",
+    "high"
+  ],
+  "mitre_universe": [
+    "T1110",
+    "T1136.001"
+  ],
+  "cases": [
+    {
+      "case_id": "P01",
+      "sha256": "1ff0d19c5083d5dc58046af1d66cbede675f575d3d91bf0c0c2b044e93bd47b5",
+      "inputs": {
+        "path": "inputs/P01.json",
+        "sha256": "ebe155041123b4cf0c1f7a778bd1e310aa446a48e4b4562a629c3943cb992ff1",
+        "raw_sha256": "0e276aa2a17339398c4b7717f291aee463cafa7fac94ead21eb1299ba7b4d4b7"
+      },
+      "labels": {
+        "path": "labels/P01.json",
+        "sha256": "e986dd5fb627cee58137053419443329390b3c699c95a218506de08b6a415caa",
+        "raw_sha256": "2943fb11b1f1a6bb8025cbf95777af91a4ff4ef25924245b0713d80d8c928983"
+      },
+      "context": {
+        "path": "context/P01.json",
+        "sha256": "65daabd079907d2a2d73a28f63bccfbfa506125a218159d2692a3712f87d2c1e",
+        "raw_sha256": "9af42a8708aab262173960487d828e1aa9941cb265fca1b487d09a945c4eb2ac"
+      }
+    },
+    {
+      "case_id": "P02",
+      "sha256": "2e67bd50e899029846dfd937ad3627cec047495c51a4a5aa3adbd0fc9220b845",
+      "inputs": {
+        "path": "inputs/P02.json",
+        "sha256": "6534c98e462b6fd8c735441293346af5b30c1accfed843ac1ba4fd6b1df613c5",
+        "raw_sha256": "49178afcc7dcd81958f03a87dc213024d3e206f98177e751378ed133372ff06b"
+      },
+      "labels": {
+        "path": "labels/P02.json",
+        "sha256": "8817baa8a5b3322e268cf7ad823c0fc02333d0c9bf249860903cb52b4d3a47f8",
+        "raw_sha256": "a31eb80cefae539d50ba6feaf7aa926d453b34d6f63b6fb865603d60099c2d53"
+      },
+      "context": {
+        "path": "context/P02.json",
+        "sha256": "231958ef337e235b49152925f82c46f904f83584e43e6c42c8ae78a143baa57b",
+        "raw_sha256": "0d030ce28ad7214a2f58c03685478e4a4d6aa70a5136e3152fb65c74fc584e36"
+      }
+    },
+    {
+      "case_id": "P03",
+      "sha256": "2fdaac971ba823937bf5ca7547a264415848e9dd7ec682b34a48886e53199fef",
+      "inputs": {
+        "path": "inputs/P03.json",
+        "sha256": "e54f63aa0ea9e8e4520189d1cb5b793bb5af98fdc80507a44b6a2b272f2579c1",
+        "raw_sha256": "2e78c485046cd1db6f33259aebe11cb3a680e6d722a5cf4086af405ea94b5b45"
+      },
+      "labels": {
+        "path": "labels/P03.json",
+        "sha256": "0c5ab7ee27598d643381a7a873bb61f12112ded95f1faacd73df2096d2dec7b7",
+        "raw_sha256": "03028e66c5f72782a33c1a692bb8e99f68c8b6f8f8de8624c69268d6352c2238"
+      },
+      "context": {
+        "path": "context/P03.json",
+        "sha256": "91eb7c2dbf641371f06a5572888b83b48db51874dfcd5b570bf41d40509bb369",
+        "raw_sha256": "6d988d146accd66f54c4c2aff542cb5f4cd8d79e5f77b481fb3ce098aa34bab4"
+      }
+    },
+    {
+      "case_id": "P04",
+      "sha256": "61e582947215472d7df49a42fd780fdcf271332069912addef84064248dca445",
+      "inputs": {
+        "path": "inputs/P04.json",
+        "sha256": "c8bbf2c07f9515e41ac92c603bde2908032e93badc30c56f9c6010e50a689acd",
+        "raw_sha256": "6be12a8c4ca0c4deb100ba2499664562d418c58cb683749ad87fff67497edf7c"
+      },
+      "labels": {
+        "path": "labels/P04.json",
+        "sha256": "66fe7392ac20b58700328a30f8fd0719bf97ff4a03eadd18db46626f342d1c4c",
+        "raw_sha256": "fcfad278c38cc6db93a4dcc37120b6f6f61a59c5e2118a896fd71c18a3771852"
+      },
+      "context": {
+        "path": "context/P04.json",
+        "sha256": "af246fc3d2da1957f269c490dfd9f79ab3a686f64ab87e7327cf6dd6866ea8c1",
+        "raw_sha256": "684f4e3e3924338aa388c02e5f5dd5916a36f9f1cc25f8768aed54ffc1c503da"
+      }
+    },
+    {
+      "case_id": "P05",
+      "sha256": "2db659437b56c8229dd05e530b707ec2773de56f45ddf23361f7b66da39b2214",
+      "inputs": {
+        "path": "inputs/P05.json",
+        "sha256": "bff9fed138cf752e83c5c29ee1c7659a1f5d17f5b6551ee646a6d262f32f9f52",
+        "raw_sha256": "22ace358f8e114ebf80f1c6d20b0e8c95bae908ad7ef536a908264b894870320"
+      },
+      "labels": {
+        "path": "labels/P05.json",
+        "sha256": "b5ecf442abf3ecc38761f3bf02d80fa4870921838628bd5abf1b79475f27b16d",
+        "raw_sha256": "d205a21d55c5bf2af4233b6e62678b949e4474504ae1e510d87ca9146ac4250e"
+      },
+      "context": {
+        "path": "context/P05.json",
+        "sha256": "b21b34506d1196b485e7972669e52bbf95e5db472ccb27cc0125b05466b4b961",
+        "raw_sha256": "58f298a1be70fc36ea99ba708ab8e8ac0ea31b1db8b2d08f4187b57c07620d6d"
+      }
+    },
+    {
+      "case_id": "P06",
+      "sha256": "664143dfd82c99e364b282f76b2cbfc6609c7f20ed2098cc20713f5a0892144a",
+      "inputs": {
+        "path": "inputs/P06.json",
+        "sha256": "2ab2651bb1f7994b879653fa0781affc736fc3e0bee1ac9dadf32fe672e5f0f5",
+        "raw_sha256": "9222720ce2397093886f7f37c9a5c8395c5b2e4c8ed51b06890e964a65fa7d36"
+      },
+      "labels": {
+        "path": "labels/P06.json",
+        "sha256": "4de6f48d8c642e8dcfafd247caf453076b9073e066c1932d3df6a11da3998961",
+        "raw_sha256": "35ab3de310c85c574a6e3f6ae18962636848d1a1715f7021d76aab0b48ead490"
+      },
+      "context": {
+        "path": "context/P06.json",
+        "sha256": "06d417700cedfb867c0ec56d263dde252903597e6e89b701d89eedf6e3aae302",
+        "raw_sha256": "9ade8da37fed826fc19da7befcef9f8a29350a26ba6b2443ad334136005b5440"
+      }
+    },
+    {
+      "case_id": "P07",
+      "sha256": "96d2efef9f3df53b6927034f78b1341f3646266f4fe777a5a342a90a29e0681c",
+      "inputs": {
+        "path": "inputs/P07.json",
+        "sha256": "d5003aac0ab368df100a25fa6249c7653131f0b42b1c1e2dd29a2eb33022739c",
+        "raw_sha256": "1f858cf39d87ed3be40c491ebfc28082a75abfbd0041d8a2ff6ef66b3a38f638"
+      },
+      "labels": {
+        "path": "labels/P07.json",
+        "sha256": "1de56d4fb0cdfe2a56fc56e66488d8e6099cd0e0750a9ce1adb665e048d36847",
+        "raw_sha256": "a693f39c21f4fe5756d77fb37e110f0d2cdb29ab8644a3114a91e57a06070531"
+      },
+      "context": {
+        "path": "context/P07.json",
+        "sha256": "61452aee8c45bf9daec467208f00326013d4f16dea57e06cccd50fda341c5349",
+        "raw_sha256": "1b605ca0d0ab34e655da59f4a7efa61d75da60afc96cf4a5d694db5cd13c5da2"
+      }
+    },
+    {
+      "case_id": "P08",
+      "sha256": "b532413cc3990c6ff1937cd85e66823f1c6a2d79d90b68c3610410b6d4ae6209",
+      "inputs": {
+        "path": "inputs/P08.json",
+        "sha256": "90c5725633f105691180c9e77f7f6cf6e521b589d5461ae7dbee21e36959fc0b",
+        "raw_sha256": "aa3ba1a7361d939819b5e3eb50cc4bb5b85a6740ac0207d1d7e8e5a71bb16fe8"
+      },
+      "labels": {
+        "path": "labels/P08.json",
+        "sha256": "6434ac5fbbc244636fddf2627037c1c308c5ffc71bd6f66882532f93b912ebab",
+        "raw_sha256": "cb18a917f3c840169c4679079ebeb3b96b2f6a8d806195620898ccc6f71fe05d"
+      },
+      "context": {
+        "path": "context/P08.json",
+        "sha256": "7488d95c5639a52c3ff80a722edbcfc07df9c35c4346e99480f5b193b290a3a0",
+        "raw_sha256": "7547d2a5481fa14960627a24f771f4825a959a9be52b637a563d58589fa82c4a"
+      }
+    },
+    {
+      "case_id": "P09",
+      "sha256": "55b56669515464eb1d204d16560507abc6847c3895c765787ead72ca69e940b5",
+      "inputs": {
+        "path": "inputs/P09.json",
+        "sha256": "de2d6074a1d81373879edc62cbdd0b69a341408262fcf69289a21af8a20cee49",
+        "raw_sha256": "bcae00bc478cc6b221960ce519785a0cc0b8a544a88c29c641468845343db95d"
+      },
+      "labels": {
+        "path": "labels/P09.json",
+        "sha256": "4263407d3370cbf2cfe12482bc845a4384f68f22d89abb2fb6d7fc12b4542c96",
+        "raw_sha256": "779fe684c3d4427dd4bdddb1e91cf517b9b478f5ca5c74b17b442e1f34fd7e50"
+      },
+      "context": {
+        "path": "context/P09.json",
+        "sha256": "4466eb9c0da944b746a0938f5a52bfdf1844d0820ccc979afbde6499167d842c",
+        "raw_sha256": "dbea87e043caa026a150ebe1d59a29c8760109d5e493e6fe2294b7c4c259d730"
+      }
+    },
+    {
+      "case_id": "P10",
+      "sha256": "573f364108c3cc28e2fc665c2689f5cf4eb3f2b3dca64cc77b7b2bee18147fad",
+      "inputs": {
+        "path": "inputs/P10.json",
+        "sha256": "72491dcc4cbfdaa52d5f37a265931f906df771758741d98a89fe816e6cf642bc",
+        "raw_sha256": "0573afd055a7e5bf988bbeeabb494bdd7f7e9b98c6b9b0306e84fcb76050bfdd"
+      },
+      "labels": {
+        "path": "labels/P10.json",
+        "sha256": "3c4cdeff478c7448db02f4abc990ee6c2af76ba32b0fe84260be5b52f59a9ec2",
+        "raw_sha256": "087cd3de556e89f6a6ca374382b2f83324fcc5c30eaa95ee4b0b809c993d0912"
+      },
+      "context": {
+        "path": "context/P10.json",
+        "sha256": "9aa3012fd276d64507b932dc7337756918ed615df29af71e396173714687b806",
+        "raw_sha256": "648f908df7e4853cddffe8ed405e1bb729f64beeb16ca22fab6211dd2dbd0c5e"
+      }
+    }
+  ]
+}

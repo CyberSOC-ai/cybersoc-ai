@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.1",
+  "protocol_version": "S1T02-pilot-v1",
+  "case_id": "P04",
+  "incident_id": "INC-PILOT-004",
+  "group_id": "G-SSH",
+  "split": "development",
+  "verdict": "false_positive",
+  "false_positive_type": "detector_error",
+  "gold_severity": "informational",
+  "mitre_techniques": [],
+  "mitre_reason": "No supported adversarial technique in the stated authorized or detector-error context; mapping awaits human review.",
+  "required_actions": [],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P04-E1",
+      "statement": "Primary observation supporting the proposed triage decision.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "decoder mistakenly mapped outcome=success to failure"
+      }
+    },
+    {
+      "id": "P04-E2",
+      "statement": "Complete incident context for authorization, impact and response scope.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Queue item auth-fail-burst linux-01, 10:20:08Z. Correlation says count=6 src=192.0.2.21 user=lab-operator. Included source event: Accepted publickey at 10:20:01Z, session ended normally. Export audit: all six references resolve to that one success event; decoder mistakenly mapped outcome=success to failure. Complete window has zero failed logins. FIX-104 authorizes source 192.0.2.21 for tcp/22; no service impact."
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The included export audit proves the alert counted a permitted successful login as failures, supporting detector error and informational assessed severity.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.1",
+  "protocol_version": "S1T02-pilot-v1",
+  "case_id": "P09",
+  "incident_id": "INC-PILOT-009",
+  "group_id": "G-ACCOUNT",
+  "split": "development",
+  "verdict": "false_positive",
+  "false_positive_type": "benign_trigger",
+  "gold_severity": "informational",
+  "mitre_techniques": [],
+  "mitre_reason": "No supported adversarial technique in the stated authorized or detector-error context; mapping awaits human review.",
+  "required_actions": [],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P09-E1",
+      "statement": "Primary observation supporting the proposed triage decision.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "actor, name and group match"
+      }
+    },
+    {
+      "id": "P09-E2",
+      "statement": "Complete incident context for authorization, impact and response scope.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "linux-01 audit 13:30:04Z add-user: local account lab-maint01 created uid=2202; sudo membership recorded. FIX-109 approves lab-operator creating that disposable account for maintenance in this window; actor, name and group match. Reset log confirms account removal at 13:35Z. No unexpected session or service impact; monitoring stayed healthy."
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The disposable privileged account matches an approved maintenance change and was removed normally, supporting a benign trigger and informational assessed severity.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

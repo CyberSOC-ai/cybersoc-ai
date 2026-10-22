@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.1",
+  "protocol_version": "S1T02-pilot-v1",
+  "case_id": "P08",
+  "incident_id": "INC-PILOT-008",
+  "group_id": "G-ACCOUNT",
+  "split": "development",
+  "verdict": "true_positive",
+  "false_positive_type": null,
+  "gold_severity": "high",
+  "mitre_techniques": [
+    "T1136.001"
+  ],
+  "mitre_reason": null,
+  "required_actions": [],
+  "analyst_guidance": "Escalate the unauthorized privileged account to an analyst, preserve audit evidence, and seek approval to disable that exact account through a separately supported procedure.",
+  "gold_evidence": [
+    {
+      "id": "P08-E1",
+      "statement": "Primary observation supporting the proposed triage decision.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "local account lab-persist01 created"
+      }
+    },
+    {
+      "id": "P08-E2",
+      "statement": "Complete incident context for authorization, impact and response scope.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "linux-01 audit 13:00:04Z add-user: local account lab-persist01 created, uid=2201; 13:00:06Z added to sudo group. Existing unapproved session actor=lab-temp. Owner confirmation: neither session nor new account is authorized. Session note recovered in the fixture says the account is intended to keep access after session expiry. New account remains enabled with sudo access; no network origin was recorded and no action has been applied."
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "An unauthorized enabled local account with sudo access intended to retain access supports high assessed severity and local-account persistence; IP containment has no evidenced source.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

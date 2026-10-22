@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.1",
+  "protocol_version": "S1T02-pilot-v1",
+  "case_id": "P03",
+  "incident_id": "INC-PILOT-003",
+  "group_id": "G-SSH",
+  "split": "development",
+  "verdict": "false_positive",
+  "false_positive_type": "benign_trigger",
+  "gold_severity": "low",
+  "mitre_techniques": [],
+  "mitre_reason": "No supported adversarial technique in the stated authorized or detector-error context; mapping awaits human review.",
+  "required_actions": [],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P03-E1",
+      "statement": "Primary observation supporting the proposed triage decision.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "terminal used the old test credential after rotation"
+      }
+    },
+    {
+      "id": "P03-E2",
+      "statement": "Complete incident context for authorization, impact and response scope.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "linux-01 auth burst, 10:05Z. src=192.0.2.20 dst=10.77.0.20:22/tcp user=lab-operator; four failures then Accepted password. Ticket FIX-103 authorizes this operator and source for the window. Operator confirmation attached: terminal used the old test credential after rotation; corrected credential worked, session closed normally. No additional sources or failures in the complete window; short access delay only."
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The authorized operator credential error caused only a short access delay, supporting a benign trigger with low assessed severity and no containment.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

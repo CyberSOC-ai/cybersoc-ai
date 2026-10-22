@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.1",
+  "protocol_version": "S1T02-pilot-v1",
+  "case_id": "P07",
+  "incident_id": "INC-PILOT-007",
+  "group_id": "G-FIM",
+  "split": "development",
+  "verdict": "false_positive",
+  "false_positive_type": "benign_trigger",
+  "gold_severity": "informational",
+  "mitre_techniques": [],
+  "mitre_reason": "No supported adversarial technique in the stated authorized or detector-error context; mapping awaits human review.",
+  "required_actions": [],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P07-E1",
+      "statement": "Primary observation supporting the proposed triage decision.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "audit actor and content match"
+      }
+    },
+    {
+      "id": "P07-E2",
+      "statement": "Complete incident context for authorization, impact and response scope.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "linux-01 syscheck 12:30:14Z path=/srv/lab-fixtures/banner.txt; old content=\"training banner A\", new content=\"training banner B\". Change FIX-107 approves exactly this update by lab-operator during 12:25..12:35Z; audit actor and content match. One write, file remains inert and not executed, no service interruption. Post-change validation matched the approved content."
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The file event exactly matches the authorized inert-fixture maintenance record with no adverse effect, supporting a benign trigger and informational assessed severity.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

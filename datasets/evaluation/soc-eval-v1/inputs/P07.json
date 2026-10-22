@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "incident_id": "INC-PILOT-007",
+  "timestamp": "2026-10-13T12:30:14Z",
+  "source": "synthetic-wazuh-fixture",
+  "source_event_id": "EVT-PILOT-007",
+  "description": "linux-01 syscheck 12:30:14Z path=/srv/lab-fixtures/banner.txt; old content=\"training banner A\", new content=\"training banner B\". Change FIX-107 approves exactly this update by lab-operator during 12:25..12:35Z; audit actor and content match. One write, file remains inert and not executed, no service interruption. Post-change validation matched the approved content.",
+  "severity": "high",
+  "entities": [
+    {
+      "type": "host",
+      "value": "linux-01"
+    },
+    {
+      "type": "file",
+      "value": "/srv/lab-fixtures/banner.txt"
+    }
+  ],
+  "ingestion_kind": "synthetic"
+}

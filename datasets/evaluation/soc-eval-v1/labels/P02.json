@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.1",
+  "protocol_version": "S1T02-pilot-v1",
+  "case_id": "P02",
+  "incident_id": "INC-PILOT-002",
+  "group_id": "G-SSH",
+  "split": "development",
+  "verdict": "true_positive",
+  "false_positive_type": null,
+  "gold_severity": "medium",
+  "mitre_techniques": [
+    "T1110"
+  ],
+  "mitre_reason": "Parent-level mapping only: the incident does not establish the credential retry method.",
+  "required_actions": [
+    {
+      "action_type": "block_ip",
+      "target": "linux-01",
+      "arguments": {
+        "source_ip": "192.0.2.10",
+        "port": 22,
+        "protocol": "tcp",
+        "duration_seconds": {
+          "min": 300,
+          "max": 3600
+        }
+      }
+    }
+  ],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P02-E1",
+      "statement": "Primary observation supporting the proposed triage decision.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "auth_count=8"
+      }
+    },
+    {
+      "id": "P02-E2",
+      "statement": "Complete incident context for authorization, impact and response scope.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "09:11:02Z correlation update linux-01: same 09:10 episode as earlier auth alert, not another 8 attempts. auth_count=8; failed password user lab-admin from 192.0.2.10 to 10.77.0.20 tcp/22 within 57s. Collector delay 4s. Owner denies granting source access; attempts sought access without the account secret. No accepted session, outage or further activity; export omits submitted secrets and does not identify retry method. Draft service note: SSH containment may last 5-60 minutes with analyst approval; telemetry and recovery use separate paths, owner signoff is outstanding."
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The correlated view of the same unapproved failed-login episode supports medium assessed severity and the same broad brute-force mapping; action policy pending owner confirmation.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

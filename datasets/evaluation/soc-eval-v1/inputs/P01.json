@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "incident_id": "INC-PILOT-001",
+  "timestamp": "2026-10-13T09:10:58Z",
+  "source": "synthetic-wazuh-fixture",
+  "source_event_id": "EVT-PILOT-001",
+  "description": "Oct 13 09:10:58Z linux-01 sshd / auth-fail-burst; src=192.0.2.10 dst=10.77.0.20:22/tcp user=lab-admin. 8 failed password authentications, 09:10:01..09:10:58; repeats collapsed in export. No successful login and service stayed up. Account owner note: no access was granted to this source; actor was trying to obtain access without the account secret. Password material was not retained, so retry method cannot be established. Draft service note: SSH containment may last 5-60 minutes with analyst approval; telemetry and recovery use separate paths, owner signoff is outstanding.",
+  "severity": "high",
+  "entities": [
+    {
+      "type": "host",
+      "value": "linux-01"
+    },
+    {
+      "type": "ip",
+      "value": "192.0.2.10"
+    },
+    {
+      "type": "ip",
+      "value": "10.77.0.20"
+    },
+    {
+      "type": "user",
+      "value": "lab-admin"
+    }
+  ],
+  "ingestion_kind": "synthetic"
+}

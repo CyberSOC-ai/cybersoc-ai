@@ -1,0 +1,128 @@
+"""soc-eval-json-v1: strict integer-only JSON, UTF-8, sorted compact keys."""
+import hashlib
+import json
+from pathlib import Path
+
+SCHEME = "soc-eval-json-v1"
+
+
+def _pairs(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate JSON key {key!r}")
+        result[key] = value
+    return result
+
+
+def _reject_number(value):
+    raise ValueError(f"floats and non-finite numbers are forbidden: {value}")
+
+
+def parse_json(data, name="JSON"):
+    """Reject duplicate keys, floats, BOMs, invalid UTF-8 and lone surrogates."""
+    try:
+        value = json.loads(data.decode("utf-8", errors="strict"),
+                           object_pairs_hook=_pairs, parse_float=_reject_number,
+                           parse_constant=_reject_number)
+        canonical_bytes(value)  # Also reject escaped lone Unicode surrogates.
+        return value
+    except (ValueError, UnicodeError, TypeError) as exc:
+        raise ValueError(f"{name}: {exc}") from exc
+
+
+def read_json(path):
+    path = Path(path)
+    try:
+        return parse_json(path.read_bytes(), str(path))
+    except OSError as exc:
+        raise ValueError(f"{path}: cannot read JSON: {exc}") from exc
+
+
+def canonical_bytes(value):
+    def check(item):
+        if type(item) in (str, int, bool, type(None)):
+            return
+        if type(item) is list:
+            for child in item:
+                check(child)
+            return
+        if type(item) is dict and all(type(k) is str for k in item):
+            for child in item.values():
+                check(child)
+            return
+        raise ValueError("canonical JSON allows only string keys and integer numbers")
+    check(value)
+    return json.dumps(value, sort_keys=True, separators=(",", ":"),
+                      ensure_ascii=False, allow_nan=False).encode("utf-8")
+
+
+def sha256(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def digest(value):
+    return sha256(canonical_bytes(value))
+
+
+def case_digest(case_id, incident, labels, context):
+    return digest({"hash_scheme": SCHEME, "case_id": case_id,
+                   "input": incident, "labels": labels, "context": context})
+
+
+def verify(dataset, expected_manifest_sha256=None):
+    """Read-only integrity check; pin the manifest externally for trusted releases."""
+    root = Path(dataset)
+    manifest_path = root / "manifest.json"
+    if expected_manifest_sha256 is not None:
+        if sha256(manifest_path.read_bytes()) != expected_manifest_sha256:
+            raise ValueError("manifest.json: does not match the externally pinned digest")
+    manifest = read_json(manifest_path)
+    if manifest.get("hash_scheme") != SCHEME:
+        raise ValueError("manifest.json: unsupported hashing scheme")
+    split_path = root / "splits.json"
+    if sha256(split_path.read_bytes()) != manifest.get("splits_sha256"):
+        raise ValueError("splits.json: raw SHA-256 does not match manifest.json")
+    splits = read_json(split_path)
+    if splits.get("hash_scheme") != SCHEME:
+        raise ValueError("splits.json: unsupported hashing scheme")
+    memberships = {}
+    for split in ("development", "test"):
+        for entry in splits[split]:
+            cid = entry["case_id"]
+            if cid in memberships:
+                raise ValueError(f"{cid}: appears more than once in splits.json")
+            memberships[cid] = entry
+    seen = set()
+    expected_paths = {folder: set() for folder in ("inputs", "labels", "context")}
+    for entry in manifest["cases"]:
+        cid = entry["case_id"]
+        if cid in seen:
+            raise ValueError(f"{cid}: duplicated in manifest.json")
+        seen.add(cid)
+        parts = {}
+        for folder in expected_paths:
+            record = entry[folder]
+            relative = f"{folder}/{cid}.json"
+            path = root / relative
+            if (record["path"] != relative or
+                    not path.resolve().is_relative_to(root.resolve()) or path.is_symlink()):
+                raise ValueError(f"{cid}: unsafe or incorrect {folder} path")
+            expected_paths[folder].add(path)
+            parts[folder] = read_json(path)
+            if sha256(path.read_bytes()) != record["raw_sha256"]:
+                raise ValueError(f"{cid}: {relative} raw SHA-256 mismatch")
+            if digest(parts[folder]) != record["sha256"]:
+                raise ValueError(f"{cid}: {relative} canonical SHA-256 mismatch")
+        actual = case_digest(cid, parts["inputs"], parts["labels"], parts["context"])
+        if actual != entry["sha256"]:
+            raise ValueError(f"{cid}: complete case SHA-256 mismatch in manifest.json")
+        if cid not in memberships or memberships[cid]["sha256"] != actual:
+            raise ValueError(f"{cid}: complete case SHA-256 missing or different in splits.json")
+    if seen != set(memberships):
+        raise ValueError(f"splits.json: case membership differs: {sorted(seen ^ set(memberships))}")
+    for folder, expected in expected_paths.items():
+        actual = set((root / folder).rglob("*.json"))
+        if actual != expected:
+            raise ValueError(f"{folder}: unlisted or missing case files: {sorted(str(p) for p in actual ^ expected)}")
+    return manifest

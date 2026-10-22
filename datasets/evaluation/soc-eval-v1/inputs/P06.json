@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "incident_id": "INC-PILOT-006",
+  "timestamp": "2026-10-13T12:00:14Z",
+  "source": "synthetic-wazuh-fixture",
+  "source_event_id": "EVT-PILOT-006",
+  "description": "linux-01 syscheck 12:00:14Z path=/srv/lab-fixtures/banner.txt; old content=\"training banner A\", new content=\"training banner B\"; one write only. Audit actor=lab-temp, owner denies authorizing that actor or change. Monitoring was healthy throughout. Inert text fixture, not executed; no service interruption, deletion, encryption or network source observed. Review note: purpose beyond the unauthorized edit is not established.",
+  "severity": "high",
+  "entities": [
+    {
+      "type": "host",
+      "value": "linux-01"
+    },
+    {
+      "type": "file",
+      "value": "/srv/lab-fixtures/banner.txt"
+    }
+  ],
+  "ingestion_kind": "synthetic"
+}
