@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.3",
+  "protocol_version": "S1T02-pilot-v2",
+  "case_id": "P05",
+  "incident_id": "INC-PILOT-005",
+  "group_id": "G-SSH",
+  "split": "development",
+  "verdict": "false_positive",
+  "false_positive_type": "benign_trigger",
+  "gold_severity": "informational",
+  "mitre_techniques": [],
+  "mitre_reason": "No supported adversarial technique in the observed permitted activity or contradictory raw-event evidence; human mapping review pending.",
+  "required_actions": [],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P05-E1",
+      "supports": "verdict",
+      "statement": "The successful login matches the roster identity, source and time.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "On-call roster: lab-operator, source 192.0.2.22, window 10:55..11:10Z"
+      }
+    },
+    {
+      "id": "P05-E2",
+      "supports": "severity",
+      "statement": "This control contains normal authentication without adverse effect.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "one success, zero failures, no correlated alert and no service impact"
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The successful login matches the roster identity, source and time; this control contains normal authentication without adverse effect.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

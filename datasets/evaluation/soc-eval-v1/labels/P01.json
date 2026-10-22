@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.3",
+  "protocol_version": "S1T02-pilot-v2",
+  "case_id": "P01",
+  "incident_id": "INC-PILOT-001",
+  "group_id": "G-SSH",
+  "split": "development",
+  "verdict": "true_positive",
+  "false_positive_type": null,
+  "gold_severity": "medium",
+  "mitre_techniques": [
+    "T1110.001"
+  ],
+  "mitre_reason": null,
+  "required_actions": [
+    {
+      "action_type": "block_ip",
+      "target": "linux-01",
+      "arguments": {
+        "source_ip": "192.0.2.10",
+        "port": 22,
+        "protocol": "tcp",
+        "duration_seconds": {
+          "min": 300,
+          "max": 3600
+        }
+      }
+    }
+  ],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P01-E1",
+      "supports": "verdict",
+      "statement": "The repeated source is outside the account access record.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "192.0.2.10 is absent"
+      }
+    },
+    {
+      "id": "P01-E2",
+      "supports": "severity",
+      "statement": "The repeated failures did not establish a session or interrupt service.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "No accepted session; service stayed up"
+      }
+    },
+    {
+      "id": "P01-E3",
+      "supports": "mitre",
+      "statement": "Repeated password attempts against one account support password guessing.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "8 failed password attempts for lab-admin in 57s"
+      }
+    },
+    {
+      "id": "P01-E4",
+      "supports": "action",
+      "statement": "The observed source and destination identify the scope for the shared SSH policy.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "src=192.0.2.10 dst=10.77.0.20"
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The repeated source is outside the account access record; the repeated failures did not establish a session or interrupt service. Required containment follows the owner-selected fixed pilot runner policy; execution authorization is not granted.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

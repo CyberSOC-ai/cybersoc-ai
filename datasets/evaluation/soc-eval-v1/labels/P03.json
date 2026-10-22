@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.3",
+  "protocol_version": "S1T02-pilot-v2",
+  "case_id": "P03",
+  "incident_id": "INC-PILOT-003",
+  "group_id": "G-SSH",
+  "split": "development",
+  "verdict": "false_positive",
+  "false_positive_type": "benign_trigger",
+  "gold_severity": "informational",
+  "mitre_techniques": [],
+  "mitre_reason": "No supported adversarial technique in the observed permitted activity or contradictory raw-event evidence; human mapping review pending.",
+  "required_actions": [],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P03-E1",
+      "supports": "verdict",
+      "statement": "The source, user and time match the permitted access entry.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "CMDB access entry maps lab-operator and 192.0.2.20 to this endpoint for 10:00..10:15Z"
+      }
+    },
+    {
+      "id": "P03-E2",
+      "supports": "severity",
+      "statement": "Normal session completion and no adverse effect support informational severity.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Session closed normally; no additional sources, failures or service impact"
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The source, user and time match the permitted access entry; normal session completion and no adverse effect support informational severity.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

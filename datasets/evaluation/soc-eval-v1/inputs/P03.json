@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "incident_id": "INC-PILOT-003",
+  "timestamp": "2026-10-13T10:05:00Z",
+  "source": "synthetic-wazuh-fixture",
+  "source_event_id": "EVT-PILOT-003",
+  "description": "linux-01 auth burst 10:05Z; src=192.0.2.20 dst=10.77.0.20 user=lab-operator. Four password failures followed by Accepted password. CMDB access entry maps lab-operator and 192.0.2.20 to this endpoint for 10:00..10:15Z. Rotation record: operator terminal retained old credential; corrected credential worked. Session closed normally; no additional sources, failures or service impact.",
+  "severity": "medium",
+  "entities": [
+    {
+      "type": "host",
+      "value": "linux-01"
+    },
+    {
+      "type": "ip",
+      "value": "192.0.2.20"
+    },
+    {
+      "type": "user",
+      "value": "lab-operator"
+    }
+  ],
+  "ingestion_kind": "synthetic"
+}

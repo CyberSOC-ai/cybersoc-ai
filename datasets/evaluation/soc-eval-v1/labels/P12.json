@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.3",
+  "protocol_version": "S1T02-pilot-v2",
+  "case_id": "P12",
+  "incident_id": "INC-PILOT-012",
+  "group_id": "G-FIM",
+  "split": "development",
+  "verdict": "true_positive",
+  "false_positive_type": null,
+  "gold_severity": "medium",
+  "mitre_techniques": [],
+  "mitre_reason": "Inert-file modification is observed without evidence of a specific adversarial technique; human mapping review pending.",
+  "required_actions": [],
+  "analyst_guidance": "Preserve the file audit and compare the change record; seek approval to restore the fixture and review lab-temp access.",
+  "gold_evidence": [
+    {
+      "id": "P12-E1",
+      "supports": "verdict",
+      "statement": "The existing record does not cover the observed actor or time.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Change FIX-112: actor=lab-operator; permitted window=15:00..15:10Z"
+      }
+    },
+    {
+      "id": "P12-E3",
+      "supports": "verdict",
+      "statement": "The observed write was performed by lab-temp at 15:40Z.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Audit actor=lab-temp; write time=15:40:00Z; one write"
+      }
+    },
+    {
+      "id": "P12-E2",
+      "supports": "severity",
+      "statement": "The edit affects inert text without observed service impact.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Inert text not executed; no service interruption or network origin"
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The existing record does not cover the observed actor or time; the edit affects inert text without observed service impact.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "incident_id": "INC-PILOT-006",
+  "timestamp": "2026-10-13T12:00:14Z",
+  "source": "synthetic-wazuh-fixture",
+  "source_event_id": "EVT-PILOT-006",
+  "description": "linux-01 syscheck 12:00:14Z path=/srv/lab-fixtures/banner.txt old=\"training banner A\" new=\"training banner B\"; one write. Audit actor=lab-temp; fixture write ACL lists only lab-operator, with no lab-temp entry. Change register for 11:45..12:15Z is empty. Inert text, not executed; no service interruption, deletion, encryption or network source. Monitoring healthy throughout.",
+  "severity": "low",
+  "entities": [
+    {
+      "type": "host",
+      "value": "linux-01"
+    },
+    {
+      "type": "file",
+      "value": "/srv/lab-fixtures/banner.txt"
+    }
+  ],
+  "ingestion_kind": "synthetic"
+}

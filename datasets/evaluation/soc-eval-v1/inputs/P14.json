@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "incident_id": "INC-PILOT-014",
+  "timestamp": "2026-10-13T17:00:08Z",
+  "source": "synthetic-wazuh-fixture",
+  "source_event_id": "EVT-PILOT-014",
+  "description": "linux-01 auth-fail-burst 17:00:08Z src=192.0.2.41 dst=10.77.0.20 account=lab-operator count=6. Rule configuration: threshold=6 distinct failed password events for the same source and account within 60 seconds; evaluated window=16:59:08..17:00:08Z. Raw refs [e-1401,e-1401,e-1401,e-1401,e-1401,e-1401]; every ref timestamp=17:00:01Z. e-1401: Failed password; ingest sequence numbers 901..906. Complete raw auth window contains one failed event and zero other failures; service unaffected. CMDB access entry permits lab-operator from 192.0.2.41 for 16:55..17:10Z.",
+  "severity": "medium",
+  "entities": [
+    {
+      "type": "host",
+      "value": "linux-01"
+    },
+    {
+      "type": "ip",
+      "value": "192.0.2.41"
+    },
+    {
+      "type": "ip",
+      "value": "10.77.0.20"
+    },
+    {
+      "type": "user",
+      "value": "lab-operator"
+    }
+  ],
+  "ingestion_kind": "synthetic"
+}

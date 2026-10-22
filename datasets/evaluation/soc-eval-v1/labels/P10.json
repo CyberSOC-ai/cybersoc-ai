@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.3",
+  "protocol_version": "S1T02-pilot-v2",
+  "case_id": "P10",
+  "incident_id": "INC-PILOT-010",
+  "group_id": "G-POWERSHELL",
+  "split": "development",
+  "verdict": "false_positive",
+  "false_positive_type": "benign_trigger",
+  "gold_severity": "informational",
+  "mitre_techniques": [],
+  "mitre_reason": "No supported adversarial technique in the observed permitted activity or contradictory raw-event evidence; human mapping review pending.",
+  "required_actions": [],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P10-E1",
+      "supports": "verdict",
+      "statement": "The local diagnostic record covers the actor, command purpose and time.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "CMDB diagnostic entry permits this marker check for lab-operator on windows-01 at 14:00Z"
+      }
+    },
+    {
+      "id": "P10-E2",
+      "supports": "severity",
+      "statement": "The observed marker command has no additional process or network effects.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "no downloads, child process, persistence or outbound connection"
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The local diagnostic record covers the actor, command purpose and time; the observed marker command has no additional process or network effects.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

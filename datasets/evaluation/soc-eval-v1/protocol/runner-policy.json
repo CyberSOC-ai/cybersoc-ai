@@ -1,0 +1,27 @@
+{
+  "policy_version": "synthetic-pilot-policy-v2",
+  "environment_id": "synthetic-pilot",
+  "target_inventory_revision": "fixture-inventory-pilot-v1",
+  "execution_enabled": false,
+  "targets": [
+    "linux-01",
+    "windows-01"
+  ],
+  "action_type": "block_ip",
+  "ssh_containment": {
+    "port": 22,
+    "protocol": "tcp",
+    "duration_seconds": {
+      "min": 300,
+      "max": 3600
+    },
+    "default_duration_seconds": 300
+  },
+  "response_defaults": {
+    "schema_version": "1.0.0",
+    "revision": 1,
+    "requires_approval": true,
+    "status": "proposed"
+  },
+  "id_policy": "Generate unique action_id and idempotency_key per proposal; incident_id comes from the incident."
+}
