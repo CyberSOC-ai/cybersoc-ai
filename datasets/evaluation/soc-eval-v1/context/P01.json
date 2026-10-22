@@ -2,7 +2,7 @@
   "case_id": "P01",
   "incident_id": "INC-PILOT-001",
   "group_id": "G-SSH",
-  "dataset_version": "soc-eval-v1-pilot.1",
+  "dataset_version": "soc-eval-v1-pilot.2",
   "synthetic": true,
   "synthetic_example": true,
   "scenario_id": "LAB-01",
@@ -22,11 +22,5 @@
     "All observations and event times are authored synthetic data.",
     "Assigned author/reviewer fields do not assert independent human annotation or review."
   ],
-  "episode_id": "SYNTH-SSH-001",
-  "mitre_reference": {
-    "url": "https://attack.mitre.org/techniques/T1110/",
-    "technique_version": "2.8",
-    "checked_on": "2026-10-22",
-    "snapshot_status": "Public technique page checked; no STIX corpus snapshot acquired; human mapping review pending."
-  }
+  "episode_id": "SYNTH-SSH-001"
 }

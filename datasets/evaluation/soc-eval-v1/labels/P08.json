@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "dataset_version": "soc-eval-v1-pilot.1",
-  "protocol_version": "S1T02-pilot-v1",
+  "dataset_version": "soc-eval-v1-pilot.2",
+  "protocol_version": "S1T02-pilot-v2",
   "case_id": "P08",
   "incident_id": "INC-PILOT-008",
   "group_id": "G-ACCOUNT",
@@ -18,18 +18,29 @@
   "gold_evidence": [
     {
       "id": "P08-E1",
-      "statement": "Primary observation supporting the proposed triage decision.",
+      "supports": "verdict",
+      "statement": "The observed account creator lacks the required role in the identity registry.",
       "locator": {
         "json_pointer": "/description",
-        "quoted_substring": "local account lab-persist01 created"
+        "quoted_substring": "Identity registry allows lab-temp fixture-file reads only, with no account-administration role"
       }
     },
     {
       "id": "P08-E2",
-      "statement": "Complete incident context for authorization, impact and response scope.",
+      "supports": "severity",
+      "statement": "The newly created privileged account remains usable.",
       "locator": {
         "json_pointer": "/description",
-        "quoted_substring": "linux-01 audit 13:00:04Z add-user: local account lab-persist01 created, uid=2201; 13:00:06Z added to sudo group. Existing unapproved session actor=lab-temp. Owner confirmation: neither session nor new account is authorized. Session note recovered in the fixture says the account is intended to keep access after session expiry. New account remains enabled with sudo access; no network origin was recorded and no action has been applied."
+        "quoted_substring": "lab-persist01 remains enabled with sudo membership at 13:10Z"
+      }
+    },
+    {
+      "id": "P08-E3",
+      "supports": "mitre",
+      "statement": "Audit records directly evidence local account creation.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "lab-temp created local account lab-persist01 uid=2201"
       }
     }
   ],
@@ -38,7 +49,7 @@
     "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
     "items": []
   },
-  "rationale": "An unauthorized enabled local account with sudo access intended to retain access supports high assessed severity and local-account persistence; IP containment has no evidenced source.",
+  "rationale": "The observed account creator lacks the required role in the identity registry; the newly created privileged account remains usable.",
   "label_author": "Anas",
   "label_reviewer": "Oussama",
   "adjudication_status": "pending_review",

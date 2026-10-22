@@ -2,7 +2,7 @@
   "case_id": "P05",
   "incident_id": "INC-PILOT-005",
   "group_id": "G-SSH",
-  "dataset_version": "soc-eval-v1-pilot.1",
+  "dataset_version": "soc-eval-v1-pilot.2",
   "synthetic": true,
   "synthetic_example": true,
   "scenario_id": "CTRL-01",

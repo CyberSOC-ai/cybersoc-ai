@@ -1,33 +1,35 @@
 # Pilot labeling notes — pending human review
 
 Apply [METRICS.md](../../../../experiments/METRICS.md); do not redefine metrics.
-The simulated incident, not permission to conduct a lab exercise, determines
-verdict. A benign trigger is a real permitted activity that does not warrant an
-adversarial incident; detector error requires explicit contradictory source
-observations. CTRL-01 is a routed control event, not a collected false alert.
-Unresolved incidents are excluded rather than assigned a negative verdict.
+Verdict concerns the simulated incident, not permission to conduct a lab exercise.
+Compare observed accounts, sources, times and effects with the supplied access
+records. A record's mere existence is not authorization for a different actor or
+window. Benign triggers match permitted activity; detector errors need contradictory
+raw observations. Unresolved incidents remain outside this pilot.
 
-Provisional assessed-severity anchors for these authored cases: informational for
-verified authorized activity/detector error without impact; low for the permitted
-credential mistake causing a short access delay; medium for repeated unauthorized
-failed access or a bounded unauthorized inert-file edit without service impact;
-high for an enabled unauthorized privileged account providing continued access.
-These anchors are proposed annotation policy, not objective measurements or
-reviewed operational severity guidance. Detector severity remains separate.
+Every false positive has informational gold severity. Low is reserved for real
+incidents of minor impact (none in this release). Medium covers repeated failed
+access without a session, or a bounded inert-file edit outside the access record.
+High covers an enabled privileged account or successful access followed by an
+interactive session. These provisional anchors require human review. Detector
+severity is a separate, noisy rule output, never the gold label.
 
-Use only supported adversarial ATT&CK behavior. P01/P02 map to broad T1110 because
-credential retry details are absent; P08 maps to T1136.001 for an unauthorized
-local account intended to maintain access. Do not map benign PowerShell merely
-because PowerShell ran, or map an unexplained inert-file edit to malware or data
-impact. Empty sets need a reason and are valid scored sets, not missing annotations.
-Public reference pages: [T1110](https://attack.mitre.org/techniques/T1110/) and
-[T1136.001](https://attack.mitre.org/techniques/T1136/001/). Mapping and immutable
-source-snapshot review are still pending.
+P01/P02/P11 use T1110.001 for repeated password attempts against one account.
+P11 also uses T1078 because the same source authenticates as lab-admin and runs
+commands in the resulting session. P08 uses T1136.001 for local account creation
+outside the creator's role. Do not infer malware from a file edit or an adversarial
+technique merely because PowerShell ran. Empty MITRE sets require a reason.
+Mappings and source snapshots await human review.
 
-Only P01/P02 have the owner-requested draft block projection; action policy pending
-owner confirmation. Every needed target/source/port and draft duration scope is
-visible in those incidents. A label projection is not an approved executable
-action. P06/P08 instead use non-scored analyst guidance. Review evidence quotations,
-severity and mapping before accepting any label. Locator resolution is not an
-entailment proof. All authorship/reviewer fields are task assignments; retain
-`pending_review` and `needs_review: true` until actual human review occurs.
+Only P01/P02/P11 require block_ip. The shared [runner policy](../protocol/README.md)
+supplies service scope, duration bounds and envelope configuration to every runner;
+labels retain expected action projections solely for evaluation. Incident text
+supplies observed source and endpoint facts, never the containment rule. P06/P08/
+P11/P12 also carry non-scored analyst guidance. No action execution is authorized.
+
+Every evidence item names the field it supports and quotes at most 120 characters
+from the incident using a resolving JSON pointer. Verdict and severity always need
+support; nonempty MITRE and required actions need support too. These quotations
+are authored synthetic evidence, not collected logs; locator checks cannot prove
+entailment. Keep author Anas, assigned reviewer Oussama, pending_review and
+needs_review=true until real human review occurs.

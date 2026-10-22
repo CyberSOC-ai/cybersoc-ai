@@ -8,7 +8,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from ai.evaluation.hashing import canonical_bytes, digest, parse_json, read_json, sha256, verify
+from ai.evaluation.hashing import build_manifests, canonical_bytes, digest, parse_json, read_json, sha256, verify
 from ai.evaluation.loader import load_evaluator_cases, load_model_inputs
 from ai.evaluation.validation import resolve_pointer, validate_case, validate_dataset, validators
 
@@ -32,8 +32,8 @@ class DatasetIntegrityTest(unittest.TestCase):
 
     def test_identity_pairing_and_dataset_relations(self):
         cases = validate_dataset(ROOT, DATASET)
-        self.assertEqual([c['case_id'] for c in cases], [f'P{i:02d}' for i in range(1, 11)],
-                         'P01-P10: pilot membership differs from the approved ten cases')
+        self.assertEqual([c['case_id'] for c in cases], [f'P{i:02d}' for i in range(1, 15)],
+                         'P01-P14: pilot membership differs from the approved fourteen cases')
 
     def test_input_only_api_never_reads_labels_or_context(self):
         def guarded_read(path):
@@ -54,7 +54,7 @@ class DatasetIntegrityTest(unittest.TestCase):
         for case in self.cases:
             with self.subTest(case_id=case['case_id']):
                 validate_case(case, self.checks)
-        for text in ('required_actions', self.cases[0]['labels']['rationale'], 'T1110', 'true_positive'):
+        for text in ('required_actions', self.cases[0]['labels']['rationale'], 'T1110.001', 'true_positive'):
             case = deepcopy(self.cases[0])
             case['input']['description'] += ' ' + text
             with self.subTest(case_id='P01', leak=text), self.assertRaisesRegex(ValueError, 'P01:.*(gold|annotation)', msg='P01: annotation leak was not rejected'):
@@ -205,15 +205,91 @@ class DatasetIntegrityTest(unittest.TestCase):
         self.assertFalse(splits['test_frozen'], 'splits.json: pilot must not claim a frozen test')
         self.assertEqual(splits['test'], [], 'splits.json: pilot must not include test cases')
         counts = Counter(label['verdict'] for label in labels)
-        self.assertEqual(dict(counts), {'true_positive': 4, 'false_positive': 6},
-                         'P01-P10: class balance differs from authored pilot')
+        self.assertEqual(dict(counts), {'true_positive': 6, 'false_positive': 8},
+                         'P01-P14: class balance differs from authored pilot')
         groups = {label['group_id'] for label in labels}
-        self.assertEqual(len(groups), 4, 'P01-P10: expected four template-family groups')
+        self.assertEqual(len(groups), 8, 'P01-P14: expected eight authored groups')
         print(f"\nPilot development: cases={len(labels)}, groups={len(groups)}, "
               f"true_positive={counts['true_positive']}, false_positive={counts['false_positive']}", flush=True)
         print('Gold severities: ' + json.dumps(dict(sorted(Counter(label['gold_severity'] for label in labels).items()))), flush=True)
         print('Needs review: ' + ', '.join(label['case_id'] for label in labels), flush=True)
         print('Test: cases=0; test_frozen=false (Stage C deferred)', flush=True)
+
+    def test_evidence_support_coverage_and_short_quotes(self):
+        for case in self.cases:
+            cid = case['case_id']
+            required = {'verdict', 'severity'}
+            if case['labels']['mitre_techniques']:
+                required.add('mitre')
+            if case['labels']['required_actions']:
+                required.add('action')
+            for item in case['labels']['gold_evidence']:
+                quote = item['locator']['quoted_substring']
+                self.assertLessEqual(len(quote), 120, f'{cid}: evidence quote exceeds 120 characters')
+                self.assertNotEqual(quote, case['input']['description'], f'{cid}: evidence quotes entire description')
+            for support in required:
+                broken = deepcopy(case)
+                broken['labels']['gold_evidence'] = [e for e in broken['labels']['gold_evidence']
+                                                    if e['supports'] != support]
+                with self.assertRaisesRegex(ValueError, cid + ':.*' + support,
+                                            msg=f'{cid}: missing {support} evidence was accepted'):
+                    validate_case(broken, self.checks)
+        for mutation in ('missing_support', 'bad_support', 'long_quote', 'whole_description'):
+            broken = deepcopy(self.cases[0])
+            item = broken['labels']['gold_evidence'][0]
+            if mutation == 'missing_support':
+                del item['supports']
+            elif mutation == 'bad_support':
+                item['supports'] = 'guess'
+            elif mutation == 'long_quote':
+                item['locator']['quoted_substring'] = 'x' * 121
+            else:
+                broken['input']['description'] = item['locator']['quoted_substring']
+            with self.assertRaisesRegex(ValueError, 'P01:', msg=f'P01: {mutation} accepted'):
+                validate_case(broken, self.checks)
+
+    def test_fixed_policy_and_no_incident_policy_leak(self):
+        policy = read_json(DATASET / 'protocol/runner-policy.json')
+        rule = policy['ssh_containment']
+        self.assertEqual((rule['port'], rule['protocol'], rule['duration_seconds']),
+                         (22, 'tcp', {'min': 300, 'max': 3600}),
+                         'runner-policy.json: owner-selected scope changed')
+        self.assertFalse(policy['execution_enabled'], 'runner-policy.json: pilot must not execute actions')
+        for case in self.cases:
+            cid = case['case_id']
+            text = case['input']['description'].lower()
+            for phrase in ('draft service note', 'duration_seconds', '300', '3600',
+                           '5-60 minutes', 'trying to obtain access without', 'intended to keep access',
+                           'decoder mistakenly', 'control event', 'review note: purpose'):
+                self.assertNotIn(phrase, text, f'{cid}: incident leaks policy or label conclusion: {phrase}')
+            for action in case['labels']['required_actions']:
+                for key in ('port', 'protocol', 'duration_seconds'):
+                    self.assertEqual(action['arguments'][key], rule[key],
+                                     f'{cid}: label {key} disagrees with shared runner policy')
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / 'pilot'
+            shutil.copytree(DATASET, root)
+            path = root / 'protocol/runner-policy.json'
+            path.write_bytes(path.read_bytes().replace(b'300', b'301', 1))
+            with self.assertRaisesRegex(ValueError, 'runner-policy.json:.*digest',
+                                        msg='runner-policy.json: policy tampering accepted'):
+                verify(root)
+
+    def test_manifest_rebuild_is_deterministic_and_refuses_frozen_test(self):
+        split_bytes, manifest = build_manifests(DATASET)
+        self.assertEqual(split_bytes, (DATASET / 'splits.json').read_bytes(),
+                         'splits.json: regeneration differs from committed data')
+        self.assertEqual(manifest, read_json(DATASET / 'manifest.json'),
+                         'manifest.json: regeneration differs from committed data')
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / 'pilot'
+            shutil.copytree(DATASET, root)
+            split = read_json(root / 'splits.json')
+            split['test_frozen'] = True
+            (root / 'splits.json').write_text(json.dumps(split))
+            with self.assertRaisesRegex(ValueError, 'splits.json:.*unfrozen',
+                                        msg='splits.json: generator rewrote frozen data'):
+                build_manifests(root)
 
 
 if __name__ == '__main__':

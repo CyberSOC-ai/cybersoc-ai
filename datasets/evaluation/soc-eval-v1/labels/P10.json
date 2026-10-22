@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "dataset_version": "soc-eval-v1-pilot.1",
-  "protocol_version": "S1T02-pilot-v1",
+  "dataset_version": "soc-eval-v1-pilot.2",
+  "protocol_version": "S1T02-pilot-v2",
   "case_id": "P10",
   "incident_id": "INC-PILOT-010",
   "group_id": "G-POWERSHELL",
@@ -10,24 +10,26 @@
   "false_positive_type": "benign_trigger",
   "gold_severity": "informational",
   "mitre_techniques": [],
-  "mitre_reason": "No supported adversarial technique in the stated authorized or detector-error context; mapping awaits human review.",
+  "mitre_reason": "No supported adversarial technique in the observed permitted activity or contradictory raw-event evidence; human mapping review pending.",
   "required_actions": [],
   "analyst_guidance": null,
   "gold_evidence": [
     {
       "id": "P10-E1",
-      "statement": "Primary observation supporting the proposed triage decision.",
+      "supports": "verdict",
+      "statement": "The local diagnostic record covers the actor, command purpose and time.",
       "locator": {
         "json_pointer": "/description",
-        "quoted_substring": "Script text: Write-Output \"LAB-MARKER\""
+        "quoted_substring": "CMDB diagnostic entry permits this marker check for lab-operator on windows-01 at 14:00Z"
       }
     },
     {
       "id": "P10-E2",
-      "statement": "Complete incident context for authorization, impact and response scope.",
+      "supports": "severity",
+      "statement": "The observed marker command has no additional process or network effects.",
       "locator": {
         "json_pointer": "/description",
-        "quoted_substring": "windows-01 process alert 14:00:00Z image=powershell.exe parent=explorer.exe user=lab-operator. Script text: Write-Output \"LAB-MARKER\"; captured output LAB-MARKER, exit=0. FIX-110 authorizes this one local audit-channel check. Complete process/network window: no downloads, child process, persistence or outbound connection. Custom fixture rule triggers on any PowerShell start; no adverse effect."
+        "quoted_substring": "no downloads, child process, persistence or outbound connection"
       }
     }
   ],
@@ -36,7 +38,7 @@
     "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
     "items": []
   },
-  "rationale": "The approved marker-only command and complete benign process context support a benign trigger with informational assessed severity, not an adversarial PowerShell mapping.",
+  "rationale": "The local diagnostic record covers the actor, command purpose and time; the observed marker command has no additional process or network effects.",
   "label_author": "Anas",
   "label_reviewer": "Oussama",
   "adjudication_status": "pending_review",

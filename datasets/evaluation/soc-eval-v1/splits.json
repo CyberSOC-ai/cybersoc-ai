@@ -1,57 +1,77 @@
 {
-  "dataset_version": "soc-eval-v1-pilot.1",
+  "dataset_version": "soc-eval-v1-pilot.2",
   "hash_scheme": "soc-eval-json-v1",
   "test_frozen": false,
   "development": [
     {
       "case_id": "P01",
       "group_id": "G-SSH",
-      "sha256": "1ff0d19c5083d5dc58046af1d66cbede675f575d3d91bf0c0c2b044e93bd47b5"
+      "sha256": "50354b5ac257f763331ff7226796fd170afebabf417fe7a36780e93e4894e2a7"
     },
     {
       "case_id": "P02",
       "group_id": "G-SSH",
-      "sha256": "2e67bd50e899029846dfd937ad3627cec047495c51a4a5aa3adbd0fc9220b845"
+      "sha256": "9dcfd89cb61ef909f49ccd4ecad8268a99c7e973991211597ee9553a9883bd0c"
     },
     {
       "case_id": "P03",
       "group_id": "G-SSH",
-      "sha256": "2fdaac971ba823937bf5ca7547a264415848e9dd7ec682b34a48886e53199fef"
+      "sha256": "e219766fde56736742c72f0ba81d84251b4ef19430cf5abbacc4d5fd96a5ab70"
     },
     {
       "case_id": "P04",
       "group_id": "G-SSH",
-      "sha256": "61e582947215472d7df49a42fd780fdcf271332069912addef84064248dca445"
+      "sha256": "0e9b56dd988101a264ab2e270b65ff7a2cca6d714b313c58b3fb37a3880a02a5"
     },
     {
       "case_id": "P05",
       "group_id": "G-SSH",
-      "sha256": "2db659437b56c8229dd05e530b707ec2773de56f45ddf23361f7b66da39b2214"
+      "sha256": "f270a9ebea83a6cb70c87ef08fcf87a307fe6cb5eec9600906936afe506a6558"
     },
     {
       "case_id": "P06",
       "group_id": "G-FIM",
-      "sha256": "664143dfd82c99e364b282f76b2cbfc6609c7f20ed2098cc20713f5a0892144a"
+      "sha256": "3d39fcd0ff21f679234601423b6ae6cc7302bdaafef1725115b7b558713e2550"
     },
     {
       "case_id": "P07",
       "group_id": "G-FIM",
-      "sha256": "96d2efef9f3df53b6927034f78b1341f3646266f4fe777a5a342a90a29e0681c"
+      "sha256": "98980cc543fd7ece62880cd113885c6b639c00d300c9282208def56244f53a41"
     },
     {
       "case_id": "P08",
       "group_id": "G-ACCOUNT",
-      "sha256": "b532413cc3990c6ff1937cd85e66823f1c6a2d79d90b68c3610410b6d4ae6209"
+      "sha256": "1fb2cd62178083506e022e085f8ffcfcfe6873c13c3dd0938bcddc78f7a50aa7"
     },
     {
       "case_id": "P09",
       "group_id": "G-ACCOUNT",
-      "sha256": "55b56669515464eb1d204d16560507abc6847c3895c765787ead72ca69e940b5"
+      "sha256": "38b78cc37345f4bc124f5320d90a9d6413f6b523c3cf2d142d577191a3e04878"
     },
     {
       "case_id": "P10",
       "group_id": "G-POWERSHELL",
-      "sha256": "573f364108c3cc28e2fc665c2689f5cf4eb3f2b3dca64cc77b7b2bee18147fad"
+      "sha256": "978a8ccb1c5031d83574a06ecb1cc9901f89daa72d4375a4d34db5b0a8a92234"
+    },
+    {
+      "case_id": "P11",
+      "group_id": "G-SSH-SESSION",
+      "sha256": "f60497edad9603615e13a9e06ea8e1fed697d35dbbaea32aa08f7c6a8b28cf74"
+    },
+    {
+      "case_id": "P12",
+      "group_id": "G-FIM-WINDOW",
+      "sha256": "90c79dfd8fd13ae9c7a77b046d94ffa1550083740dc9833f072d07167bd16175"
+    },
+    {
+      "case_id": "P13",
+      "group_id": "G-SSH-SCANNER",
+      "sha256": "fac05544cffa75308b5fbeb3ab62c5de4a5d37462389e8411aa526d3e37a7f01"
+    },
+    {
+      "case_id": "P14",
+      "group_id": "G-SSH-REPLAY",
+      "sha256": "7957b6a0ec5b0c588e2623f30ffe22c453f154d5f0e7c657d888e1f7a35ba45a"
     }
   ],
   "test": []

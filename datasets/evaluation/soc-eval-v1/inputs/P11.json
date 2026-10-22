@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "incident_id": "INC-PILOT-011",
+  "timestamp": "2026-10-13T15:03:00Z",
+  "source": "synthetic-wazuh-fixture",
+  "source_event_id": "EVT-PILOT-011",
+  "description": "linux-01 sshd burst 15:03:00Z src=198.51.100.31 dst=10.77.0.20. 40 failed password attempts for lab-admin during 15:00:00..15:02:59Z. Accepted password for lab-admin from 198.51.100.31 at 15:03:00Z; session s-311 opened from that source. Session s-311: id returned uid=1001(lab-admin); ls /etc completed at 15:03:08Z. Access registry for lab-admin lists 192.0.2.22 only, with no 198.51.100.31 entry. Session still open at 15:04Z; service responding.",
+  "severity": "high",
+  "entities": [
+    {
+      "type": "host",
+      "value": "linux-01"
+    },
+    {
+      "type": "ip",
+      "value": "198.51.100.31"
+    },
+    {
+      "type": "ip",
+      "value": "10.77.0.20"
+    },
+    {
+      "type": "user",
+      "value": "lab-admin"
+    }
+  ],
+  "ingestion_kind": "synthetic"
+}

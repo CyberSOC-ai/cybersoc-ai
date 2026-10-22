@@ -4,8 +4,8 @@
   "timestamp": "2026-10-13T13:00:04Z",
   "source": "synthetic-wazuh-fixture",
   "source_event_id": "EVT-PILOT-008",
-  "description": "linux-01 audit 13:00:04Z add-user: local account lab-persist01 created, uid=2201; 13:00:06Z added to sudo group. Existing unapproved session actor=lab-temp. Owner confirmation: neither session nor new account is authorized. Session note recovered in the fixture says the account is intended to keep access after session expiry. New account remains enabled with sudo access; no network origin was recorded and no action has been applied.",
-  "severity": "medium",
+  "description": "linux-01 audit 13:00:04Z: lab-temp created local account lab-persist01 uid=2201; 13:00:06Z added lab-persist01 to sudo. Identity registry allows lab-temp fixture-file reads only, with no account-administration role. Change register for this window is empty. lab-persist01 remains enabled with sudo membership at 13:10Z; no network origin recorded, no action applied.",
+  "severity": "high",
   "entities": [
     {
       "type": "host",

@@ -4,8 +4,8 @@
   "timestamp": "2026-10-13T09:10:58Z",
   "source": "synthetic-wazuh-fixture",
   "source_event_id": "EVT-PILOT-001",
-  "description": "Oct 13 09:10:58Z linux-01 sshd / auth-fail-burst; src=192.0.2.10 dst=10.77.0.20:22/tcp user=lab-admin. 8 failed password authentications, 09:10:01..09:10:58; repeats collapsed in export. No successful login and service stayed up. Account owner note: no access was granted to this source; actor was trying to obtain access without the account secret. Password material was not retained, so retry method cannot be established. Draft service note: SSH containment may last 5-60 minutes with analyst approval; telemetry and recovery use separate paths, owner signoff is outstanding.",
-  "severity": "high",
+  "description": "Oct 13 09:10:58Z linux-01 sshd / auth-fail-burst; src=192.0.2.10 dst=10.77.0.20 user=lab-admin. 8 failed password attempts for lab-admin in 57s; auth method=password, all against this one account. Owner record lists only 192.0.2.22 for lab-admin; 192.0.2.10 is absent. No accepted session; service stayed up. Collector heartbeat and auth audit cover the full window.",
+  "severity": "medium",
   "entities": [
     {
       "type": "host",

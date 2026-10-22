@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.2",
+  "protocol_version": "S1T02-pilot-v2",
+  "case_id": "P14",
+  "incident_id": "INC-PILOT-014",
+  "group_id": "G-SSH-REPLAY",
+  "split": "development",
+  "verdict": "false_positive",
+  "false_positive_type": "detector_error",
+  "gold_severity": "informational",
+  "mitre_techniques": [],
+  "mitre_reason": "No supported adversarial technique in the observed permitted activity or contradictory raw-event evidence; human mapping review pending.",
+  "required_actions": [],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P14-E1",
+      "supports": "verdict",
+      "statement": "The six references resolve to one event and timestamp rather than six distinct attempts.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Raw refs [e-1401,e-1401,e-1401,e-1401,e-1401,e-1401]; every ref timestamp=17:00:01Z"
+      }
+    },
+    {
+      "id": "P14-E2",
+      "supports": "severity",
+      "statement": "The complete raw window contains only one failed event without service impact.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Complete raw auth window contains one failed event and zero other failures; service unaffected"
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The six references resolve to one event and timestamp rather than six distinct attempts; the complete raw window contains only one failed event without service impact.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

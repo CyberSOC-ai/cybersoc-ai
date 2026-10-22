@@ -4,8 +4,8 @@
   "timestamp": "2026-10-13T10:20:08Z",
   "source": "synthetic-wazuh-fixture",
   "source_event_id": "EVT-PILOT-004",
-  "description": "Queue item auth-fail-burst linux-01, 10:20:08Z. Correlation says count=6 src=192.0.2.21 user=lab-operator. Included source event: Accepted publickey at 10:20:01Z, session ended normally. Export audit: all six references resolve to that one success event; decoder mistakenly mapped outcome=success to failure. Complete window has zero failed logins. FIX-104 authorizes source 192.0.2.21 for tcp/22; no service impact.",
-  "severity": "high",
+  "description": "Queue item auth-fail-burst linux-01 10:20:08Z; count=6 src=192.0.2.21 user=lab-operator. All six source references contain outcome=success, Accepted publickey at 10:20:01Z; normalized outcome=failure. Complete auth window: zero failed logins; session closed normally, no service impact. On-call roster entry permits lab-operator from 192.0.2.21 during 10:00..11:00Z.",
+  "severity": "low",
   "entities": [
     {
       "type": "host",

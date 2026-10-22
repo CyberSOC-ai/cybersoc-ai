@@ -4,8 +4,8 @@
   "timestamp": "2026-10-13T13:30:04Z",
   "source": "synthetic-wazuh-fixture",
   "source_event_id": "EVT-PILOT-009",
-  "description": "linux-01 audit 13:30:04Z add-user: local account lab-maint01 created uid=2202; sudo membership recorded. FIX-109 approves lab-operator creating that disposable account for maintenance in this window; actor, name and group match. Reset log confirms account removal at 13:35Z. No unexpected session or service impact; monitoring stayed healthy.",
-  "severity": "high",
+  "description": "linux-01 audit 13:30:04Z: lab-operator created local account lab-maint01 uid=2202 and added it to sudo. FIX-109 covers lab-operator, lab-maint01 and sudo membership during 13:25..13:40Z. Removal logged at 13:35Z; no unexpected sessions or service impact. Monitoring healthy.",
+  "severity": "medium",
   "entities": [
     {
       "type": "host",

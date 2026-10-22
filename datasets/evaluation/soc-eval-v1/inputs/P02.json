@@ -4,7 +4,7 @@
   "timestamp": "2026-10-13T09:11:02Z",
   "source": "synthetic-wazuh-fixture",
   "source_event_id": "EVT-PILOT-002",
-  "description": "09:11:02Z correlation update linux-01: same 09:10 episode as earlier auth alert, not another 8 attempts. auth_count=8; failed password user lab-admin from 192.0.2.10 to 10.77.0.20 tcp/22 within 57s. Collector delay 4s. Owner denies granting source access; attempts sought access without the account secret. No accepted session, outage or further activity; export omits submitted secrets and does not identify retry method. Draft service note: SSH containment may last 5-60 minutes with analyst approval; telemetry and recovery use separate paths, owner signoff is outstanding.",
+  "description": "09:11:02Z linux-01 correlation update for the 09:10 episode; not another eight events. src=192.0.2.10 dst=10.77.0.20. auth_count=8, method=password, account=lab-admin, interval=57s. Source 192.0.2.10 is absent from the lab-admin access registry (listed source: 192.0.2.22). Collector delay=4s; no accepted session, outage or later activity in the complete window.",
   "severity": "high",
   "entities": [
     {

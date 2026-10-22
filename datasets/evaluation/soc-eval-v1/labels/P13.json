@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.2",
+  "protocol_version": "S1T02-pilot-v2",
+  "case_id": "P13",
+  "incident_id": "INC-PILOT-013",
+  "group_id": "G-SSH-SCANNER",
+  "split": "development",
+  "verdict": "false_positive",
+  "false_positive_type": "benign_trigger",
+  "gold_severity": "informational",
+  "mitre_techniques": [],
+  "mitre_reason": "No supported adversarial technique in the observed permitted activity or contradictory raw-event evidence; human mapping review pending.",
+  "required_actions": [],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P13-E1",
+      "supports": "verdict",
+      "statement": "The scanner entry covers the observed source, destination, activity and time.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Scanner allowlist SCAN-13 lists 203.0.113.40 and linux-01 authentication checks during 15:55..16:10Z"
+      }
+    },
+    {
+      "id": "P13-E2",
+      "supports": "severity",
+      "statement": "The covered authentication check established no session or service impact.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "no sessions or service impact"
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The scanner entry covers the observed source, destination, activity and time; the covered authentication check established no session or service impact.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

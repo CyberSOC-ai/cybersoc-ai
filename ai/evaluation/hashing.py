@@ -80,6 +80,13 @@ def verify(dataset, expected_manifest_sha256=None):
     manifest = read_json(manifest_path)
     if manifest.get("hash_scheme") != SCHEME:
         raise ValueError("manifest.json: unsupported hashing scheme")
+    policy_path = root / "protocol/runner-policy.json"
+    policy_record = manifest.get('runner_policy', {})
+    if (policy_record.get('path') != 'protocol/runner-policy.json'
+            or policy_path.is_symlink()
+            or sha256(policy_path.read_bytes()) != policy_record.get('raw_sha256')
+            or digest(read_json(policy_path)) != policy_record.get('sha256')):
+        raise ValueError('protocol/runner-policy.json: missing or mismatched policy digest')
     split_path = root / "splits.json"
     if sha256(split_path.read_bytes()) != manifest.get("splits_sha256"):
         raise ValueError("splits.json: raw SHA-256 does not match manifest.json")
@@ -126,3 +133,51 @@ def verify(dataset, expected_manifest_sha256=None):
         if actual != expected:
             raise ValueError(f"{folder}: unlisted or missing case files: {sorted(str(p) for p in actual ^ expected)}")
     return manifest
+
+
+def build_manifests(dataset):
+    """Return refreshed manifests without writing; release metadata comes from labels.
+
+    Caller explicitly saves splits first, then manifest. Only a development pilot
+    may be regenerated here; a frozen release must never be silently rehashed.
+    """
+    root = Path(dataset)
+    old_splits = read_json(root / 'splits.json')
+    if old_splits['test_frozen'] or old_splits['test']:
+        raise ValueError('splits.json: regeneration is restricted to an unfrozen development pilot')
+    records, members, versions, severities, techniques = [], [], set(), set(), set()
+    for path in sorted((root / 'inputs').glob('*.json')):
+        cid = path.stem
+        parts = {folder: read_json(root / folder / path.name)
+                 for folder in ('inputs', 'labels', 'context')}
+        label = parts['labels']
+        if label['split'] != 'development':
+            raise ValueError(f'{cid}: regeneration requires development membership')
+        versions.add(label['dataset_version'])
+        severities.add(label['gold_severity'])
+        techniques.update(label['mitre_techniques'])
+        complete = case_digest(cid, parts['inputs'], label, parts['context'])
+        record = {'case_id': cid, 'sha256': complete}
+        for folder, value in parts.items():
+            relative = f'{folder}/{cid}.json'
+            record[folder] = {'path': relative, 'sha256': digest(value),
+                              'raw_sha256': sha256((root / relative).read_bytes())}
+        records.append(record)
+        members.append({'case_id': cid, 'group_id': label['group_id'], 'sha256': complete})
+    if len(versions) != 1:
+        raise ValueError('labels/: expected exactly one dataset version')
+    version = versions.pop()
+    splits = {'dataset_version': version, 'hash_scheme': SCHEME, 'test_frozen': False,
+              'development': members, 'test': []}
+    split_bytes = (json.dumps(splits, indent=2, ensure_ascii=False) + '\n').encode('utf-8')
+    policy = root / 'protocol/runner-policy.json'
+    manifest = {'dataset_version': version, 'status': 'synthetic_pilot_pending_review',
+                'synthetic_example': True, 'hash_scheme': SCHEME,
+                'splits_sha256': sha256(split_bytes),
+                'runner_policy': {'path': 'protocol/runner-policy.json',
+                                  'sha256': digest(read_json(policy)),
+                                  'raw_sha256': sha256(policy.read_bytes())},
+                'severity_universe': [s for s in ('informational', 'low', 'medium', 'high', 'critical')
+                                      if s in severities],
+                'mitre_universe': sorted(techniques), 'cases': records}
+    return split_bytes, manifest

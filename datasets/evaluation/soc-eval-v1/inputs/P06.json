@@ -4,8 +4,8 @@
   "timestamp": "2026-10-13T12:00:14Z",
   "source": "synthetic-wazuh-fixture",
   "source_event_id": "EVT-PILOT-006",
-  "description": "linux-01 syscheck 12:00:14Z path=/srv/lab-fixtures/banner.txt; old content=\"training banner A\", new content=\"training banner B\"; one write only. Audit actor=lab-temp, owner denies authorizing that actor or change. Monitoring was healthy throughout. Inert text fixture, not executed; no service interruption, deletion, encryption or network source observed. Review note: purpose beyond the unauthorized edit is not established.",
-  "severity": "high",
+  "description": "linux-01 syscheck 12:00:14Z path=/srv/lab-fixtures/banner.txt old=\"training banner A\" new=\"training banner B\"; one write. Audit actor=lab-temp; fixture write ACL lists only lab-operator, with no lab-temp entry. Change register for 11:45..12:15Z is empty. Inert text, not executed; no service interruption, deletion, encryption or network source. Monitoring healthy throughout.",
+  "severity": "low",
   "entities": [
     {
       "type": "host",

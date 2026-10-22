@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "dataset_version": "soc-eval-v1-pilot.1",
-  "protocol_version": "S1T02-pilot-v1",
+  "dataset_version": "soc-eval-v1-pilot.2",
+  "protocol_version": "S1T02-pilot-v2",
   "case_id": "P06",
   "incident_id": "INC-PILOT-006",
   "group_id": "G-FIM",
@@ -10,24 +10,26 @@
   "false_positive_type": null,
   "gold_severity": "medium",
   "mitre_techniques": [],
-  "mitre_reason": "Unauthorized inert-file modification is evidenced, but purpose and adversarial technique are not established; mapping awaits human review.",
+  "mitre_reason": "Inert-file modification is observed without evidence of a specific adversarial technique; human mapping review pending.",
   "required_actions": [],
   "analyst_guidance": "Inspect the change and preserve the audit trail; ask the owner to authorize restoration of the inert fixture, without proposing an IP block.",
   "gold_evidence": [
     {
       "id": "P06-E1",
-      "statement": "Primary observation supporting the proposed triage decision.",
+      "supports": "verdict",
+      "statement": "The observed writer is absent from the fixture write ACL.",
       "locator": {
         "json_pointer": "/description",
-        "quoted_substring": "owner denies authorizing that actor or change"
+        "quoted_substring": "Audit actor=lab-temp; fixture write ACL lists only lab-operator, with no lab-temp entry"
       }
     },
     {
       "id": "P06-E2",
-      "statement": "Complete incident context for authorization, impact and response scope.",
+      "supports": "severity",
+      "statement": "The observed modification is bounded to inert text without service impact.",
       "locator": {
         "json_pointer": "/description",
-        "quoted_substring": "linux-01 syscheck 12:00:14Z path=/srv/lab-fixtures/banner.txt; old content=\"training banner A\", new content=\"training banner B\"; one write only. Audit actor=lab-temp, owner denies authorizing that actor or change. Monitoring was healthy throughout. Inert text fixture, not executed; no service interruption, deletion, encryption or network source observed. Review note: purpose beyond the unauthorized edit is not established."
+        "quoted_substring": "Inert text, not executed; no service interruption, deletion, encryption or network source"
       }
     }
   ],
@@ -36,7 +38,7 @@
     "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
     "items": []
   },
-  "rationale": "An unauthorized but bounded inert-file edit supports medium assessed severity; its purpose does not justify a specific ATT&CK technique or an IP block.",
+  "rationale": "The observed writer is absent from the fixture write ACL; the observed modification is bounded to inert text without service impact.",
   "label_author": "Anas",
   "label_reviewer": "Oussama",
   "adjudication_status": "pending_review",

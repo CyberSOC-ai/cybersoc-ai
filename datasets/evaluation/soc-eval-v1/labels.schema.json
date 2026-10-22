@@ -9,10 +9,10 @@
       "const": "1.0.0"
     },
     "dataset_version": {
-      "const": "soc-eval-v1-pilot.1"
+      "const": "soc-eval-v1-pilot.2"
     },
     "protocol_version": {
-      "const": "S1T02-pilot-v1"
+      "const": "S1T02-pilot-v2"
     },
     "case_id": {
       "$ref": "https://cybersoc.invalid/contracts/v1/common.schema.json#/$defs/id"
@@ -169,19 +169,29 @@
               },
               "quoted_substring": {
                 "type": "string",
-                "minLength": 1
+                "minLength": 1,
+                "maxLength": 120
               }
             },
             "required": [
               "json_pointer",
               "quoted_substring"
             ]
+          },
+          "supports": {
+            "enum": [
+              "verdict",
+              "severity",
+              "mitre",
+              "action"
+            ]
           }
         },
         "required": [
           "id",
           "statement",
-          "locator"
+          "locator",
+          "supports"
         ]
       }
     },
@@ -288,6 +298,9 @@
           },
           "required_actions": {
             "maxItems": 0
+          },
+          "gold_severity": {
+            "const": "informational"
           }
         }
       }

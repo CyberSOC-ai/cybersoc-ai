@@ -4,8 +4,8 @@
   "timestamp": "2026-10-13T10:05:00Z",
   "source": "synthetic-wazuh-fixture",
   "source_event_id": "EVT-PILOT-003",
-  "description": "linux-01 auth burst, 10:05Z. src=192.0.2.20 dst=10.77.0.20:22/tcp user=lab-operator; four failures then Accepted password. Ticket FIX-103 authorizes this operator and source for the window. Operator confirmation attached: terminal used the old test credential after rotation; corrected credential worked, session closed normally. No additional sources or failures in the complete window; short access delay only.",
-  "severity": "high",
+  "description": "linux-01 auth burst 10:05Z; src=192.0.2.20 dst=10.77.0.20 user=lab-operator. Four password failures followed by Accepted password. CMDB access entry maps lab-operator and 192.0.2.20 to this endpoint for 10:00..10:15Z. Rotation record: operator terminal retained old credential; corrected credential worked. Session closed normally; no additional sources, failures or service impact.",
+  "severity": "medium",
   "entities": [
     {
       "type": "host",

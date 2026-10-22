@@ -1,0 +1,26 @@
+{
+  "case_id": "P12",
+  "incident_id": "INC-PILOT-012",
+  "group_id": "G-FIM-WINDOW",
+  "dataset_version": "soc-eval-v1-pilot.2",
+  "synthetic": true,
+  "synthetic_example": true,
+  "scenario_id": "LAB-02",
+  "template_family": "G-FIM-WINDOW",
+  "source_commit": "cac377a973c64ba0cc0003df89b62d4a4556640e",
+  "catalog_path": "infrastructure/soc-lab/README.md",
+  "authored_on": "2026-10-22",
+  "provenance": "Assistant-authored for Anas from the approved catalog scenarios; not collected or executed; human review pending.",
+  "fixture_inventory": {
+    "endpoint_id": "linux-01",
+    "inventory_revision": "fixture-inventory-pilot-v1",
+    "environment_id": "synthetic-pilot",
+    "operational_allowlist": false,
+    "note": "Logical endpoint from the lab plan; fictional fixture only, not a registered operational allowlist or execution authorization."
+  },
+  "limitations": [
+    "All observations and event times are authored synthetic data.",
+    "Assigned author/reviewer fields do not assert independent human annotation or review.",
+    "New authored variant group; shared scenario types are not evidence of statistical independence."
+  ]
+}

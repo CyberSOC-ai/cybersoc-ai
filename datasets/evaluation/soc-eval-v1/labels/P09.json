@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "dataset_version": "soc-eval-v1-pilot.1",
-  "protocol_version": "S1T02-pilot-v1",
+  "dataset_version": "soc-eval-v1-pilot.2",
+  "protocol_version": "S1T02-pilot-v2",
   "case_id": "P09",
   "incident_id": "INC-PILOT-009",
   "group_id": "G-ACCOUNT",
@@ -10,24 +10,26 @@
   "false_positive_type": "benign_trigger",
   "gold_severity": "informational",
   "mitre_techniques": [],
-  "mitre_reason": "No supported adversarial technique in the stated authorized or detector-error context; mapping awaits human review.",
+  "mitre_reason": "No supported adversarial technique in the observed permitted activity or contradictory raw-event evidence; human mapping review pending.",
   "required_actions": [],
   "analyst_guidance": null,
   "gold_evidence": [
     {
       "id": "P09-E1",
-      "statement": "Primary observation supporting the proposed triage decision.",
+      "supports": "verdict",
+      "statement": "The maintenance record covers the creator, account, privilege and time.",
       "locator": {
         "json_pointer": "/description",
-        "quoted_substring": "actor, name and group match"
+        "quoted_substring": "FIX-109 covers lab-operator, lab-maint01 and sudo membership during 13:25..13:40Z"
       }
     },
     {
       "id": "P09-E2",
-      "statement": "Complete incident context for authorization, impact and response scope.",
+      "supports": "severity",
+      "statement": "The temporary account was removed without an unexpected session or impact.",
       "locator": {
         "json_pointer": "/description",
-        "quoted_substring": "linux-01 audit 13:30:04Z add-user: local account lab-maint01 created uid=2202; sudo membership recorded. FIX-109 approves lab-operator creating that disposable account for maintenance in this window; actor, name and group match. Reset log confirms account removal at 13:35Z. No unexpected session or service impact; monitoring stayed healthy."
+        "quoted_substring": "Removal logged at 13:35Z; no unexpected sessions or service impact"
       }
     }
   ],
@@ -36,7 +38,7 @@
     "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
     "items": []
   },
-  "rationale": "The disposable privileged account matches an approved maintenance change and was removed normally, supporting a benign trigger and informational assessed severity.",
+  "rationale": "The maintenance record covers the creator, account, privilege and time; the temporary account was removed without an unexpected session or impact.",
   "label_author": "Anas",
   "label_reviewer": "Oussama",
   "adjudication_status": "pending_review",

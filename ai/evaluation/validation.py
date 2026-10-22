@@ -68,6 +68,13 @@ def validate_case(case, checks):
     if not label['mitre_techniques']:
         require(isinstance(label['mitre_reason'], str) and bool(label['mitre_reason'].strip()),
                 'empty MITRE techniques need a nonempty mitre_reason')
+    needed = {'verdict', 'severity'}
+    if label['mitre_techniques']:
+        needed.add('mitre')
+    if label['required_actions']:
+        needed.add('action')
+    provided = {item['supports'] for item in label['gold_evidence']}
+    require(needed <= provided, f'gold_evidence missing support for {sorted(needed - provided)}')
     evidence_ids = set()
     for evidence in label['gold_evidence']:
         require(evidence['id'] not in evidence_ids, f"duplicate gold_evidence ID {evidence['id']}")
@@ -78,6 +85,8 @@ def validate_case(case, checks):
         except (KeyError, IndexError, TypeError, ValueError) as exc:
             raise ValueError(f'{cid}: gold_evidence locator {pointer!r} does not resolve: {exc}') from exc
         require(isinstance(value, str), f'gold_evidence locator {pointer!r} must resolve to text')
+        require(evidence['locator']['quoted_substring'] != incident['description'],
+                'gold_evidence must not quote the whole description')
         require(evidence['locator']['quoted_substring'] in value,
                 f'gold_evidence quoted substring is absent at {pointer!r}')
     for action in label['required_actions']:

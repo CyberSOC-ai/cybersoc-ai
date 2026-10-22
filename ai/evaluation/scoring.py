@@ -112,7 +112,7 @@ def macro_f1(gold, predictions, universe):
 
 
 def score_cases(cases, predictions, severity_universe, mitre_universe, result_validator):
-    """Score full investigation-result objects; missing key = not attempted.
+    """Score results keyed by case_id or incident_id; missing key = not attempted.
 
     Explicit None or schema-invalid/error result = attempted failure. This is
     synthetic-pilot plumbing, not authorization or reviewed benchmark evidence.
@@ -120,8 +120,28 @@ def score_cases(cases, predictions, severity_universe, mitre_universe, result_va
     ids = [case["case_id"] for case in cases]
     if len(ids) != len(set(ids)):
         raise ValueError("score_cases: duplicate case IDs")
-    if set(predictions) - set(ids):
-        raise ValueError(f"score_cases: unknown case IDs {sorted(set(predictions) - set(ids))}")
+    incident_to_case = {}
+    for case in cases:
+        iid = case['input']['incident_id']
+        if iid in incident_to_case:
+            raise ValueError(f"{case['case_id']}: duplicate incident_id {iid}")
+        incident_to_case[iid] = case['case_id']
+    aliases = {cid: cid for cid in ids}
+    for iid, cid in incident_to_case.items():
+        if iid in aliases and aliases[iid] != cid:
+            raise ValueError(f"{cid}: ambiguous incident_id/case_id key {iid}")
+        aliases[iid] = cid
+    # A sequence of pairs can preserve duplicates that a dict would overwrite.
+    entries = predictions.items() if hasattr(predictions, 'items') else predictions
+    normalized = {}
+    for key, value in entries:
+        if key not in aliases:
+            raise ValueError(f"score_cases: unknown incident_id or case_id {key!r}")
+        cid = aliases[key]
+        if cid in normalized:
+            raise ValueError(f"{cid}: duplicate prediction for incident_id {cases[ids.index(cid)]['input']['incident_id']}")
+        normalized[cid] = value
+    predictions = normalized
     counts = {"intended": len(cases), "attempted": 0, "valid": 0, "failed": 0,
               "not_attempted": 0, "not_attempted_reasons": {}}
     gold_verdict, predicted_verdict, gold_severity, predicted_severity = [], [], [], []

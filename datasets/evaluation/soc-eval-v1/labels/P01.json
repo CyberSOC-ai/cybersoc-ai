@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "dataset_version": "soc-eval-v1-pilot.1",
-  "protocol_version": "S1T02-pilot-v1",
+  "dataset_version": "soc-eval-v1-pilot.2",
+  "protocol_version": "S1T02-pilot-v2",
   "case_id": "P01",
   "incident_id": "INC-PILOT-001",
   "group_id": "G-SSH",
@@ -10,9 +10,9 @@
   "false_positive_type": null,
   "gold_severity": "medium",
   "mitre_techniques": [
-    "T1110"
+    "T1110.001"
   ],
-  "mitre_reason": "Parent-level mapping only: the incident does not establish the credential retry method.",
+  "mitre_reason": null,
   "required_actions": [
     {
       "action_type": "block_ip",
@@ -32,18 +32,38 @@
   "gold_evidence": [
     {
       "id": "P01-E1",
-      "statement": "Primary observation supporting the proposed triage decision.",
+      "supports": "verdict",
+      "statement": "The repeated source is outside the account access record.",
       "locator": {
         "json_pointer": "/description",
-        "quoted_substring": "8 failed password authentications"
+        "quoted_substring": "192.0.2.10 is absent"
       }
     },
     {
       "id": "P01-E2",
-      "statement": "Complete incident context for authorization, impact and response scope.",
+      "supports": "severity",
+      "statement": "The repeated failures did not establish a session or interrupt service.",
       "locator": {
         "json_pointer": "/description",
-        "quoted_substring": "Oct 13 09:10:58Z linux-01 sshd / auth-fail-burst; src=192.0.2.10 dst=10.77.0.20:22/tcp user=lab-admin. 8 failed password authentications, 09:10:01..09:10:58; repeats collapsed in export. No successful login and service stayed up. Account owner note: no access was granted to this source; actor was trying to obtain access without the account secret. Password material was not retained, so retry method cannot be established. Draft service note: SSH containment may last 5-60 minutes with analyst approval; telemetry and recovery use separate paths, owner signoff is outstanding."
+        "quoted_substring": "No accepted session; service stayed up"
+      }
+    },
+    {
+      "id": "P01-E3",
+      "supports": "mitre",
+      "statement": "Repeated password attempts against one account support password guessing.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "8 failed password attempts for lab-admin in 57s"
+      }
+    },
+    {
+      "id": "P01-E4",
+      "supports": "action",
+      "statement": "The observed source and destination identify the scope for the shared SSH policy.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "src=192.0.2.10 dst=10.77.0.20"
       }
     }
   ],
@@ -52,7 +72,7 @@
     "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
     "items": []
   },
-  "rationale": "Unapproved repeated authentication attempts without a successful session support medium assessed severity and a broad brute-force mapping; action policy pending owner confirmation.",
+  "rationale": "The repeated source is outside the account access record; the repeated failures did not establish a session or interrupt service. Required containment follows the owner-selected fixed pilot runner policy; execution authorization is not granted.",
   "label_author": "Anas",
   "label_reviewer": "Oussama",
   "adjudication_status": "pending_review",
