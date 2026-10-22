@@ -1,0 +1,10 @@
+{
+  "status": "empty_template",
+  "sample_id": null,
+  "adjudicator_id": null,
+  "adjudicated_at": null,
+  "original_annotation_refs": [],
+  "original_annotator_labels": [],
+  "adjudicated_labels": [],
+  "disagreement_reasons": []
+}

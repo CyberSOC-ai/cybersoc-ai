@@ -17,7 +17,7 @@
 | Task | Owner | Reviewer | Domain | Status |
 |---|---|---|---|---|
 | S1-T01 — Reproducible local environment + Docker + basic CI | Ahmed | Achraf | devops | In progress |
-| S1-T02 — Evaluation dataset v1 and evaluation protocol | Anas | Oussama | ai-slm | Backlog |
+| S1-T02 — Evaluation dataset v1 and evaluation protocol | Anas | Oussama | ai-slm | Ready (pilot; S1-T02 incomplete) |
 | S1-T03 — Baseline SLM runner | Soulaiman | Anas | ai-slm | Backlog |
 | S1-T04 — FastAPI core + incident ingestion | Oussama | Soulaiman | backend | Backlog |
 | S1-T05 — SOC Lab MVP | Achraf | Ahmed | soc | Backlog |
@@ -136,43 +136,122 @@ S1-T03
 # 3. Anas
 ## Assigned tasks
 
-S1-T02, S1-T07
+S1-T02 (evaluation dataset and protocol), S1-T07 (No-RAG end-to-end baseline).
+S1-T07 runner/lab integration has not been executed in this work.
 
 ## Work completed
 
-> To be completed from validated sprint evidence.
+2026-10-22 — Delivered the synthetic pilot dataset, scoring tools and protocol
+drafts. Released soc-eval-v1-pilot.3 after Anas reviewed and approved all 14 cases.
+Set label_author to Anas; Oussama's peer review is still pending. Every label keeps
+pending_review / needs_review=true. Applied the approved template-family merges:
+P11/P13/P14 into G-SSH and P12 into G-FIM. Incident inputs and gold decisions,
+actions and evidence are unchanged.
+
+S1-T02 is NOT done: the frozen test split, two-person claim labelling and peer
+review are NOT done. Status: Ready for baseline integration (pilot only); the full
+S1-T02 task remains incomplete. No judge model, human claim annotations or measured
+model performance is claimed. PR #78 is Part of #10. Anas authorized merging the
+pilot without waiting for Oussama's review due to time constraints. This owner
+decision does not constitute peer approval or completion of the project Definition
+of Done. All labels retain pending_review / needs_review=true.
+
+### Remaining work and dependencies
+
+- Anas: prepare separate test cases, keep template families disjoint from development,
+  obtain label review, then freeze test membership and record versioned hashes.
+- Soulaiman (#11): produce baseline answers on the development incidents using the
+  documented runner interface; this pilot is ready for that integration.
+- Two independent annotators: label all baseline development answers and their claims,
+  covering at least 50 claims. Extend with more answers if needed; preserve original
+  ratings, calculate agreement and adjudicate disagreements.
+- Oussama: review the 14 labels, protocol drafts and scoring; resolve findings before
+  claiming peer-reviewed benchmark readiness.
+- Team: choose and record judge model/provider/revision/decoding/retry policy, then
+  validate the judge against the adjudicated human annotations.
+
+Do not close #10 or publish pilot scores as final benchmark results.
 
 ## Technical approach
 
-> To be completed from validated sprint evidence.
+Reference [METRICS.md](../../../experiments/METRICS.md) for scoring authority.
+Retain nominal Cohen's kappa and raw agreement; implement owner-selected quadratic
+weighted Cohen's kappa for ordinal 1–5 scores, null for zero expected disagreement.
+Hash metadata changes and all protocol/validation assets with existing tooling.
+Keep candidate text in quoted untrusted prompt blocks and labels out of model code.
+Execute the README's 15-line baseline-runner example with a contract-valid dummy
+predictor; no model is involved.
 
 ## Files / components modified
 
-> To be completed from validated sprint evidence.
+- [Dataset README](../../../datasets/evaluation/soc-eval-v1/README.md), approved
+  author/group/version metadata, [guidelines](../../../datasets/evaluation/soc-eval-v1/guidelines/labeling.md),
+  [manifest](../../../datasets/evaluation/soc-eval-v1/manifest.json) and split hashes.
+- [Protocol](../../../datasets/evaluation/soc-eval-v1/protocol/README.md) agreement
+  documentation and [validation templates](../../../datasets/evaluation/soc-eval-v1/validation/README.md).
+- [Scorer](../../../ai/evaluation/scoring.py) and [evaluation tests](../../../tests/evaluation/).
+- Only this member section and the S1-T02 status row in the sprint journal.
 
 ## Tests / validation
 
-> To be completed from validated sprint evidence.
+Cloud sandbox, no Docker: installed pinned requirements; evaluation discovery:
+43 tests passed; contracts discovery: 19 tests passed. Ruff passed. Repository
+integrity and local Markdown links passed: 158 tracked text files checked.
+Real output and hosted CI are recorded in PR #78. New tests check a hand-computed
+weighted-kappa example, invalid and degenerate ratings, and the actual README
+example using incident-ID predictions. Existing integrity, oracle, shortcut,
+faithfulness, nominal-kappa and prompt-boundary tests also passed. Mutations use
+temporary copies, never the dataset. Software tests are not peer review or human
+claim-validation evidence.
 
 ## Results / metrics
 
-> To be completed from validated sprint evidence.
+Composition: 14 synthetic development cases, 6 true positives, 8 false positives,
+four template-family groups, no test split. Gold severity: informational 8,
+medium 4, high 2. Shortcut verdict accuracy: ticket 7/14, wording 8/14; detector
+severity accuracy 5/14; action exact match: never-act 11/14, always-block 9/14.
+The 0.80 line is a local data-quality check, not a project metric or acceptance
+threshold. The arithmetic fixture [1,2,3] versus [1,3,3] gives quadratic weighted
+kappa 0.8 and raw agreement 2/3; these are software fixtures, not human results.
 
 ## Problems encountered
 
-> To be completed from validated sprint evidence.
+The pilot has no frozen test split, collected lab evidence, real baseline answer
+set or independent claim annotations. Shared template families limit independence.
+Peer review remains outstanding. Empty templates and prompt boundary tests do not
+establish judge validity or model-level injection resistance.
 
 ## Decisions made
 
-> To be completed from validated sprint evidence.
+Apply the rule that cases sharing a scenario template family or describing the
+same episode share a group_id; preserve other groups. Anas approved all cases;
+Oussama has not reviewed them, so nothing is accepted. Label ALL baseline answers
+on development cases with no sampling seed. If their claims total fewer than the
+CDC minimum of 50, extend with more answers; never reduce the minimum. Preserve
+original independent ratings before adjudication. Use quadratic weighted Cohen's
+kappa for ordinal scores. Judge model/provider/revision/decoding/retry policy:
+TBD - team decision. Configuration remains null/not_selected. Proposal scoring
+does not establish execution safety. Git does not enforce evaluator-only access.
 
 ## Related Issues / Pull Requests
 
-> To be completed from validated sprint evidence.
+[Issue #10 / S1-T02](https://github.com/CyberSOC-ai/cybersoc-ai/issues/10),
+[PR #78](https://github.com/CyberSOC-ai/cybersoc-ai/pull/78), branch
+feature/10-soc-eval-v1. Owner Anas; peer reviewer Oussama (@Ossel14).
+The [S1-T03 handoff](../../../datasets/evaluation/soc-eval-v1/README.md#for-s1-t03-baseline-runner)
+lets Soulaiman (@soulaimane-22) use this pilot for [#11](https://github.com/CyberSOC-ai/cybersoc-ai/issues/11).
+Labels await peer review; do not tune on these cases or publish scores as final
+benchmark results. Issue #10 remains open. Anas authorized PR #78 to be merged
+for pilot integration without waiting for peer review; the review request remains
+outstanding.
 
 ## Learning outcome
 
-> To be completed from validated sprint evidence.
+Owner approval, peer review and two-person claim annotation are distinct evidence.
+Grouping records construction dependence; hashes establish identity, not truth.
+Contextual support differs from correctness. Claims within an answer are not
+independent samples. Quadratic weighting makes ordinal disagreement explicit,
+while a zero expected disagreement gives no usable kappa estimate.
 
 
 # 4. Achraf

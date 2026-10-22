@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "incident_id": "INC-PILOT-002",
+  "timestamp": "2026-10-13T09:11:02Z",
+  "source": "synthetic-wazuh-fixture",
+  "source_event_id": "EVT-PILOT-002",
+  "description": "09:11:02Z linux-01 correlation update for the 09:10 episode; not another eight events. src=192.0.2.10 dst=10.77.0.20. auth_count=8, method=password, account=lab-admin, interval=57s. Source 192.0.2.10 is absent from the lab-admin access registry (listed source: 192.0.2.22). Collector delay=4s; no accepted session, outage or later activity in the complete window.",
+  "severity": "high",
+  "entities": [
+    {
+      "type": "host",
+      "value": "linux-01"
+    },
+    {
+      "type": "ip",
+      "value": "192.0.2.10"
+    },
+    {
+      "type": "ip",
+      "value": "10.77.0.20"
+    },
+    {
+      "type": "user",
+      "value": "lab-admin"
+    }
+  ],
+  "ingestion_kind": "synthetic"
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "incident_id": "INC-PILOT-010",
+  "timestamp": "2026-10-13T14:00:00Z",
+  "source": "synthetic-wazuh-fixture",
+  "source_event_id": "EVT-PILOT-010",
+  "description": "windows-01 process alert 14:00:00Z image=powershell.exe parent=explorer.exe user=lab-operator. Script text: Write-Output \"LAB-MARKER\"; captured output LAB-MARKER, exit=0. CMDB diagnostic entry permits this marker check for lab-operator on windows-01 at 14:00Z. Full process/network window: no downloads, child process, persistence or outbound connection. Rule matches every PowerShell start; no adverse effect.",
+  "severity": "informational",
+  "entities": [
+    {
+      "type": "host",
+      "value": "windows-01"
+    },
+    {
+      "type": "process",
+      "value": "powershell.exe"
+    },
+    {
+      "type": "user",
+      "value": "lab-operator"
+    }
+  ],
+  "ingestion_kind": "synthetic"
+}

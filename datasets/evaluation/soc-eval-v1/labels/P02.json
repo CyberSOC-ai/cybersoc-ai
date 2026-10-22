@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.3",
+  "protocol_version": "S1T02-pilot-v2",
+  "case_id": "P02",
+  "incident_id": "INC-PILOT-002",
+  "group_id": "G-SSH",
+  "split": "development",
+  "verdict": "true_positive",
+  "false_positive_type": null,
+  "gold_severity": "medium",
+  "mitre_techniques": [
+    "T1110.001"
+  ],
+  "mitre_reason": null,
+  "required_actions": [
+    {
+      "action_type": "block_ip",
+      "target": "linux-01",
+      "arguments": {
+        "source_ip": "192.0.2.10",
+        "port": 22,
+        "protocol": "tcp",
+        "duration_seconds": {
+          "min": 300,
+          "max": 3600
+        }
+      }
+    }
+  ],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P02-E1",
+      "supports": "verdict",
+      "statement": "The same repeated source is absent from the account registry.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Source 192.0.2.10 is absent from the lab-admin access registry"
+      }
+    },
+    {
+      "id": "P02-E2",
+      "supports": "severity",
+      "statement": "The correlation update reports failed access without demonstrated impact.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "no accepted session, outage or later activity"
+      }
+    },
+    {
+      "id": "P02-E3",
+      "supports": "mitre",
+      "statement": "The correlation preserves repeated password attempts against one account.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "auth_count=8, method=password, account=lab-admin, interval=57s"
+      }
+    },
+    {
+      "id": "P02-E4",
+      "supports": "action",
+      "statement": "The repeated episode identifies the same containment source and endpoint.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "src=192.0.2.10 dst=10.77.0.20"
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The same repeated source is absent from the account registry; the correlation update reports failed access without demonstrated impact. Required containment follows the owner-selected fixed pilot runner policy; execution authorization is not granted.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

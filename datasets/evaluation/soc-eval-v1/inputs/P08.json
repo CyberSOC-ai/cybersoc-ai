@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "incident_id": "INC-PILOT-008",
+  "timestamp": "2026-10-13T13:00:04Z",
+  "source": "synthetic-wazuh-fixture",
+  "source_event_id": "EVT-PILOT-008",
+  "description": "linux-01 audit 13:00:04Z: lab-temp created local account lab-persist01 uid=2201; 13:00:06Z added lab-persist01 to sudo. Identity registry allows lab-temp fixture-file reads only, with no account-administration role. Change register for this window is empty. lab-persist01 remains enabled with sudo membership at 13:10Z; no network origin recorded, no action applied.",
+  "severity": "high",
+  "entities": [
+    {
+      "type": "host",
+      "value": "linux-01"
+    },
+    {
+      "type": "user",
+      "value": "lab-persist01"
+    }
+  ],
+  "ingestion_kind": "synthetic"
+}

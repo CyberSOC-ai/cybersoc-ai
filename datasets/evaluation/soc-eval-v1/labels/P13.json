@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.3",
+  "protocol_version": "S1T02-pilot-v2",
+  "case_id": "P13",
+  "incident_id": "INC-PILOT-013",
+  "group_id": "G-SSH",
+  "split": "development",
+  "verdict": "false_positive",
+  "false_positive_type": "benign_trigger",
+  "gold_severity": "informational",
+  "mitre_techniques": [],
+  "mitre_reason": "No supported adversarial technique in the observed permitted activity or contradictory raw-event evidence; human mapping review pending.",
+  "required_actions": [],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P13-E1",
+      "supports": "verdict",
+      "statement": "The scanner entry covers the observed source, destination, activity and time.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "permitted source=203.0.113.40; destination=linux-01 (10.77.0.20); protocol=tcp"
+      }
+    },
+    {
+      "id": "P13-E2",
+      "supports": "severity",
+      "statement": "The covered authentication check established no session or service impact.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "no sessions or service impact"
+      }
+    },
+    {
+      "id": "P13-E3",
+      "supports": "verdict",
+      "statement": "The allowlist permits SSH password failure checks for the observed account.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "test type=SSH password-authentication failure checks; covered accounts=[lab-admin]"
+      }
+    },
+    {
+      "id": "P13-E4",
+      "supports": "verdict",
+      "statement": "The allowlist window and limits cover the observed time, count and rate.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "permitted window=15:55..16:10Z; limit=150 attempts per 5 minutes and 30 attempts/minute"
+      }
+    },
+    {
+      "id": "P13-E5",
+      "supports": "verdict",
+      "statement": "The observed checks stay within the permitted failure-only test type and numerical bounds.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "120 failed password logins during 16:00..16:05Z; uniformly paced at 24 attempts/minute, no successful login"
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The scanner entry covers the observed source, destination, activity and time; the covered authentication check established no session or service impact.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

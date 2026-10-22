@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.3",
+  "protocol_version": "S1T02-pilot-v2",
+  "case_id": "P06",
+  "incident_id": "INC-PILOT-006",
+  "group_id": "G-FIM",
+  "split": "development",
+  "verdict": "true_positive",
+  "false_positive_type": null,
+  "gold_severity": "medium",
+  "mitre_techniques": [],
+  "mitre_reason": "Inert-file modification is observed without evidence of a specific adversarial technique; human mapping review pending.",
+  "required_actions": [],
+  "analyst_guidance": "Inspect the change and preserve the audit trail; ask the owner to authorize restoration of the inert fixture, without proposing an IP block.",
+  "gold_evidence": [
+    {
+      "id": "P06-E1",
+      "supports": "verdict",
+      "statement": "The observed writer is absent from the fixture write ACL.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Audit actor=lab-temp; fixture write ACL lists only lab-operator, with no lab-temp entry"
+      }
+    },
+    {
+      "id": "P06-E2",
+      "supports": "severity",
+      "statement": "The observed modification is bounded to inert text without service impact.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Inert text, not executed; no service interruption, deletion, encryption or network source"
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The observed writer is absent from the fixture write ACL; the observed modification is bounded to inert text without service impact.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

@@ -1,0 +1,14 @@
+{
+  "status": "empty_template",
+  "sample_id": null,
+  "source_run_id": null,
+  "dataset_manifest_sha256": null,
+  "extraction_prompt_sha256": null,
+  "minimum_claims": 50,
+  "sample_size_beyond_minimum": "All baseline development answers; extend with more answers if total claims are fewer than 50",
+  "sampling_method": "All baseline answers on development cases; no random sampling",
+  "sampling_seed": null,
+  "distinct_answers": null,
+  "claim_count": null,
+  "answers": []
+}

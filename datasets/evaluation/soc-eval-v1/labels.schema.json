@@ -1,0 +1,356 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cybersoc.invalid/evaluation/soc-eval-v1/labels.schema.json",
+  "title": "Evaluator-only synthetic pilot labels",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "dataset_version": {
+      "const": "soc-eval-v1-pilot.3"
+    },
+    "protocol_version": {
+      "const": "S1T02-pilot-v2"
+    },
+    "case_id": {
+      "$ref": "https://cybersoc.invalid/contracts/v1/common.schema.json#/$defs/id"
+    },
+    "incident_id": {
+      "$ref": "https://cybersoc.invalid/contracts/v1/common.schema.json#/$defs/id"
+    },
+    "group_id": {
+      "$ref": "https://cybersoc.invalid/contracts/v1/common.schema.json#/$defs/id"
+    },
+    "split": {
+      "enum": [
+        "development",
+        "test"
+      ]
+    },
+    "verdict": {
+      "enum": [
+        "true_positive",
+        "false_positive"
+      ]
+    },
+    "false_positive_type": {
+      "enum": [
+        null,
+        "benign_trigger",
+        "detector_error"
+      ]
+    },
+    "gold_severity": {
+      "$ref": "https://cybersoc.invalid/contracts/v1/common.schema.json#/$defs/severity"
+    },
+    "mitre_techniques": {
+      "type": "array",
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^T[0-9]{4}(\\.[0-9]{3})?(?![\\s\\S])"
+      }
+    },
+    "mitre_reason": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "required_actions": {
+      "type": "array",
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "action_type": {
+            "const": "block_ip"
+          },
+          "target": {
+            "$ref": "https://cybersoc.invalid/contracts/v1/common.schema.json#/$defs/id"
+          },
+          "arguments": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "source_ip": {
+                "type": "string",
+                "format": "ipv4"
+              },
+              "port": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 65535
+              },
+              "protocol": {
+                "enum": [
+                  "tcp",
+                  "udp"
+                ]
+              },
+              "duration_seconds": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "min": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 3600
+                  },
+                  "max": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 3600
+                  }
+                },
+                "required": [
+                  "min",
+                  "max"
+                ]
+              }
+            },
+            "required": [
+              "source_ip",
+              "port",
+              "protocol",
+              "duration_seconds"
+            ]
+          }
+        },
+        "required": [
+          "action_type",
+          "target",
+          "arguments"
+        ]
+      }
+    },
+    "analyst_guidance": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "gold_evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "https://cybersoc.invalid/contracts/v1/common.schema.json#/$defs/id"
+          },
+          "statement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "locator": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "json_pointer": {
+                "type": "string",
+                "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])"
+              },
+              "quoted_substring": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              }
+            },
+            "required": [
+              "json_pointer",
+              "quoted_substring"
+            ]
+          },
+          "supports": {
+            "enum": [
+              "verdict",
+              "severity",
+              "mitre",
+              "action"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "statement",
+          "locator",
+          "supports"
+        ]
+      }
+    },
+    "retrieval_relevance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "const": "not_labelled"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "items": {
+          "type": "array",
+          "maxItems": 0
+        }
+      },
+      "required": [
+        "status",
+        "reason",
+        "items"
+      ]
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "label_author": {
+      "type": "string",
+      "minLength": 1
+    },
+    "label_reviewer": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "adjudication_status": {
+      "enum": [
+        "draft",
+        "pending_review",
+        "disputed",
+        "accepted",
+        "adjudicated"
+      ]
+    },
+    "needs_review": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schema_version",
+    "dataset_version",
+    "protocol_version",
+    "case_id",
+    "incident_id",
+    "group_id",
+    "split",
+    "verdict",
+    "false_positive_type",
+    "gold_severity",
+    "mitre_techniques",
+    "mitre_reason",
+    "required_actions",
+    "analyst_guidance",
+    "gold_evidence",
+    "retrieval_relevance",
+    "rationale",
+    "label_author",
+    "label_reviewer",
+    "adjudication_status",
+    "needs_review"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "verdict": {
+            "const": "true_positive"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "false_positive_type": {
+            "type": "null"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "false_positive_type": {
+            "enum": [
+              "benign_trigger",
+              "detector_error"
+            ]
+          },
+          "required_actions": {
+            "maxItems": 0
+          },
+          "gold_severity": {
+            "const": "informational"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mitre_techniques": {
+            "maxItems": 0
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "mitre_reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "adjudication_status": {
+            "enum": [
+              "accepted",
+              "adjudicated"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "needs_review": {
+            "const": false
+          },
+          "label_reviewer": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "needs_review": {
+            "const": true
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.3",
+  "protocol_version": "S1T02-pilot-v2",
+  "case_id": "P07",
+  "incident_id": "INC-PILOT-007",
+  "group_id": "G-FIM",
+  "split": "development",
+  "verdict": "false_positive",
+  "false_positive_type": "benign_trigger",
+  "gold_severity": "informational",
+  "mitre_techniques": [],
+  "mitre_reason": "No supported adversarial technique in the observed permitted activity or contradictory raw-event evidence; human mapping review pending.",
+  "required_actions": [],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P07-E1",
+      "supports": "verdict",
+      "statement": "The maintenance record matches the actor, time and exact change.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "FIX-107 covers this exact content change by lab-operator during 12:25..12:35Z; audit actor=lab-operator"
+      }
+    },
+    {
+      "id": "P07-E2",
+      "supports": "severity",
+      "statement": "The permitted edit has no observed service impact.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "inert file not executed, no service interruption"
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The maintenance record matches the actor, time and exact change; the permitted edit has no observed service impact.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

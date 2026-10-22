@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.3",
+  "protocol_version": "S1T02-pilot-v2",
+  "case_id": "P08",
+  "incident_id": "INC-PILOT-008",
+  "group_id": "G-ACCOUNT",
+  "split": "development",
+  "verdict": "true_positive",
+  "false_positive_type": null,
+  "gold_severity": "high",
+  "mitre_techniques": [
+    "T1136.001"
+  ],
+  "mitre_reason": null,
+  "required_actions": [],
+  "analyst_guidance": "Escalate the unauthorized privileged account to an analyst, preserve audit evidence, and seek approval to disable that exact account through a separately supported procedure.",
+  "gold_evidence": [
+    {
+      "id": "P08-E1",
+      "supports": "verdict",
+      "statement": "The observed account creator lacks the required role in the identity registry.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Identity registry allows lab-temp fixture-file reads only, with no account-administration role"
+      }
+    },
+    {
+      "id": "P08-E2",
+      "supports": "severity",
+      "statement": "The newly created privileged account remains usable.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "lab-persist01 remains enabled with sudo membership at 13:10Z"
+      }
+    },
+    {
+      "id": "P08-E3",
+      "supports": "mitre",
+      "statement": "Audit records directly evidence local account creation.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "lab-temp created local account lab-persist01 uid=2201"
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The observed account creator lacks the required role in the identity registry; the newly created privileged account remains usable.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.3",
+  "protocol_version": "S1T02-pilot-v2",
+  "case_id": "P11",
+  "incident_id": "INC-PILOT-011",
+  "group_id": "G-SSH",
+  "split": "development",
+  "verdict": "true_positive",
+  "false_positive_type": null,
+  "gold_severity": "high",
+  "mitre_techniques": [
+    "T1110.001",
+    "T1078"
+  ],
+  "mitre_reason": "Accepted password and commands in the same authenticated lab-admin session evidence valid-account use after password guessing. The T1110.001 method mapping is probable, not certain, pending human review.",
+  "required_actions": [
+    {
+      "action_type": "block_ip",
+      "target": "linux-01",
+      "arguments": {
+        "source_ip": "198.51.100.31",
+        "port": 22,
+        "protocol": "tcp",
+        "duration_seconds": {
+          "min": 300,
+          "max": 3600
+        }
+      }
+    }
+  ],
+  "analyst_guidance": "Seek approval to reset or disable lab-admin and preserve and review session s-311.",
+  "gold_evidence": [
+    {
+      "id": "P11-E1",
+      "supports": "verdict",
+      "statement": "The successful source is outside the account access registry.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Access registry for lab-admin lists 192.0.2.22 only, with no 198.51.100.31 entry"
+      }
+    },
+    {
+      "id": "P11-E2",
+      "supports": "severity",
+      "statement": "An interactive authenticated session executed commands after the failure burst.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Session s-311: id returned uid=1001(lab-admin); ls /etc completed at 15:03:08Z"
+      }
+    },
+    {
+      "id": "P11-E3",
+      "supports": "mitre",
+      "statement": "Repeated password attempts against one account support password guessing.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "40 failed password attempts for lab-admin during 15:00:00..15:02:59Z"
+      }
+    },
+    {
+      "id": "P11-E4",
+      "supports": "mitre",
+      "statement": "The same source subsequently used valid account credentials.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "Accepted password for lab-admin from 198.51.100.31 at 15:03:00Z"
+      }
+    },
+    {
+      "id": "P11-E5",
+      "supports": "action",
+      "statement": "The source and endpoint identify the shared SSH policy containment scope.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "linux-01 sshd burst 15:03:00Z src=198.51.100.31 dst=10.77.0.20"
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "The successful source is outside the account access registry; an interactive authenticated session executed commands after the failure burst. Required containment follows the owner-selected fixed pilot runner policy; execution authorization is not granted.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

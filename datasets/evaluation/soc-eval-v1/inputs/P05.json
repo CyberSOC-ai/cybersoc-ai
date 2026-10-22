@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "incident_id": "INC-PILOT-005",
+  "timestamp": "2026-10-13T11:00:00Z",
+  "source": "synthetic-wazuh-fixture",
+  "source_event_id": "EVT-PILOT-005",
+  "description": "linux-01 sshd 11:00:00Z Accepted publickey for lab-operator from 192.0.2.22; destination 10.77.0.20. Session closed 11:01Z. On-call roster: lab-operator, source 192.0.2.22, window 10:55..11:10Z. Complete window: one success, zero failures, no correlated alert and no service impact.",
+  "severity": "informational",
+  "entities": [
+    {
+      "type": "host",
+      "value": "linux-01"
+    },
+    {
+      "type": "ip",
+      "value": "192.0.2.22"
+    },
+    {
+      "type": "user",
+      "value": "lab-operator"
+    }
+  ],
+  "ingestion_kind": "synthetic"
+}

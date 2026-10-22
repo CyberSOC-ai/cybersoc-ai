@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.3",
+  "protocol_version": "S1T02-pilot-v2",
+  "case_id": "P04",
+  "incident_id": "INC-PILOT-004",
+  "group_id": "G-SSH",
+  "split": "development",
+  "verdict": "false_positive",
+  "false_positive_type": "detector_error",
+  "gold_severity": "informational",
+  "mitre_techniques": [],
+  "mitre_reason": "No supported adversarial technique in the observed permitted activity or contradictory raw-event evidence; human mapping review pending.",
+  "required_actions": [],
+  "analyst_guidance": null,
+  "gold_evidence": [
+    {
+      "id": "P04-E1",
+      "supports": "verdict",
+      "statement": "Raw successful authentication contradicts the normalized failure outcome.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "outcome=success, Accepted publickey at 10:20:01Z; normalized outcome=failure"
+      }
+    },
+    {
+      "id": "P04-E2",
+      "supports": "severity",
+      "statement": "The complete window shows no failed access or service impact.",
+      "locator": {
+        "json_pointer": "/description",
+        "quoted_substring": "zero failed logins; session closed normally, no service impact"
+      }
+    }
+  ],
+  "retrieval_relevance": {
+    "status": "not_labelled",
+    "reason": "No acquired corpus or reviewed retrieval relevance judgements in this synthetic pilot.",
+    "items": []
+  },
+  "rationale": "Raw successful authentication contradicts the normalized failure outcome; the complete window shows no failed access or service impact.",
+  "label_author": "Anas",
+  "label_reviewer": "Oussama",
+  "adjudication_status": "pending_review",
+  "needs_review": true
+}

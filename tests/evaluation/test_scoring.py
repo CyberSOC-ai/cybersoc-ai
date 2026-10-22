@@ -1,0 +1,181 @@
+"""Hand-computed metric examples, independent of authored case labels."""
+from copy import deepcopy
+from pathlib import Path
+import unittest
+
+from ai.evaluation.scoring import binary_metrics, macro_f1, match_actions
+
+ROOT = Path(__file__).resolve().parents[2]
+TP, FP = 'true_positive', 'false_positive'
+
+
+def required_action():
+    return {'action_type': 'block_ip', 'target': 'linux-01', 'arguments': {
+        'source_ip': '192.0.2.10', 'port': 22, 'protocol': 'tcp',
+        'duration_seconds': {'min': 300, 'max': 3600}}}
+
+
+def proposed_action():
+    action = required_action()
+    action['arguments']['duration_seconds'] = 300
+    return action
+
+
+class ScoringTest(unittest.TestCase):
+    def test_exact_action_ignores_generated_ids_and_wording(self):
+        action = proposed_action()
+        action.update(action_id='GENERATED-9', reason='Different wording', expected_effect='Different prose')
+        result = match_actions([required_action()], [action])
+        self.assertTrue(result['exact_match'], 'UNIT-action: exact semantic match rejected')
+        self.assertEqual((result['precision'], result['recall']), (1, 1), 'UNIT-action: wrong set scores')
+
+    def test_wrong_action_type_target_and_arguments(self):
+        for key, value in (('action_type', 'quarantine'), ('target', 'soc-01'),
+                           ('source_ip', '192.0.2.11'), ('port', 23), ('protocol', 'udp')):
+            action = proposed_action()
+            target = action if key in ('action_type', 'target') else action['arguments']
+            target[key] = value
+            with self.subTest(case_id='UNIT-action', field=key):
+                self.assertFalse(match_actions([required_action()], [action])['exact_match'],
+                                 f'UNIT-action: wrong {key} incorrectly matched')
+
+    def test_duration_inclusive_boundaries_and_types(self):
+        for duration, expected in ((299, False), (300, True), (900, True), (3600, True),
+                                   (3601, False), (True, False), (300.0, False)):
+            action = proposed_action()
+            action['arguments']['duration_seconds'] = duration
+            self.assertEqual(match_actions([required_action()], [action])['exact_match'], expected,
+                             f'UNIT-action: duration {duration!r} has wrong matching result')
+
+    def test_extra_missing_duplicate_and_empty_actions(self):
+        gold, proposed = required_action(), proposed_action()
+        for required, actions in (([gold], [proposed, deepcopy(proposed)]), ([gold], []), ([], [proposed])):
+            self.assertFalse(match_actions(required, actions)['exact_match'],
+                             'UNIT-action: missing/extra action incorrectly matched')
+        result = match_actions([], [])
+        self.assertTrue(result['exact_match'], 'UNIT-action: empty sets should match')
+        self.assertIsNone(result['precision'], 'UNIT-action: empty precision must be null')
+        self.assertIsNone(result['recall'], 'UNIT-action: empty recall must be null')
+        self.assertEqual(result['null_reasons'], {'precision': 'zero_denominator', 'recall': 'zero_denominator'},
+                         'UNIT-action: empty denominator reasons missing')
+
+    def test_overlapping_ranges_use_one_to_one_maximum_match(self):
+        broad, narrow = required_action(), required_action()
+        narrow['arguments']['duration_seconds'] = {'min': 300, 'max': 300}
+        first, second = proposed_action(), proposed_action()
+        second['arguments']['duration_seconds'] = 600
+        self.assertTrue(match_actions([broad, narrow], [first, second])['exact_match'],
+                        'UNIT-action: greedy matching lost an available one-to-one assignment')
+
+    def test_binary_hand_computed_confusion_with_abstentions(self):
+        result = binary_metrics([TP, TP, TP, TP, FP, FP, FP, FP],
+                                [TP, FP, 'undetermined', None, TP, FP, 'undetermined', None])
+        self.assertEqual([result[k] for k in ('tp', 'fp', 'tn', 'fn')], [1, 1, 1, 3],
+                         'UNIT-binary: expected TP=1 FP=1 TN=1 FN=3')
+        self.assertEqual(result['accuracy'], 2 / 8, 'UNIT-binary: abstentions dropped from accuracy')
+        self.assertEqual(result['precision'], 1 / 2, 'UNIT-binary: precision differs from confusion table')
+        self.assertEqual(result['recall'], 1 / 4, 'UNIT-binary: true abstentions must add FN')
+        self.assertAlmostEqual(result['f1'], 1 / 3, msg='UNIT-binary: F1 differs from hand calculation')
+        self.assertEqual((result['abstentions_true_positive'], result['abstentions_false_positive']), (2, 2),
+                         'UNIT-binary: abstentions must remain visible by gold class')
+
+    def test_binary_zero_denominators_are_null(self):
+        empty = binary_metrics([], [])
+        for key in ('accuracy', 'precision', 'recall', 'f1'):
+            self.assertIsNone(empty[key], f'UNIT-binary: empty {key} must be null')
+            self.assertEqual(empty['null_reasons'][key], 'zero_denominator', f'UNIT-binary: {key} reason missing')
+        result = binary_metrics([FP, FP], [FP, None])
+        self.assertEqual(result['accuracy'], 0.5, 'UNIT-binary: failed benign output must be incorrect')
+        for key in ('precision', 'recall', 'f1'):
+            self.assertIsNone(result[key], f'UNIT-binary: benign-only {key} must be null')
+
+    def test_severity_macro_f1_and_zero_support(self):
+        result = macro_f1([{'medium'}, {'high'}, {'high'}], [{'medium'}, {'medium'}, None], ['medium', 'high'])
+        self.assertAlmostEqual(result['macro_f1'], 1 / 3, msg='UNIT-severity: expected mean of 2/3 and 0')
+        self.assertEqual(result['per_label']['high']['fn'], 2, 'UNIT-severity: failed output lost a FN')
+        empty = macro_f1([], [], ['high'])['per_label']['high']
+        self.assertEqual((empty['f1'], empty['support']), (0, 0), 'UNIT-severity: METRICS zero-support rule violated')
+        self.assertIsNone(empty['precision'], 'UNIT-severity: zero precision denominator must be null')
+        self.assertIsNone(empty['recall'], 'UNIT-severity: zero recall denominator must be null')
+
+    def test_multilabel_exact_mitre_and_valid_empty_set(self):
+        result = macro_f1([{'T1110'}, {'T1136.001'}, set()],
+                          [{'T1110.001'}, {'T1136.001'}, {'T1110'}], ['T1110', 'T1136.001'])
+        self.assertEqual(result['macro_f1'], 0.5, 'UNIT-MITRE: parent/sub-technique must not match')
+        self.assertEqual(result['per_label']['T1110']['fp'], 1, 'UNIT-MITRE: valid empty gold lost false positive')
+        self.assertEqual(result['per_label']['T1110']['fn'], 1, 'UNIT-MITRE: missed parent label lost false negative')
+        self.assertEqual(result['out_of_universe_predictions'], ['T1110.001'], 'UNIT-MITRE: unknown prediction hidden')
+        self.assertIsNone(macro_f1([set()], [set()], [])['macro_f1'], 'UNIT-MITRE: empty universe must be null')
+
+    def test_length_mismatches_are_not_silently_truncated(self):
+        with self.assertRaisesRegex(ValueError, 'lengths differ', msg='UNIT-length: unequal rows were silently truncated'):
+            binary_metrics([TP], [])
+        with self.assertRaisesRegex(ValueError, 'lengths differ', msg='UNIT-length: unequal rows were silently truncated'):
+            macro_f1([{'high'}], [], ['high'])
+
+
+class FaithfulnessAndAgreementTest(unittest.TestCase):
+    def test_faithfulness_denominator_threshold_and_empty(self):
+        from ai.evaluation.scoring import faithfulness
+        result = faithfulness(['supported']*8 + ['unsupported','unjudged'])
+        self.assertEqual(result['faithfulness'], .8, 'UNIT-faithfulness: unjudged excluded from denominator')
+        self.assertEqual(result['unjudged_share'], .1, 'UNIT-faithfulness: wrong unjudged share')
+        self.assertIsNone(result['reason'], 'UNIT-faithfulness: exactly 10 percent suppressed')
+        result = faithfulness(['supported']*8 + ['unjudged']*2)
+        self.assertIsNone(result['faithfulness'], 'UNIT-faithfulness: >10 percent unjudged retained headline')
+        self.assertIsNone(result['hallucination_rate'], 'UNIT-faithfulness: suppressed complement retained')
+        self.assertEqual(result['reason'], 'unjudged_share_exceeds_10_percent', 'UNIT-faithfulness: wrong null reason')
+        self.assertEqual(result['claim_counts'], {'supported':8,'unsupported':0,'unjudged':2,'total':10},
+                         'UNIT-faithfulness: wrong counts')
+        self.assertIsNone(faithfulness([])['faithfulness'], 'UNIT-faithfulness: zero claims scored')
+        self.assertEqual(faithfulness([{'status':'unsupported'}])['faithfulness'], 0,
+                         'UNIT-faithfulness: unsupported claim earned credit')
+        with self.assertRaises(ValueError, msg='UNIT-faithfulness: unknown claim state silently dropped'):
+            faithfulness(['maybe'])
+
+    def test_cohens_kappa_hand_computed_table_and_degenerate_agreement(self):
+        from ai.evaluation.scoring import cohens_kappa
+        # Table [[8,2],[4,6]]: raw=14/20=.7, chance=.5, kappa=.4.
+        a = ['yes']*10 + ['no']*10
+        b = ['yes']*8 + ['no']*2 + ['yes']*4 + ['no']*6
+        result = cohens_kappa(a,b)
+        self.assertEqual(result['kappa'], .4, 'UNIT-kappa: wrong hand-computed result')
+        self.assertEqual(result['raw_agreement'], .7, 'UNIT-kappa: wrong raw agreement')
+        self.assertEqual(result['disagreement_count'], 6, 'UNIT-kappa: disagreement count lost')
+        self.assertEqual(result['category_counts']['rater_b'], {'no':8,'yes':12}, 'UNIT-kappa: wrong marginals')
+        self.assertEqual(result['disagreement_table']['yes'], {'no':2,'yes':8}, 'UNIT-kappa: wrong table')
+        self.assertEqual(cohens_kappa(['a','b'],['a','b'])['kappa'], 1, 'UNIT-kappa: perfect agreement wrong')
+        result = cohens_kappa(['a']*3,['a']*3)
+        self.assertIsNone(result['kappa'], 'UNIT-kappa: chance agreement 1 must be null')
+        self.assertEqual(result['raw_agreement'], 1, 'UNIT-kappa: raw agreement lost')
+        self.assertEqual(result['reason'], 'chance_agreement_is_1', 'UNIT-kappa: missing null reason')
+        self.assertIsNone(cohens_kappa([],[])['kappa'], 'UNIT-kappa: empty ratings scored')
+        with self.assertRaises(ValueError, msg='UNIT-kappa: missing rating silently excluded'):
+            cohens_kappa(['a'],[None])
+        with self.assertRaises(ValueError, msg='UNIT-kappa: unequal lengths silently truncated'):
+            cohens_kappa(['a'],[])
+
+
+if __name__ == '__main__':
+    unittest.main()
+
+
+class WeightedKappaTest(unittest.TestCase):
+    def test_quadratic_hand_computed_and_boundaries(self):
+        from ai.evaluation.scoring import weighted_kappa
+        # A=[1,2,3], B=[1,3,3]: squared observed sum=1;
+        # independent cross-pair squared sum=15; 1-(1/3)/(15/9)=0.8.
+        result = weighted_kappa([1, 2, 3], [1, 3, 3])
+        self.assertAlmostEqual(result['kappa'], .8, msg='UNIT-weighted: hand-computed kappa differs')
+        self.assertEqual(result['raw_agreement'], 2/3, 'UNIT-weighted: raw agreement differs')
+        self.assertEqual(result['observed_disagreement'], 1/48, 'UNIT-weighted: wrong observed weights')
+        self.assertEqual(result['expected_disagreement'], 15/144, 'UNIT-weighted: wrong expected weights')
+        self.assertEqual(weighted_kappa([1, 5], [1, 5])['kappa'], 1, 'UNIT-weighted: perfect agreement differs')
+        self.assertEqual(weighted_kappa([1, 5], [5, 1])['kappa'], -1, 'UNIT-weighted: opposite ratings differ')
+        constant = weighted_kappa([5], [5])
+        self.assertIsNone(constant['kappa'], 'UNIT-weighted: zero expected disagreement must be null')
+        self.assertEqual(constant['reason'], 'zero_expected_disagreement', 'UNIT-weighted: missing null reason')
+        self.assertIsNone(weighted_kappa([], [])['kappa'], 'UNIT-weighted: empty ratings must be null')
+        for a, b in [([1], []), ([0], [1]), ([6], [1]), ([True], [1]), ([1.0], [1]), ([None], [1])]:
+            with self.assertRaises(ValueError, msg='UNIT-weighted: invalid paired ratings accepted'):
+                weighted_kappa(a, b)
