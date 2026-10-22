@@ -93,3 +93,5 @@ Ahmed · Soulaiman · Anas · Achraf · Oussama
 - [Sprint 6](docs/sprints/sprint-06/README.md)
 - [Sprint 7](docs/sprints/sprint-07/README.md)
 - [Sprint 8](docs/sprints/sprint-08/README.md)
+
+The [Sprint 1 backend API](backend/README.md) documents loopback startup, strict incident ingestion, SQLite storage and the pending baseline-runner interface.

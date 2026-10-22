@@ -5,7 +5,8 @@ RUN python -m pip install --no-cache-dir -r /tmp/requirements.txt
 
 WORKDIR /workspace
 
-RUN useradd --create-home --uid 1000 dev
+RUN useradd --create-home --uid 1000 dev \
+    && install -d -m 700 -o dev -g dev /runtime
 USER dev
 
 CMD ["python", "--version"]

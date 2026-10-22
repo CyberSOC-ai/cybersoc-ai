@@ -91,3 +91,7 @@ The Gitleaks Action reads the repository secret `GITLEAKS_LICENSE`; a maintainer
 | Gitleaks Action reports a license problem | Confirm `GITLEAKS_LICENSE` is available to this repository and workflow |
 
 The check containers exit after each command and are removed by `--rm`. Run `docker compose down` to remove the project's Compose network. Avoid broad Docker cleanup commands that could delete other projects' resources.
+
+## Sprint 1 backend service
+
+The [backend guide](../backend/README.md) covers the API, persistent writable runtime volume and loopback-only published port. The `dev` service remains the check environment; `api` starts Uvicorn with one worker. New backend tests run in CI with `python -B -m unittest discover -s tests/backend -v`; the existing contract suite now contains 19 methods, and the merged evaluation pilot has its own suite. Rebuild after API dependencies change. No real runner is configured by default.
