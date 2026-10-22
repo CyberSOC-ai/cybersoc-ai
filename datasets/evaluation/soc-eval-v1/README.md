@@ -10,8 +10,9 @@ from a deployed SOC. They are not evidence of real SOC performance. No model,
 judge, human double-labelling or response execution is claimed. The
 [inventory](../../SOURCES.md) requirement for collected cases remains outstanding.
 All labels are pending review; naming Oussama assigns review, it does not record
-review completion. `label_author: Anas` identifies the task owner, not an assertion
-that Anas independently annotated assistant-authored material.
+review completion. Each label records `label_author: Codex-drafted; Anas review pending`. It becomes
+`Anas` only after the owner reviews that specific case; no such review is claimed.
+All current labels remain pending_review / needs_review=true.
 
 ## Layout and boundaries
 
@@ -24,7 +25,9 @@ that Anas independently annotated assistant-authored material.
 - [splits.json](splits.json): membership, groups, complete case digests and freeze flag.
 - [manifest.json](manifest.json): component and case hashes, split-file hash,
   declared severity and MITRE scoring universes.
-- [guidelines/labeling.md](guidelines/labeling.md): provisional label policy.
+- [guidelines/labeling.md](guidelines/labeling.md): provisional policy and proposed grouping merges.
+- [protocol/](protocol/README.md): faithfulness, prompt templates, rubric and action matching.
+- [validation/](validation/README.md): empty sampling/annotation/adjudication templates.
 
 The evaluator preflights with `validate_dataset`, then hands only the input-only
 loader interface to model code. This is API separation, not a filesystem security
@@ -44,6 +47,9 @@ P01-P05 share `G-SSH`, P06-P07 `G-FIM`, P08-P09 `G-ACCOUNT`, and P10
 `G-POWERSHELL`; P01/P02 are two views of the same episode. New synthetic variants
 P11-P14 use `G-SSH-SESSION`, `G-FIM-WINDOW`, `G-SSH-SCANNER`, `G-SSH-REPLAY`.
 There are 8 authored groups; shared scenario types still limit independence.
+The [grouping proposal](guidelines/labeling.md#grouping-proposal--not-applied) would
+merge these into four template families. Approval: TBD - owner decision.
+No group IDs or memberships have changed in this delivery.
 P11/P13 extend LAB-01 beyond its live exercise limits: these are authored variations,
 not collected runs or instructions to execute those counts.
 
@@ -60,15 +66,11 @@ carry non-scored analyst guidance. Full action envelopes come from runner config
 not labels. The owner selected this pilot policy; execution remains disabled and
 operational authorization is pending. No account-disable adapter is invented.
 
-[METRICS.md](../../../experiments/METRICS.md) is authoritative. Failed/invalid or
-undetermined verdicts remain incorrect; true-incident abstentions add FN, benign
-abstentions add no TP/FP/FN. Binary zero denominators yield null with reasons.
-Per-label macro-F1 zero denominators yield **0**, the explicit METRICS exception;
-precision/recall remain null. Macro-F1 uses declared universes and discloses
-out-of-universe predictions. Action matching is one-to-one with no extras or
-omissions; empty/empty matches with null precision/recall. Failed full outputs
-never obtain an empty-action match. Missing prediction keys mean not attempted;
-explicit null means attempted failure. Per-case reasons and counts are retained.
+[METRICS.md](../../../experiments/METRICS.md) is authoritative. Implementations in
+[scoring.py](../../../ai/evaluation/scoring.py) now include faithfulness accounting
+and Cohen's kappa with raw agreement and disagreement counts. Protocol documentation
+references the authority rather than replacing its metric definitions. Ordinal
+agreement for the 1–5 quality ratings: TBD - owner decision.
 
 ## Runner integration
 
@@ -118,7 +120,9 @@ format, not RFC 8785 or the future action-approval digest format.
 Each component has canonical and raw-byte hashes. A case digest hashes an object
 with `hash_scheme`, `case_id`, `input`, `labels`, `context` and their full values.
 Both manifests reference each complete case digest; manifest also hashes exact
-`splits.json` bytes and canonical/raw runner-policy hashes. Neither file includes its own hash. Experiment records must
+`splits.json` bytes and canonical/raw runner-policy hashes. All protocol/validation
+assets have raw SHA-256 entries in manifest.assets. Verification rejects missing,
+modified, duplicate or unlisted assets; prompt digests cover exact UTF-8 bytes. Neither file includes its own hash. Experiment records must
 pin the exact raw manifest digest externally; `verify(...,
 expected_manifest_sha256=...)` checks it. Without that argument verification checks
 internal consistency only, not authorization to replace all data and checksums.
@@ -148,6 +152,43 @@ labels are permitted for pilot self-tests and must not be presented as reviewed
 benchmark ground truth. There is no frozen test set, collected lab evidence,
 critical-severity coverage, judge, annotation study, retrieval evaluation or
 operational response validation. Fourteen authored cases are too few for broad claims;
-shared families further limit independence. Stage C owns the deferred evaluation
-protocol/validation artifacts and test-release decisions. Dataset publication
+shared families further limit independence. Protocol drafts and empty validation
+templates now exist; test-release decisions, real double-labelling and human review
+remain pending. Dataset publication
 licensing remains a team decision; no third-party records were copied.
+
+## Datasheet: motivation, composition and use
+
+**Motivation:** provide repeatable interfaces for the baseline runner and evaluation
+software while lab collection is incomplete. No real SOC performance is established.
+
+**Composition:** 14 cases, 8 existing groups; 6 proposed true positives and 8 false
+positives. All are development-only, with no low/critical assessed severity or test
+split. The eight groups must not be assumed independent construction families.
+
+**Provenance and labelling:** assistant-drafted from catalog scenarios, unreviewed;
+inputs are synthetic observations, not collected logs. Anas is the task owner and
+Oussama the assigned reviewer; these roles do not establish completed annotation.
+Author integrity is explicit in each label. No case facts or verdicts changed here.
+
+**Exclusions:** unresolved incidents, real collected logs, reviewed retrieval
+relevance, judge validation, independent human double-labelling, and execution-safety
+validation are absent. The rubric examples are pending-review illustrations, not
+human ratings or model outputs.
+
+**Permitted use:** development checks and clearly identified synthetic demonstrations,
+subject to the repository's pending publication/licensing decision. These artifacts
+provide no operational execution permission or basis for held-out performance claims.
+Test labels are evaluator-only by convention, not enforced by Git; currently there
+are no test cases. API separation does not prevent repository readers seeing labels.
+
+**Limits:** tickets are not a reliable signal, and authorization forms vary. The
+never-act shortcut scores 11/14 exact action matches. The shortcut-baseline 0.80
+line is a local data-quality check, not a metric or project acceptance threshold.
+Small size and synthetic prose limit generalization even when shortcuts stay below
+that line. No new threshold, confidence method, random seed or sample size is chosen.
+
+**Pending owner choices:** sample size beyond the CDC minimum of 50 claims,
+answer-selection method/seed, ordinal agreement measure, grouping approval and judge
+configuration: TBD - owner decision. See the [validation guide](validation/README.md)
+and [faithfulness guide](protocol/faithfulness.md) before real evaluation.

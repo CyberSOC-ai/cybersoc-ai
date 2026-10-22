@@ -39,7 +39,7 @@
     "items": []
   },
   "rationale": "The observed writer is absent from the fixture write ACL; the observed modification is bounded to inert text without service impact.",
-  "label_author": "Anas",
+  "label_author": "Codex-drafted; Anas review pending",
   "label_reviewer": "Oussama",
   "adjudication_status": "pending_review",
   "needs_review": true

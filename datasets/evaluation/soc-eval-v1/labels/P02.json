@@ -73,7 +73,7 @@
     "items": []
   },
   "rationale": "The same repeated source is absent from the account registry; the correlation update reports failed access without demonstrated impact. Required containment follows the owner-selected fixed pilot runner policy; execution authorization is not granted.",
-  "label_author": "Anas",
+  "label_author": "Codex-drafted; Anas review pending",
   "label_reviewer": "Oussama",
   "adjudication_status": "pending_review",
   "needs_review": true

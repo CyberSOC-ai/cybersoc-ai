@@ -70,6 +70,31 @@ def case_digest(case_id, incident, labels, context):
                    "input": incident, "labels": labels, "context": context})
 
 
+def _asset_paths(root):
+    paths = []
+    for folder in ('protocol', 'validation'):
+        directory = root / folder
+        if directory.is_symlink():
+            raise ValueError(f'{folder}: symlinked asset directory is forbidden')
+        for path in directory.rglob('*'):
+            if path.is_symlink() or not path.resolve().is_relative_to(root.resolve()):
+                raise ValueError(f'{path}: unsafe protocol/validation asset path')
+            if path.is_file():
+                paths.append(path.relative_to(root).as_posix())
+    return sorted(paths)
+
+
+def _verify_assets(root, manifest):
+    records = manifest.get('assets', [])
+    names = [row['path'] for row in records]
+    if len(names) != len(set(names)) or sorted(names) != _asset_paths(root):
+        raise ValueError('manifest.json: missing, duplicate or unlisted protocol/validation assets')
+    for record in records:
+        path = root / record['path']
+        if sha256(path.read_bytes()) != record['raw_sha256']:
+            raise ValueError(f"{record['path']}: raw SHA-256 mismatch")
+
+
 def verify(dataset, expected_manifest_sha256=None):
     """Read-only integrity check; pin the manifest externally for trusted releases."""
     root = Path(dataset)
@@ -87,6 +112,7 @@ def verify(dataset, expected_manifest_sha256=None):
             or sha256(policy_path.read_bytes()) != policy_record.get('raw_sha256')
             or digest(read_json(policy_path)) != policy_record.get('sha256')):
         raise ValueError('protocol/runner-policy.json: missing or mismatched policy digest')
+    _verify_assets(root, manifest)
     split_path = root / "splits.json"
     if sha256(split_path.read_bytes()) != manifest.get("splits_sha256"):
         raise ValueError("splits.json: raw SHA-256 does not match manifest.json")
@@ -179,5 +205,7 @@ def build_manifests(dataset):
                                   'raw_sha256': sha256(policy.read_bytes())},
                 'severity_universe': [s for s in ('informational', 'low', 'medium', 'high', 'critical')
                                       if s in severities],
-                'mitre_universe': sorted(techniques), 'cases': records}
+                'mitre_universe': sorted(techniques), 'cases': records,
+                'assets': [{'path': name, 'raw_sha256': sha256((root / name).read_bytes())}
+                           for name in _asset_paths(root)]}
     return split_bytes, manifest

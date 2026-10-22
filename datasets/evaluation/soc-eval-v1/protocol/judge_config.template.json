@@ -1,0 +1,13 @@
+{
+  "status": "not_selected",
+  "model": null,
+  "revision": null,
+  "decoding_settings": {
+    "temperature": null,
+    "top_p": null,
+    "max_output_tokens": null,
+    "seed": null
+  },
+  "retry_policy": null,
+  "provider": null
+}

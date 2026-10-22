@@ -199,7 +199,7 @@ class DatasetIntegrityTest(unittest.TestCase):
             cid = label['case_id']
             self.assertEqual(label['adjudication_status'], 'pending_review', f'{cid}: human review must not be invented')
             self.assertTrue(label['needs_review'], f'{cid}: review flag must remain true')
-            self.assertEqual((label['label_author'], label['label_reviewer']), ('Anas', 'Oussama'),
+            self.assertEqual((label['label_author'], label['label_reviewer']), ('Codex-drafted; Anas review pending', 'Oussama'),
                              f'{cid}: owner/reviewer assignment differs')
         splits = read_json(DATASET / 'splits.json')
         self.assertFalse(splits['test_frozen'], 'splits.json: pilot must not claim a frozen test')

@@ -39,7 +39,7 @@
     "items": []
   },
   "rationale": "The maintenance record matches the actor, time and exact change; the permitted edit has no observed service impact.",
-  "label_author": "Anas",
+  "label_author": "Codex-drafted; Anas review pending",
   "label_reviewer": "Oussama",
   "adjudication_status": "pending_review",
   "needs_review": true

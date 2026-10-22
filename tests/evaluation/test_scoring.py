@@ -114,5 +114,47 @@ class ScoringTest(unittest.TestCase):
             macro_f1([{'high'}], [], ['high'])
 
 
+class FaithfulnessAndAgreementTest(unittest.TestCase):
+    def test_faithfulness_denominator_threshold_and_empty(self):
+        from ai.evaluation.scoring import faithfulness
+        result = faithfulness(['supported']*8 + ['unsupported','unjudged'])
+        self.assertEqual(result['faithfulness'], .8, 'UNIT-faithfulness: unjudged excluded from denominator')
+        self.assertEqual(result['unjudged_share'], .1, 'UNIT-faithfulness: wrong unjudged share')
+        self.assertIsNone(result['reason'], 'UNIT-faithfulness: exactly 10 percent suppressed')
+        result = faithfulness(['supported']*8 + ['unjudged']*2)
+        self.assertIsNone(result['faithfulness'], 'UNIT-faithfulness: >10 percent unjudged retained headline')
+        self.assertIsNone(result['hallucination_rate'], 'UNIT-faithfulness: suppressed complement retained')
+        self.assertEqual(result['reason'], 'unjudged_share_exceeds_10_percent', 'UNIT-faithfulness: wrong null reason')
+        self.assertEqual(result['claim_counts'], {'supported':8,'unsupported':0,'unjudged':2,'total':10},
+                         'UNIT-faithfulness: wrong counts')
+        self.assertIsNone(faithfulness([])['faithfulness'], 'UNIT-faithfulness: zero claims scored')
+        self.assertEqual(faithfulness([{'status':'unsupported'}])['faithfulness'], 0,
+                         'UNIT-faithfulness: unsupported claim earned credit')
+        with self.assertRaises(ValueError, msg='UNIT-faithfulness: unknown claim state silently dropped'):
+            faithfulness(['maybe'])
+
+    def test_cohens_kappa_hand_computed_table_and_degenerate_agreement(self):
+        from ai.evaluation.scoring import cohens_kappa
+        # Table [[8,2],[4,6]]: raw=14/20=.7, chance=.5, kappa=.4.
+        a = ['yes']*10 + ['no']*10
+        b = ['yes']*8 + ['no']*2 + ['yes']*4 + ['no']*6
+        result = cohens_kappa(a,b)
+        self.assertEqual(result['kappa'], .4, 'UNIT-kappa: wrong hand-computed result')
+        self.assertEqual(result['raw_agreement'], .7, 'UNIT-kappa: wrong raw agreement')
+        self.assertEqual(result['disagreement_count'], 6, 'UNIT-kappa: disagreement count lost')
+        self.assertEqual(result['category_counts']['rater_b'], {'no':8,'yes':12}, 'UNIT-kappa: wrong marginals')
+        self.assertEqual(result['disagreement_table']['yes'], {'no':2,'yes':8}, 'UNIT-kappa: wrong table')
+        self.assertEqual(cohens_kappa(['a','b'],['a','b'])['kappa'], 1, 'UNIT-kappa: perfect agreement wrong')
+        result = cohens_kappa(['a']*3,['a']*3)
+        self.assertIsNone(result['kappa'], 'UNIT-kappa: chance agreement 1 must be null')
+        self.assertEqual(result['raw_agreement'], 1, 'UNIT-kappa: raw agreement lost')
+        self.assertEqual(result['reason'], 'chance_agreement_is_1', 'UNIT-kappa: missing null reason')
+        self.assertIsNone(cohens_kappa([],[])['kappa'], 'UNIT-kappa: empty ratings scored')
+        with self.assertRaises(ValueError, msg='UNIT-kappa: missing rating silently excluded'):
+            cohens_kappa(['a'],[None])
+        with self.assertRaises(ValueError, msg='UNIT-kappa: unequal lengths silently truncated'):
+            cohens_kappa(['a'],[])
+
+
 if __name__ == '__main__':
     unittest.main()

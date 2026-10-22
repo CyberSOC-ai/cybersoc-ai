@@ -39,7 +39,7 @@
     "items": []
   },
   "rationale": "Raw successful authentication contradicts the normalized failure outcome; the complete window shows no failed access or service impact.",
-  "label_author": "Anas",
+  "label_author": "Codex-drafted; Anas review pending",
   "label_reviewer": "Oussama",
   "adjudication_status": "pending_review",
   "needs_review": true

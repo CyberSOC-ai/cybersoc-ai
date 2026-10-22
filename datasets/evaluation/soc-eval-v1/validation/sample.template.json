@@ -1,0 +1,14 @@
+{
+  "status": "empty_template",
+  "sample_id": null,
+  "source_run_id": null,
+  "dataset_manifest_sha256": null,
+  "extraction_prompt_sha256": null,
+  "minimum_claims": 50,
+  "sample_size_beyond_minimum": "TBD - owner decision",
+  "sampling_method": "TBD - owner decision",
+  "sampling_seed": "TBD - owner decision",
+  "distinct_answers": null,
+  "claim_count": null,
+  "answers": []
+}

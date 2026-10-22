@@ -39,7 +39,7 @@
     "items": []
   },
   "rationale": "The local diagnostic record covers the actor, command purpose and time; the observed marker command has no additional process or network effects.",
-  "label_author": "Anas",
+  "label_author": "Codex-drafted; Anas review pending",
   "label_reviewer": "Oussama",
   "adjudication_status": "pending_review",
   "needs_review": true

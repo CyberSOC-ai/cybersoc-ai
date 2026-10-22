@@ -15,3 +15,12 @@ incident_id from the incident, and keep status proposed and requires_approval tr
 Never read labels or evaluator context to populate these fields. Logical targets
 are fictional fixtures, not an operational allowlist. execution_enabled is false;
 this policy permits scoring proposals only, not executing them.
+
+## Evaluation protocol assets
+
+[METRICS.md](../../../../experiments/METRICS.md) is the authority. Use the
+[faithfulness workflow](faithfulness.md), [claim extraction prompt](claim_extraction_prompt.md),
+[judge prompt](faithfulness_judge_prompt.md), [unselected judge config](judge_config.template.json),
+[quality reference examples](quality_rubric.md), [action matching guide](action_matching.md),
+[human validation templates](../validation/README.md).
+These are pending-review tools and instructions, not completed evaluation evidence.

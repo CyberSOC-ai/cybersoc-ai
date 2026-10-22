@@ -1,4 +1,5 @@
 """METRICS.md calculations, with failed outputs retained in attempted counts."""
+from collections import Counter
 from ipaddress import IPv4Address
 
 
@@ -184,3 +185,54 @@ def score_cases(cases, predictions, severity_universe, mitre_universe, result_va
             "action_exact_match": _ratio(sum(r.get("action_exact_match", False)
                                              for r in per_case.values()), counts["attempted"]),
             "action_null_reason": "zero_denominator" if not counts["attempted"] else None}
+
+
+def faithfulness(claims):
+    """Claims are status strings or records with status; failed judgements are unjudged."""
+    counts = Counter({'supported': 0, 'unsupported': 0, 'unjudged': 0})
+    for index, claim in enumerate(claims):
+        status = claim.get('status') if isinstance(claim, dict) else claim
+        if status not in counts:
+            raise ValueError(f'faithfulness: claim {index} has invalid status {status!r}')
+        counts[status] += 1
+    total = sum(counts.values())
+    share = counts['unjudged'] / total if total else None
+    reason = ('zero_claims' if not total else
+              'unjudged_share_exceeds_10_percent' if counts['unjudged'] * 10 > total else None)
+    value = counts['supported'] / total if reason is None else None
+    return {'faithfulness': value, 'hallucination_rate': 1 - value if value is not None else None,
+            'claim_counts': {**counts, 'total': total}, 'unjudged_share': share, 'reason': reason}
+
+
+
+def cohens_kappa(rater_a, rater_b):
+    """Complete paired string categories; rows=A, columns=B, diagonal retained.
+
+    Apply before adjudication. Missing ratings must not be silently discarded.
+    """
+    if len(rater_a) != len(rater_b):
+        raise ValueError('cohens_kappa: rater lengths differ')
+    ratings = list(rater_a) + list(rater_b)
+    if any(not isinstance(v, str) or not v for v in ratings):
+        raise ValueError('cohens_kappa: nonempty string categories required; no missing ratings')
+    categories = sorted(set(ratings))
+    n = len(rater_a)
+    a, b = Counter(rater_a), Counter(rater_b)
+    table = {x: {y: 0 for y in categories} for x in categories}
+    for x, y in zip(rater_a, rater_b):
+        table[x][y] += 1
+    matches = sum(table[x][x] for x in categories)
+    result = {'kappa': None, 'raw_agreement': matches/n if n else None, 'n': n,
+              'agreement_count': matches, 'disagreement_count': n-matches,
+              'category_counts': {'rater_a': {x:a[x] for x in categories},
+                                  'rater_b': {x:b[x] for x in categories}},
+              'disagreement_table': table, 'chance_agreement': None,
+              'reason': 'no_paired_ratings' if not n else None}
+    if n:
+        expected_matches = sum(a[x]*b[x] for x in categories)
+        result['chance_agreement'] = expected_matches/(n*n)
+        if expected_matches == n*n:
+            result['reason'] = 'chance_agreement_is_1'
+        else:
+            result['kappa'] = (matches*n-expected_matches)/(n*n-expected_matches)
+    return result

@@ -31,5 +31,19 @@ Every evidence item names the field it supports and quotes at most 120 character
 from the incident using a resolving JSON pointer. Verdict and severity always need
 support; nonempty MITRE and required actions need support too. These quotations
 are authored synthetic evidence, not collected logs; locator checks cannot prove
-entailment. Keep author Anas, assigned reviewer Oussama, pending_review and
+entailment. Record label_author as "Codex-drafted; Anas review pending", assigned reviewer Oussama, pending_review and
 needs_review=true until real human review occurs.
+
+## Grouping proposal — not applied
+
+Rule: cases sharing a scenario template family or describing the same episode share a group_id.
+
+Proposed changes, pending owner approval:
+- Merge P11 (G-SSH-SESSION), P13 (G-SSH-SCANNER) and P14 (G-SSH-REPLAY)
+  into G-SSH with P01-P05.
+- Merge P12 (G-FIM-WINDOW) into G-FIM with P06/P07.
+- Keep P08/P09 in G-ACCOUNT and P10 in G-POWERSHELL.
+
+Current data retains all eight group IDs. Applying this proposal would yield four
+families. Approval and effective release: TBD - owner decision. Do not treat the
+current eight groups as demonstrated independent constructions.
