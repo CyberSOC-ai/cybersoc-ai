@@ -1,8 +1,10 @@
 # Sprint 1 API — Issue #12
 
-The FastAPI boundary validates normalized incidents, stores them in SQLite and dispatches No-RAG investigations through an injectable runner. [Existing v1 contracts](contracts/README.md) remain unchanged. [Runner coordination proposal](RUNNER_INTERFACE.md) was documented before dispatch implementation; Soulaiman's agreement and real-model integration are pending #11. A missing real runner is an explicit 503, not a successful synthetic answer.
+The FastAPI boundary validates normalized incidents, stores them in SQLite and dispatches No-RAG investigations through an injectable runner. [Existing v1 contracts](contracts/README.md) remain unchanged. [Runner interface](RUNNER_INTERFACE.md) was documented before dispatch implementation, then approved by Soulaiman and successfully exercised with Qwen in a Linux in-process ASGI smoke. See the [scoped integration evidence](../ai/baseline/API_INTEGRATION.md). A missing real runner is an explicit 503, not a successful synthetic answer.
 
 ## Run locally
+
+The backend currently supports **Linux, Docker/Linux containers or an appropriate Linux environment such as WSL2**. Native Windows Python is unsupported because runtime-path and SQLite ownership checks use POSIX APIs including `os.getuid()`. Windows users should run the backend inside a Linux environment (for example, Docker Desktop Linux containers or WSL2), retaining ownership checks. An explicit runtime directory alone does not provide native Windows support. Only the documented Linux container integration is evidenced here; validate the chosen host/VM setup separately.
 
 From the repository root, using the [Docker development environment](../docs/development.md):
 
@@ -20,13 +22,21 @@ The last request returns **503 dependency_unavailable** with the default applica
 
 Compose publishes only `127.0.0.1:8000`. Uvicorn listens on the container interface so that port forwarding works; this is not permission to publish the host port publicly. The development API has no authentication and is for a trusted single-user loopback environment. Add reviewed authentication/authorization and transport protection before exposing it beyond loopback; private lab networking alone is not identity. No CORS access is enabled.
 
-For a configured host Python environment, run:
+For a configured **Linux host Python environment**, run:
 
 ```sh
 uvicorn backend.app:create_app --factory --host 127.0.0.1 --port 8000 --workers 1
 ```
 
-There is no environment variable or HTTP parameter that dynamically imports a runner. S1-T03 supplies a reviewed Python composition entry point calling `create_app(runner=real_adapter)`; never attach a test runner to the deployed service.
+There is no environment variable or HTTP parameter that dynamically imports a runner. S1-T03 supplies the [composition helper](../ai/baseline/api_adapter.py) calling `create_app(runner=real_adapter)`; never attach a test runner to the deployed service. After trusted model loading and policy/version setup, a Python composition entry point can explicitly use:
+
+```python
+from ai.baseline.api_adapter import compose_api
+
+app = compose_api(core, policy, versions, runtime_dir, timeout_seconds=180)
+```
+
+Here `core`, `policy`, `versions` and the private `runtime_dir` are configured by trusted deployment code, not HTTP input. The backend default remains **30 seconds**; `compose_api` currently defaults to **180 seconds** for CPU use and passes an explicit setting to the backend. Keep the core/model runtime deadline consistent; the earlier effective deadline wins. This is bounded configuration, not disabled timeout enforcement. Phi CPU runs may require the longer budget, but Phi-through-API remains unverified. The existing default Compose application deliberately has no runner and still returns 503. A real llama.cpp runtime also needs its own verified binaries/libraries; the reported integration image included `libgomp1`.
 
 ## Persistence and event identity
 
@@ -70,4 +80,24 @@ docker compose run --rm -T dev ruff check --no-cache .
 python3 -B infrastructure/ci/check_repository.py
 ```
 
-Backend tests use controlled runners exclusively; they cover successful and failed dispatch, strict input/output validation, local OpenAPI references, persistence, concurrent deduplication, sanitation, timeout/late-result/cancellation behavior and body limits. CI explicitly discovers backend tests alongside the existing suites. Passing API tests does not establish model quality, actual GPU fit or the full lab-to-model pipeline. Independent backend deliverables can proceed without #11; real-model integration is pending #11, live normalized-alert integration is pending #14, and the combined baseline is #15. No models downloaded, inference benchmarks, RAG infrastructure, training or response execution are part of this change.
+Backend tests use controlled runners exclusively; they cover successful and failed dispatch, strict input/output validation, local OpenAPI references, persistence, concurrent deduplication, sanitation, timeout/late-result/cancellation behavior and body limits. CI explicitly discovers backend tests alongside the existing suites. Passing API tests does not establish model quality, actual GPU fit or the full lab-to-model pipeline. Soulaiman's [integration report](../ai/baseline/API_INTEGRATION.md) and [PR comment](https://github.com/CyberSOC-ai/cybersoc-ai/pull/79#issuecomment-6353520974) additionally report one successful real Qwen **in-process ASGI** request with SQLite result/trace persistence and a 103-test combined Linux run against backend snapshot `d1957f7`. This is historical owner-reported evidence; the runner checkout was dirty and detailed artifacts remain local, so it is not an independently reproduced official benchmark. Backend files were unchanged between that snapshot and the approved final PR head. The [formal approval](https://github.com/CyberSOC-ai/cybersoc-ai/pull/79#pullrequestreview-5633412190) agrees the tested interface.
+
+The original backend smoke tested a Uvicorn loopback listener with **no real runner**. The separate Qwen integration used an ASGI client **without a Uvicorn TCP listener**. These two checks do not jointly prove an externally served real-model deployment. Phi-through-API, real-model external clients, live Wazuh integration, authentication and multi-client deployment remain unverified. Live normalized alerts and the full end-to-end baseline remain #14/#15 work; model quality and remaining S1-T03 acceptance remain #11 work. They are not additional Issue #12 acceptance criteria. This documentation follow-up downloads no models and runs no new model inference, benchmarks, training, RAG or response execution.
+
+## Issue #12 acceptance and closure assessment — 2026-10-23
+
+Re-read the [exact issue criteria](https://github.com/CyberSOC-ai/cybersoc-ai/issues/12) and [CDC §14](../docs/CDC.md#14-definition-of-done). The required scope is health/incident validation and the baseline investigation endpoint/OpenAPI, with validation evidence and applicable DoD conditions.
+
+| Acceptance / DoD requirement | Evidence / remaining action |
+|---|---|
+| Health endpoint; incident validation | Implemented, backend tests and loopback smoke documented in PR #79 and Oussama's journal |
+| Baseline investigation endpoint; OpenAPI | Implemented, controlled success/error tests plus Soulaiman's scoped real Qwen integration |
+| Validation and affected documentation linked in PR | [PR #79](https://github.com/CyberSOC-ai/cybersoc-ai/pull/79) links implementation, security controls, test results and runner handoff; this documentation correction is local pending publication |
+| Dedicated branch, relevant tests, passing checks, no secrets | Original feature branch, 82 local tests, staged secret scan and successful hosted CI; see linked runs below |
+| Requested reviewer and feedback handled | Soulaiman formally approved the final head; Windows/timeout documentation feedback is addressed in this follow-up, not yet merged |
+| Owner sprint documentation and linked closure | [Oussama's Sprint 1 journal](../docs/sprints/sprint-01/README.md#5-oussama) records implementation and merge evidence; this follow-up needs its approved publication/CI/review/merge workflow, and Issue #12 remains open |
+| Experiment metadata when applicable | Issue #12 is backend implementation, not a model benchmark; referenced S1-T03 smoke metadata and limitations remain in its evidence record, without claiming full experiment reproducibility |
+
+PR #79 merged at `7e4bdb2533541a1cc52feff43b3c72d48280d14f` on 2026-10-23 19:25:40 UTC. Its [final-head CI](https://github.com/CyberSOC-ai/cybersoc-ai/actions/runs/40011091986) and [post-merge main CI](https://github.com/CyberSOC-ai/cybersoc-ai/actions/runs/40011328644) passed, including backend, baseline, contract and evaluation suites, lint and secret scanning. These are evidence for PR #79, not hosted CI for this local documentation branch.
+
+No additional blocking code requirement was identified for Issue #12. Its technical acceptance scope is satisfied; formal Done/closure remains pending the documentation follow-up workflow and Oussama's explicit closure approval. Do not require a model-quality benchmark, native Windows support, authentication/public deployment or live Wazuh integration to close this scoped issue.
