@@ -32,5 +32,7 @@ jobs:
         run: docker compose run --rm -T dev python -B -m unittest discover -s tests/contracts -v
       - name: Run evaluation tests
         run: docker compose run --rm -T dev python -B -m unittest discover -s tests/evaluation -v
+      - name: Run backend tests
+        run: docker compose run --rm -T dev python -B -m unittest discover -s tests/backend -v
       - name: Run baseline runner tests (no models required)
         run: docker compose run --rm -T dev python -B -m unittest discover -s tests/baseline -v

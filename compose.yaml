@@ -5,3 +5,17 @@ services:
       dockerfile: infrastructure/docker/Dockerfile.dev
     volumes:
       - .:/workspace:ro
+  api:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.dev
+    command: ["uvicorn", "backend.app:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+    environment:
+      CYBERSOC_RUNTIME_DIR: /runtime
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - .:/workspace:ro
+      - api-runtime:/runtime
+volumes:
+  api-runtime:

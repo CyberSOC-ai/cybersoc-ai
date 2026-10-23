@@ -19,7 +19,7 @@
 | S1-T01 — Reproducible local environment + Docker + basic CI | Ahmed | Achraf | devops | In progress |
 | S1-T02 — Evaluation dataset v1 and evaluation protocol | Anas | Oussama | ai-slm | Ready (pilot; S1-T02 incomplete) |
 | S1-T03 — Baseline SLM runner | Soulaiman | Anas | ai-slm | In review |
-| S1-T04 — FastAPI core + incident ingestion | Oussama | Soulaiman | backend | Backlog |
+| S1-T04 — FastAPI core + incident ingestion | Oussama | Soulaiman | backend | In progress |
 | S1-T05 — SOC Lab MVP | Achraf | Ahmed | soc | Backlog |
 | S1-T06 — SOC alert normalizer | Ahmed | Oussama | soc | Backlog |
 | S1-T07 — No-RAG end-to-end baseline | Anas | Ahmed | ai-slm | Backlog |
@@ -301,43 +301,53 @@ Raw endpoint events, manager alerts and OpenSearch exports differ. Unwrap _sourc
 # 5. Oussama
 ## Assigned tasks
 
-S1-T04
+S1-T04 — FastAPI core + incident ingestion / [Issue #12](https://github.com/CyberSOC-ai/cybersoc-ai/issues/12). Reviewer: Soulaiman (`soulaimane-22`).
 
 ## Work completed
 
-> To be completed from validated sprint evidence.
+2026-10-22: Implemented the independent S1-T04 backend on `feature/12-fastapi-incident-ingestion`, based on latest `origin/main` at `e801410` (including the merged evaluation pilot, PR #78). Added GET `/health`, POST `/incidents`, POST `/incidents/{incident_id}/investigate`, strict v1 validation, SQLite persistence, OpenAPI documentation and backend tests. Actual application returns 503 when no real runner is configured. Controlled successful runners exist only in tests. No model, RAG, training or response execution was implemented.
+
+Documented the [runner interface proposal](../../../backend/RUNNER_INTERFACE.md) before implementing dispatch. This is a coordination handoff to Soulaiman, not evidence of his agreement or completed #11 integration. S1-T04 is not Done: review, hosted CI, real-runner integration evidence and the authorized PR/merge/closure workflow remain pending. Issue #11 does not formally block independent backend work.
 
 ## Technical approach
 
-> To be completed from validated sprint evidence.
+Validate raw JSON against the unchanged offline Draft 2020-12 registry with format checking, without Pydantic coercion. Use a repository protocol and private file-backed SQLite outside the source tree. Atomic transactions and uniqueness constraints enforce incident/event identity; preserve original events and record delivery metadata separately.
+
+Inject a trusted synchronous baseline adapter at application construction. Bound execution off the event loop to one call and a 30-second deadline by default, with no waiting queue. A timed-out/cancelled call retains capacity until it actually exits; late output is discarded. Persist validated result and baseline trace together before reporting success. API/storage health and model configuration are separate.
 
 ## Files / components modified
 
-> To be completed from validated sprint evidence.
+Added `backend/app.py`, `repository.py`, `runner.py`, `validation.py`, `__init__.py`, `backend/README.md`, `backend/RUNNER_INTERFACE.md` and `tests/backend/test_api.py`. Updated root dependency pins, Compose, development Dockerfile, `.env.example`, CI test discovery, root/development guides, the S1-T04 row and this member section. Existing interchange schemas, evaluation assets, other member sections and shared integration sections are unchanged.
 
 ## Tests / validation
 
-> To be completed from validated sprint evidence.
+Python 3.12 Docker development image built with the pinned API dependencies; `pip check` passed. Backend tests cover strict inputs and untrusted outputs, malformed/oversized/streamed JSON, sanitized failures, local OpenAPI references, duplicate/conflicting events, concurrent atomic ingestion, persistence, timeout/late-result/cancellation behavior, responsive health and durable result/trace records. Final Python 3.12 Docker results: 20 backend tests, 19 unchanged contract tests and 43 evaluation tests passed (82 total). Docker Ruff and dependency consistency checks passed. Tracked-file integrity/link checks passed for 166 files, staged whitespace checks passed, and Gitleaks 8.30.1 found no leaks in staged changes. Compose configuration parsed successfully. Hosted CI has not run because no push/PR is authorized.
+
+Actual loopback container smoke checks passed for health, incident ingestion, OpenAPI and default 503 dependency errors. After restarting the isolated API, the same incident returned 200 with `created: false`, demonstrating persisted identity. The smoke service was stopped; its private synthetic-data volume was retained. No real inference, GPU measurement, live lab ingestion or hosted CI run is claimed.
 
 ## Results / metrics
 
-> To be completed from validated sprint evidence.
+Three API operations, one repository abstraction/SQLite implementation and one documented runner protocol. Defaults: 65536-byte request body, five-second body receipt deadline, 131072-byte serialized candidate limit, batch/concurrency admission of one inference call and 30-second inference deadline. All successful inference test results are explicitly controlled fixtures; no model-quality metrics.
 
 ## Problems encountered
 
-> To be completed from validated sprint evidence.
+Sandbox Docker-socket and package-network restrictions required approved tool access. The first deep-nesting test exposed a parser-dependent difference (valid nested JSON could reach schema validation); explicit nesting bounds now reject it consistently. The initial isolated Compose smoke start lacked its project-specific image tag; a cached project build resolved it. No failed attempt is counted as passed.
+
+Python threads cannot guarantee hard inference cancellation; a real runner must honor the monotonic deadline or use a supervised process/service. An abruptly terminated process or cancelled HTTP handler is not a recoverable job queue. The loopback development API has no authentication; identity/access controls are required before exposure beyond loopback.
 
 ## Decisions made
 
-> To be completed from validated sprint evidence.
+Keep production runner configuration absent until a real adapter is supplied. Use controlled runners only in tests; missing dependency is 503, busy is 503, timeout is 504, invalid output is 502, conflicting event identity is 409. Never echo raw exceptions or model text in errors. Preserve source severity separately from AI risk; proposals remain inert data.
+
+Use a writable, private named volume at `/runtime` with source mounted read-only. Default host storage is a private directory under `/tmp`, overridable outside the checkout. Only one Uvicorn worker is supported for the laptop concurrency budget. Coordinate the adapter and version/deadline semantics with Soulaiman; defer actual SLM loading and benchmarking to #11 and end-to-end lab integration to #15.
 
 ## Related Issues / Pull Requests
 
-> To be completed from validated sprint evidence.
+[Issue #12](https://github.com/CyberSOC-ai/cybersoc-ai/issues/12); branch `feature/12-fastapi-incident-ingestion`. Declared prerequisites [#3](https://github.com/CyberSOC-ai/cybersoc-ai/issues/3) and [#9](https://github.com/CyberSOC-ai/cybersoc-ai/issues/9) are merged/completed. [#11](https://github.com/CyberSOC-ai/cybersoc-ai/issues/11) provides the future real runner; [#14](https://github.com/CyberSOC-ai/cybersoc-ai/issues/14) provides normalized live alerts; [#15](https://github.com/CyberSOC-ai/cybersoc-ai/issues/15) integrates the baseline. Local commit only is authorized; no push, PR, merge or issue change is authorized at this stage.
 
 ## Learning outcome
 
-> To be completed from validated sprint evidence.
+JSON Schema validation and OpenAPI documentation are separate concerns: HTTP models must not silently coerce invalid contract data. Event uniqueness must be enforced transactionally, rather than with an unprotected check-then-insert. A response timeout is not cancellation of compute, and a passing fake-adapter test is not evidence of a working real-model baseline.
 
 # Shared Sprint Integration
 
