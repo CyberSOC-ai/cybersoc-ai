@@ -84,7 +84,7 @@ class BaselineRunner:
             raise ValueError("Invalid timeout")
         self.generator = generator
         self.checks = contract_validators(root)
-        self.prompt = (Path(__file__).with_name("prompt.txt")).read_text(encoding="utf-8")
+        self.prompt = (Path(__file__).with_name("prompt.txt")).read_bytes().decode("utf-8")
         self.timeout_seconds = timeout_seconds
         self.last_measurement = None
         self.last_output = None

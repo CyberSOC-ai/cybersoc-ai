@@ -18,6 +18,7 @@ from ai.evaluation.validation import validate_dataset, validators
 
 from .llama_server import LlamaServer
 from .runtime import LocalRuntime
+from .provenance import SOURCE_SCOPE, snapshot_sources
 from .runner import BaselineRunner, InvalidOutput, RunnerTimeout, RunnerUnavailable
 
 
@@ -67,15 +68,7 @@ def main():
     started = utc()
     commit, dirty = git_state(root)
     save(output / "configuration.json", config)
-    source = {}
-    source_dir = output / "source"
-    source_dir.mkdir()
-    for file in sorted(Path(__file__).parent.glob("*")):
-        if file.suffix not in (".py", ".txt"):
-            continue
-        target = source_dir / file.name
-        target.write_bytes(file.read_bytes())
-        source[file.name] = sha(file)
+    source = snapshot_sources(root, output)
     save(output / "source-manifest.json", source)
     environment = {"os": platform.platform(), "cpu": platform.processor(),
                    "python": sys.version, "execution": "local llama.cpp CPU; exploratory",
@@ -89,7 +82,9 @@ def main():
     prompt_file = Path(__file__).with_name("prompt.txt")
     save(output / "inputs.json", inputs)
     save(output / "policy.json", policy)
-    prompt_record = {"system_template": prompt_file.read_text(encoding="utf-8"),
+    (output / "prompt.txt").write_bytes(prompt_file.read_bytes())
+    prompt_record = {"system_template": prompt_file.read_bytes().decode("utf-8"),
+                     "template_ref": "prompt.txt",
                      "version": "PRM-soc-triage-v1", "sha256": sha(prompt_file)}
     save(output / "prompt.json", prompt_record)
     experiment.update(record_kind="exploratory", synthetic_example=False,
@@ -98,7 +93,9 @@ def main():
                       changed_variable="model artifact (comparison only under matched configuration)",
                       execution_status="running", started_at=started)
     experiment["code"].update(git_commit=commit, dirty=dirty,
-                              patch_ref="source/ and source-manifest.json (runner source snapshot)")
+        patch_ref="source/ (execution dependency snapshot; see source-manifest.json)",
+        source_manifest_ref="source-manifest.json", source_manifest_sha256=sha(output / "source-manifest.json"),
+        snapshot_scope=list(SOURCE_SCOPE))
     experiment["model"].update(publisher_id=config["artifact_repo"], revision=config["artifact_revision"],
                                sha256=config["model_sha256"], tokenizer_id=config["artifact_repo"],
                                tokenizer_revision=config["artifact_revision"],
@@ -106,8 +103,8 @@ def main():
     experiment["model"]["upstream_model_id"] = config["publisher_id"]
     experiment["model"]["upstream_head_at_inspection"] = config["upstream_revision"]
     experiment["model"]["lineage_limit"] = "Conversion's exact upstream checkpoint revision not established"
-    experiment["prompt"].update(version="PRM-soc-triage-v1", template_ref="prompt.json",
-                                sha256=sha(prompt_file), rendered_inputs_ref="rendered-prompts.json")
+    experiment["prompt"].update(version="PRM-soc-triage-v1", template_ref="prompt.txt",
+                                sha256=sha(output / "prompt.txt"), rendered_inputs_ref="rendered-prompts.json")
     experiment["dataset"].update(version=read_json(dataset / "manifest.json")["dataset_version"],
         manifest_ref="dataset-manifest.json", manifest_sha256=sha(dataset / "manifest.json"),
         split="development", split_manifest_sha256=sha(dataset / "splits.json"),

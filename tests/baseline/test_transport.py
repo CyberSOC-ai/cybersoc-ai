@@ -5,6 +5,7 @@ import json
 from threading import Thread
 import time
 import unittest
+from unittest.mock import patch
 
 from ai.baseline.llama_server import LlamaServer
 from ai.baseline.runner import InvalidOutput, RunnerTimeout, RunnerUnavailable
@@ -93,3 +94,35 @@ class TransportTests(unittest.TestCase):
         self.client.max_input_tokens = 1
         with self.assertRaises(InvalidOutput):
             self.client.generate([], {}, time.monotonic() + 2)
+
+
+class ResponseShapeTests(unittest.TestCase):
+    def generate(self, path, record):
+        responses = {"/apply-template": {"prompt": "controlled"}, "/tokenize": {"tokens": [1]},
+                     "/completion": {"content": "{}", "stop": True, "timings": {"predicted_n": 2}}}
+        responses[path] = record
+        client = LlamaServer()
+        with patch.object(client, "_request", side_effect=lambda p, *a, **k: iter([responses[p]])):
+            return client.generate([], {}, time.monotonic() + 2)
+
+    def test_malformed_completion_events_raise_recognized_failure(self):
+        records = [[], None, "text", 1, {}, {"content": []}, {"stop": "true"},
+            {"content": "{}", "stop": True, "timings": []},
+            {"content": "{}", "stop": True, "timings": {"predicted_n": "2"}},
+            {"content": "{}", "stop": True, "timings": {"predicted_n": True}},
+            {"content": "{}", "stop": True, "timings": {"predicted_ms": float("nan")}},
+            {"content": "{}", "stop": True, "truncated": "false"}]
+        for record in records:
+            with self.subTest(record=record), self.assertRaises(InvalidOutput):
+                self.generate("/completion", record)
+
+    def test_malformed_template_responses_raise_recognized_failure(self):
+        for record in ([], None, {}, {"prompt": []}):
+            with self.subTest(record=record), self.assertRaises(InvalidOutput):
+                self.generate("/apply-template", record)
+
+    def test_malformed_token_responses_raise_recognized_failure(self):
+        for record in ([], None, {}, {"tokens": None}, {"tokens": "text"},
+                       {"tokens": [True]}, {"tokens": [1.5]}, {"tokens": [-1]}):
+            with self.subTest(record=record), self.assertRaises(InvalidOutput):
+                self.generate("/tokenize", record)

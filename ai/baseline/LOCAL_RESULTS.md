@@ -60,9 +60,20 @@ initial recorder. Their upstream revision field refers to inspected repository
 HEAD, not proven conversion lineage; the recorded artifact SHA-256 identifies the
 actual executed weights. The later record distinguishes those identities explicitly.
 
+These experiments were **not run from clean implementation commits**. The recorded
+Git SHA identifies the base checkout and `dirty=true` records local changes. Their
+historical source snapshots cover only `ai/baseline`, not the complete evaluator
+implementation. Dataset manifests identify the recorded data, but cannot establish
+the exact evaluator code used. The historical artifacts are retained unchanged;
+the broader snapshot recorder added for [PR review](REVIEW_FIXES.md) does not
+retroactively remove this reproducibility limitation. The owner has chosen to keep
+the detailed artifacts local, so reviewer access and independent verification of
+these reported real-model results remain outstanding.
+
 ## Remaining work
 
 Review the runner and initial outputs with Soulaiman/Anas; agree the API adapter
 with Oussama and test it against PR #79 after integration; address evaluation
 readiness and formal workflow requirements before closing #11. Keep ADR-002
-Proposed. Publishing and merging require Soulaiman's later authorization.
+Proposed. Soulaiman authorized the review fixes and merge on 2026-10-23; that
+authorization does not constitute reviewer approval or independent result verification.

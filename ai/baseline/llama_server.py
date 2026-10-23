@@ -2,6 +2,7 @@
 
 import http.client
 import json
+import math
 import socket
 import time
 
@@ -72,9 +73,15 @@ class LlamaServer:
         self.last_formatted_prompt = None
         started = time.monotonic()
         try:
-            template = next(self._request("/apply-template", {"messages": messages}, deadline))["prompt"]
+            template_record = next(self._request("/apply-template", {"messages": messages}, deadline), None)
+            if not isinstance(template_record, dict) or not isinstance(template_record.get("prompt"), str):
+                raise InvalidOutput("Invalid template response")
+            template = template_record["prompt"]
             self.last_formatted_prompt = template
-            tokens = next(self._request("/tokenize", {"content": template, "add_special": True}, deadline))["tokens"]
+            token_record = next(self._request("/tokenize", {"content": template, "add_special": True}, deadline), None)
+            tokens = token_record.get("tokens") if isinstance(token_record, dict) else None
+            if not isinstance(tokens, list) or any(type(token) is not int or token < 0 for token in tokens):
+                raise InvalidOutput("Invalid tokenization response")
             if len(tokens) > self.max_input_tokens:
                 raise InvalidOutput("Input exceeds token budget; no silent truncation")
             payload = {"prompt": template, "json_schema": schema, "stream": True,
@@ -82,9 +89,13 @@ class LlamaServer:
                        "seed": self.seed, "cache_prompt": False, "n_keep": 0}
             content, final, first = [], None, None
             for event in self._request("/completion", payload, deadline, stream=True):
+                if not isinstance(event, dict):
+                    raise InvalidOutput("Invalid completion event")
                 part = event.get("content", "")
-                if not isinstance(part, str):
-                    raise InvalidOutput("Invalid generated content")
+                if not isinstance(part, str) or type(event.get("stop", False)) is not bool:
+                    raise InvalidOutput("Invalid completion fields")
+                if "truncated" in event and type(event["truncated"]) is not bool:
+                    raise InvalidOutput("Invalid completion fields")
                 if part and first is None:
                     first = time.monotonic() - started
                 content.append(part)
@@ -94,12 +105,19 @@ class LlamaServer:
                 raise InvalidOutput("Generation incomplete or token limit reached")
             elapsed = time.monotonic() - started
             timings = final.get("timings", {})
+            if not isinstance(timings, dict):
+                raise InvalidOutput("Invalid completion timings")
             predicted = timings.get("predicted_n", final.get("tokens_predicted"))
+            if predicted is not None and (type(predicted) is not int or predicted < 0):
+                raise InvalidOutput("Invalid output token count")
+            if any(type(value) not in (int, float) or not math.isfinite(value) or value < 0
+                   for value in timings.values()):
+                raise InvalidOutput("Invalid completion timings")
             return "".join(content), {
                 "client_seconds": elapsed, "time_to_first_content_chunk_seconds": first,
                 "ttft_seconds": None, "input_tokens": len(tokens), "output_tokens": predicted,
                 "output_tokens_per_client_second": predicted / elapsed if predicted is not None else None,
                 "server_timings": timings, "cache_prompt": False,
             }
-        except (KeyError, TypeError) as exc:
+        except (KeyError, TypeError, OverflowError) as exc:
             raise InvalidOutput("Incomplete server response") from exc

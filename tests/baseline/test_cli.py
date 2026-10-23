@@ -9,6 +9,7 @@ import unittest
 from unittest.mock import patch
 
 from ai.baseline import run
+from ai.baseline.llama_server import LlamaServer
 
 
 class FakeRuntime:
@@ -60,10 +61,10 @@ class CLITests(unittest.TestCase):
             "quantization": "controlled-test", "timeout_seconds": 2}), encoding="utf-8")
         self.output = self.folder / "run"
 
-    def invoke(self):
-        argv = ["run", "--config", str(self.config), "--output", str(self.output), "--limit", "1"]
+    def invoke(self, *, limit=1, generator=FakeGenerator):
+        argv = ["run", "--config", str(self.config), "--output", str(self.output), "--limit", str(limit)]
         with patch("sys.argv", argv), patch.object(run, "LocalRuntime", FakeRuntime), \
-                patch.object(run, "LlamaServer", FakeGenerator), \
+                patch.object(run, "LlamaServer", generator), \
                 patch.object(run, "git_state", return_value=("a" * 40, True)), \
                 redirect_stdout(StringIO()):
             return run.main()
@@ -79,6 +80,13 @@ class CLITests(unittest.TestCase):
             self.assertEqual(run.sha(self.output / name), digest)
         self.assertIn("model-outputs.json", artifacts)
         self.assertIn("rendered-prompts.json", artifacts)
+        experiment = json.loads((self.output / "experiment.json").read_text())
+        self.assertEqual(run.sha(self.output / experiment["prompt"]["template_ref"]), experiment["prompt"]["sha256"])
+        self.assertEqual((self.output / "prompt.txt").read_bytes(),
+                         (Path(run.__file__).with_name("prompt.txt")).read_bytes())
+        source = json.loads((self.output / "source-manifest.json").read_text())
+        self.assertIn("ai/evaluation/scoring.py", source)
+        self.assertEqual(run.sha(self.output / "source/ai/evaluation/scoring.py"), source["ai/evaluation/scoring.py"])
         with self.assertRaises(FileExistsError):
             self.invoke()
 
@@ -98,3 +106,38 @@ class CLITests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "digest mismatch"):
             self.invoke()
         self.assertFalse(self.output.exists())
+
+    def test_malformed_completion_is_counted_and_batch_finishes(self):
+        completion_count = 0
+
+        def response(client, path, payload, deadline, **kwargs):
+            nonlocal completion_count
+            if path == "/apply-template":
+                yield {"prompt": "controlled prompt"}
+            elif path == "/tokenize":
+                yield {"tokens": [1, 2, 3]}
+            else:
+                completion_count += 1
+                if completion_count == 1:
+                    yield []  # Anas's exact malformed-event reproduction.
+                else:
+                    yield {"content": FakeGenerator.text, "stop": True, "stop_type": "eos",
+                           "timings": {"predicted_n": 10}}
+
+        with patch.object(LlamaServer, "_request", response):
+            self.assertEqual(self.invoke(limit=2, generator=LlamaServer), 1)
+        scores = json.loads((self.output / "scores.json").read_text())
+        self.assertEqual(scores["counts"]["attempted"], 2)
+        self.assertEqual(scores["counts"]["failed"], 1)
+        self.assertEqual(scores["counts"]["valid"], 1)
+        self.assertEqual(scores["counts"]["not_attempted"], 12)
+        predictions = json.loads((self.output / "predictions.json").read_text())
+        self.assertIsNone(predictions["INC-PILOT-001"])
+        self.assertEqual(predictions["INC-PILOT-002"]["status"], "ok")
+        failures = json.loads((self.output / "failures.json").read_text())
+        self.assertEqual(failures["INC-PILOT-001"], "InvalidOutput")
+        experiment = json.loads((self.output / "experiment.json").read_text())
+        self.assertEqual(experiment["execution_status"], "completed_with_failures")
+        self.assertIsNotNone(experiment["finished_at"])
+        for name in ("scores.json", "failures.json", "measurements.json", "artifact-manifest.json"):
+            self.assertTrue((self.output / name).is_file())
