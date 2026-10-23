@@ -261,39 +261,39 @@ S1-T05
 
 ## Work completed
 
-> To be completed from validated sprint evidence.
+S1-T05: On 2026-10-22, prepared [setup](../../../infrastructure/soc-lab/SETUP.md), [results/handoff](../../../infrastructure/soc-lab/S1-T05-RESULTS.md), two user-supplied raw alert exports and screenshot. Actual central deployment uses Windows Docker Desktop and two Ubuntu VMs. Review, CI, credential rotation and merge pending; not Done.
 
 ## Technical approach
 
-> To be completed from validated sprint evidence.
+Use Wazuh 4.14.9 central containers on Windows / WSL 2, endpoint agent on Ubuntu and separate internal-network simulation. Journald collects SSH. This documents an adaptation of the S0-T07 central VM plan.
 
 ## Files / components modified
 
-> To be completed from validated sprint evidence.
+Added infrastructure/soc-lab/SETUP.md, S1-T05-RESULTS.md and evidence/. Updated Achraf section only. No private runtime Compose, credentials, keys or VM images shipped.
 
 ## Tests / validation
 
-> To be completed from validated sprint evidence.
+User evidence confirms agent connected, active-response disabled locally, and two indexed rule-5760/level-5 alerts at 13:43:25.130Z and 13:46:26.157Z. Package checks verify JSON fields, original bytes, SHA-256 and links; hosted CI and full lab isolation/rebuild checks remain pending. No automated secret scanner or runtime benchmark claimed.
 
 ## Results / metrics
 
-> To be completed from validated sprint evidence.
+Two distinct live SSH-failure observations, one dashboard screenshot. Correlated brute force, performance metrics and full original run metadata are not established. Detector firedtimes is not an attempt counter.
 
 ## Problems encountered
 
-> To be completed from validated sprint evidence.
+Initial 11-failure attempt coincided with disconnected manager and is not validated detection. Docker disk-full error observed with about 1 GB free; user cleanup restored 22.7 GB. Credential mismatches fixed during setup; disclosed passwords require rotation before final acceptance.
 
 ## Decisions made
 
-> To be completed from validated sprint evidence.
+Use actual Docker Desktop topology and validate repeatable single-failure behavior without claiming correlation. Preserve failed attempts and missing metadata. User retains merge control.
 
 ## Related Issues / Pull Requests
 
-> To be completed from validated sprint evidence.
+S1-T05: confirm issue number before adding closing keyword. Branch feature/s1-t05-soc-lab-mvp; reviewer Ahmed (@ElrhAhmed). Add actual PR link and CI evidence before Done. Normalization is S1-T06 / issue #14.
 
 ## Learning outcome
 
-> To be completed from validated sprint evidence.
+Raw endpoint events, manager alerts and OpenSearch exports differ. Unwrap _source for normalizer input, preserve provenance and normalize timestamps explicitly. Storage readiness and consistent service credentials affect repeatability.
 
 
 # 5. Oussama
