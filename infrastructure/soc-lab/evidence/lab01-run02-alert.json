@@ -1,0 +1,94 @@
+{
+  "_index": "wazuh-alerts-4.x-2026.10.22",
+  "_id": "GzTdY6EB8VSRWyZyDKGj",
+  "_score": null,
+  "_source": {
+    "predecoder": {
+      "hostname": "linuxsoc",
+      "program_name": "sshd",
+      "timestamp": "Oct 22 13:46:24"
+    },
+    "input": {
+      "type": "log"
+    },
+    "agent": {
+      "ip": "192.168.56.20",
+      "name": "linux-01",
+      "id": "001"
+    },
+    "manager": {
+      "name": "wazuh.manager"
+    },
+    "data": {
+      "srcip": "192.168.77.30",
+      "dstuser": "labtest",
+      "srcport": "60582"
+    },
+    "rule": {
+      "mail": false,
+      "level": 5,
+      "hipaa": [
+        "164.312.b"
+      ],
+      "pci_dss": [
+        "10.2.4",
+        "10.2.5"
+      ],
+      "tsc": [
+        "CC6.1",
+        "CC6.8",
+        "CC7.2",
+        "CC7.3"
+      ],
+      "description": "sshd: authentication failed.",
+      "groups": [
+        "syslog",
+        "sshd",
+        "authentication_failed"
+      ],
+      "nist_800_53": [
+        "AU.14",
+        "AC.7"
+      ],
+      "gdpr": [
+        "IV_35.7.d",
+        "IV_32.2"
+      ],
+      "firedtimes": 3,
+      "mitre": {
+        "technique": [
+          "Password Guessing",
+          "SSH"
+        ],
+        "id": [
+          "T1110.001",
+          "T1021.004"
+        ],
+        "tactic": [
+          "Credential Access",
+          "Lateral Movement"
+        ]
+      },
+      "id": "5760",
+      "gpg13": [
+        "7.1"
+      ]
+    },
+    "location": "journald",
+    "decoder": {
+      "parent": "sshd",
+      "name": "sshd"
+    },
+    "id": "1792676786.80539",
+    "full_log": "Oct 22 13:46:24 linuxsoc sshd[2175]: Failed password for labtest from 192.168.77.30 port 60582 ssh2",
+    "timestamp": "2026-10-22T13:46:26.157+0000"
+  },
+  "fields": {
+    "timestamp": [
+      "2026-10-22T13:46:26.157Z"
+    ]
+  },
+  "sort": [
+    1792676786157
+  ]
+}

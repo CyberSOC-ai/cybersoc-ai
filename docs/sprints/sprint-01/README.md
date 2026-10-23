@@ -18,7 +18,7 @@
 |---|---|---|---|---|
 | S1-T01 — Reproducible local environment + Docker + basic CI | Ahmed | Achraf | devops | In progress |
 | S1-T02 — Evaluation dataset v1 and evaluation protocol | Anas | Oussama | ai-slm | Ready (pilot; S1-T02 incomplete) |
-| S1-T03 — Baseline SLM runner | Soulaiman | Anas | ai-slm | Backlog |
+| S1-T03 — Baseline SLM runner | Soulaiman | Anas | ai-slm | In review |
 | S1-T04 — FastAPI core + incident ingestion | Oussama | Soulaiman | backend | In progress |
 | S1-T05 — SOC Lab MVP | Achraf | Ahmed | soc | Backlog |
 | S1-T06 — SOC alert normalizer | Ahmed | Oussama | soc | Backlog |
@@ -94,43 +94,45 @@ A Dockerfile builds an image; Compose records how to build and run it; a bind mo
 # 2. Soulaiman
 ## Assigned tasks
 
-S1-T03
+S1-T03 — Baseline SLM runner; reviewer Anas. [Issue #11](https://github.com/CyberSOC-ai/cybersoc-ai/issues/11).
 
 ## Work completed
 
-> To be completed from validated sprint evidence.
+2026-10-22: Started implementation locally on `feature/11-baseline-slm-runner`. Added an input-only No-RAG inference core, explicit local model loading, bounded llama.cpp HTTP generation, strict result/proposal validation, a development-pilot CLI, reproducibility records and behavioral tests. See the [runner guide](../../../ai/baseline/README.md). Soulaiman authorized committing, branch publication and PR creation after the local review. Task completion and reviewer approval are not claimed.
 
 ## Technical approach
 
-> To be completed from validated sprint evidence.
+Reuse the merged v1 contracts and Anas's pilot loader/scorer. Keep model decisions separate from trusted record identity and policy-controlled action fields. Use CPU llama.cpp with immutable GGUF artifacts on this Ryzen/Radeon machine. The initial runtime configuration uses Q4_K_M for practical local inference, not a controlled S5 optimization benchmark. Keep the callable pilot interface and optional adapter for Oussama's proposed API interface around the same core. The API branch is not merged by this task.
 
 ## Files / components modified
 
-> To be completed from validated sprint evidence.
+`ai/baseline/`, `tests/baseline/`, `.github/workflows/ci.yml`, `.gitignore`, draft `docs/adr/ADR-002.md` and this member section/status row. Downloaded runtimes, model weights, local configuration and generated runs stay in ignored `.local/`; a repository-local `.venv` is also ignored. Existing dataset labels, protocol files and contracts are unchanged.
 
 ## Tests / validation
 
-> To be completed from validated sprint evidence.
+Local Python 3.14.3 environment installed the existing pinned requirements. Contract tests: 19 passed. Evaluation tests: 43 passed after sandbox restrictions on temporary files were removed for the test command. Baseline suite: 19 tests passed, including core behavior, real loopback transport, API adapter identities/deadlines and CLI artifact persistence/failure counting. Ruff and repository/local Markdown-link checks passed. Completed Qwen/Phi run artifact hashes were independently rechecked. Subsequent local integration: Docker Desktop started; 103 combined baseline/backend/contract/evaluation tests passed in a non-root Python 3.12 Linux image. One real Qwen request returned HTTP 200 and persisted its correlated result/trace. Native Windows backend storage failed on POSIX ownership APIs; these checks were preserved by testing in Linux. [Integration evidence](../../../ai/baseline/API_INTEGRATION.md) records the pinned backend, image and scope. Pre-publication checks also passed in the shared Docker dev image: Ruff, 19 baseline tests (2 optional API tests skipped), 19 contract tests and 43 evaluation tests. Hosted CI is tracked on the PR; no hosted pass is claimed here.
 
 ## Results / metrics
 
-> To be completed from validated sprint evidence.
+First actual Qwen Q4_K_M development case produced a contract-valid result on CPU: 1 attempted, 1 valid, 13 not attempted. Client latency was 14.728 seconds, excluding cold model load; server reported 188 output tokens and approximately 25.02 decode tokens/second. The triage verdict was undetermined; schema validity does not prove correct analysis. Initial full Qwen pass: 14 attempted, 8 valid and 6 rejected outputs; all failures remain in scoring. The follow-up Qwen pass again had 8 valid/6 rejected; Phi had 13 valid/1 rejected across 14 attempted. Correct triage verdicts across all attempts were 3/14 for Qwen and 1/14 for Phi. These weak pilot observations do not justify a model winner. Full timing/memory and limitations are in the [local results note](../../../ai/baseline/LOCAL_RESULTS.md); source/raw artifacts stay in `.local/runs/`. Judge-based faithfulness and human quality scores are not measured. These are synthetic development observations, not frozen-test benchmarks.
+
+2026-10-23 review fixes: Anas reproduced an unhandled malformed completion event. Added response-shape validation and a CLI regression proving the failed attempt is counted, the next case runs and final scores/status are saved. Aligned prompt references with exact file hashes and expanded source snapshots to include locally edited evaluation dependencies. Native validation: 25 baseline tests passed with two optional API skips, plus 19 contract and 43 evaluation tests; Ruff and repository integrity passed. One real Qwen smoke completed successfully and its artifact hashes checked. Historical runs were dirty and their narrower snapshots do not establish the exact evaluator code; detailed artifacts remain local at the owner's request. See [review fixes](../../../ai/baseline/REVIEW_FIXES.md). Reviewer approval is not claimed.
 
 ## Problems encountered
 
-> To be completed from validated sprint evidence.
+This machine has approximately 14 GiB RAM and integrated Radeon graphics; Oussama's documented NVIDIA GPU is not this environment. Native Python is 3.14.3 rather than the project's Docker/Python 3.12 convention. Some sandboxed tests failed on local socket/temp-directory permissions; the same tests passed when rerun with the necessary permissions. Baseline outputs can fail validation and remain failures rather than repaired or synthetic successes. Phi's GGUF is a community conversion, with exact conversion-to-upstream-checkpoint lineage not established.
 
 ## Decisions made
 
-> To be completed from validated sprint evidence.
+Soulaiman authorized publication on the isolated task branch and requested Anas's review. On 2026-10-23 he authorized fixing the review findings and merging after verification, with no ZIP or external artifact sharing. This is owner authorization, not reviewer approval or independent verification of model results. No agent/RAG/response execution is introduced. Preserve input-only model access, use the same fixed policy for every case, bound tokens and deadlines, reject unobserved proposal targets and leave approval state to trusted code. Do not tune on pilot labels or declare ADR-002 accepted from early pilot evidence. Local API composition and a Qwen-through-API smoke passed against the pinned PR #79 snapshot; owner agreement and rechecking the approved merged backend remain pending.
 
 ## Related Issues / Pull Requests
 
-> To be completed from validated sprint evidence.
+[S1-T03 / #11](https://github.com/CyberSOC-ai/cybersoc-ai/issues/11); input pilot [PR #78](https://github.com/CyberSOC-ai/cybersoc-ai/pull/78), part of [#10](https://github.com/CyberSOC-ai/cybersoc-ai/issues/10). Coordination target: Oussama's open [PR #79](https://github.com/CyberSOC-ai/cybersoc-ai/pull/79). [S1-T03 PR #81](https://github.com/CyberSOC-ai/cybersoc-ai/pull/81) is open from `feature/11-baseline-slm-runner` into `main`. Soulaiman will request Anas's review. No merge or review approval is claimed; #11 remains open.
 
 ## Learning outcome
 
-> To be completed from validated sprint evidence.
+A model runner combines loading, prompt formatting, generation and validated output. A successful JSON/schema check differs from a correct triage decision. Pilot labels and evaluator metadata must stay outside model inputs. Reproducible runs identify the exact executed artifact/configuration, failures, timing scope and limitations; converting a model does not automatically establish its upstream checkpoint provenance.
 
 
 # 3. Anas
@@ -261,39 +263,39 @@ S1-T05
 
 ## Work completed
 
-> To be completed from validated sprint evidence.
+S1-T05: On 2026-10-22, prepared [setup](../../../infrastructure/soc-lab/SETUP.md), [results/handoff](../../../infrastructure/soc-lab/S1-T05-RESULTS.md), two user-supplied raw alert exports and screenshot. Actual central deployment uses Windows Docker Desktop and two Ubuntu VMs. Review, CI, credential rotation and merge pending; not Done.
 
 ## Technical approach
 
-> To be completed from validated sprint evidence.
+Use Wazuh 4.14.9 central containers on Windows / WSL 2, endpoint agent on Ubuntu and separate internal-network simulation. Journald collects SSH. This documents an adaptation of the S0-T07 central VM plan.
 
 ## Files / components modified
 
-> To be completed from validated sprint evidence.
+Added infrastructure/soc-lab/SETUP.md, S1-T05-RESULTS.md and evidence/. Updated Achraf section only. No private runtime Compose, credentials, keys or VM images shipped.
 
 ## Tests / validation
 
-> To be completed from validated sprint evidence.
+User evidence confirms agent connected, active-response disabled locally, and two indexed rule-5760/level-5 alerts at 13:43:25.130Z and 13:46:26.157Z. Package checks verify JSON fields, original bytes, SHA-256 and links; hosted CI and full lab isolation/rebuild checks remain pending. No automated secret scanner or runtime benchmark claimed.
 
 ## Results / metrics
 
-> To be completed from validated sprint evidence.
+Two distinct live SSH-failure observations, one dashboard screenshot. Correlated brute force, performance metrics and full original run metadata are not established. Detector firedtimes is not an attempt counter.
 
 ## Problems encountered
 
-> To be completed from validated sprint evidence.
+Initial 11-failure attempt coincided with disconnected manager and is not validated detection. Docker disk-full error observed with about 1 GB free; user cleanup restored 22.7 GB. Credential mismatches fixed during setup; disclosed passwords require rotation before final acceptance.
 
 ## Decisions made
 
-> To be completed from validated sprint evidence.
+Use actual Docker Desktop topology and validate repeatable single-failure behavior without claiming correlation. Preserve failed attempts and missing metadata. User retains merge control.
 
 ## Related Issues / Pull Requests
 
-> To be completed from validated sprint evidence.
+S1-T05: confirm issue number before adding closing keyword. Branch feature/s1-t05-soc-lab-mvp; reviewer Ahmed (@ElrhAhmed). Add actual PR link and CI evidence before Done. Normalization is S1-T06 / issue #14.
 
 ## Learning outcome
 
-> To be completed from validated sprint evidence.
+Raw endpoint events, manager alerts and OpenSearch exports differ. Unwrap _source for normalizer input, preserve provenance and normalize timestamps explicitly. Storage readiness and consistent service credentials affect repeatability.
 
 
 # 5. Oussama
