@@ -1,5 +1,8 @@
 # Sprint 1 API — Issue #12
 
+For saved Wazuh exports, first use the [SOC alert normalizer](normalizer/README.md)
+to produce incident v1 JSON suitable for `POST /incidents`.
+
 The FastAPI boundary validates normalized incidents, stores them in SQLite and dispatches No-RAG investigations through an injectable runner. [Existing v1 contracts](contracts/README.md) remain unchanged. [Runner interface](RUNNER_INTERFACE.md) was documented before dispatch implementation, then approved by Soulaiman and successfully exercised with Qwen in a Linux in-process ASGI smoke. See the [scoped integration evidence](../ai/baseline/API_INTEGRATION.md). A missing real runner is an explicit 503, not a successful synthetic answer.
 
 ## Run locally

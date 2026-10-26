@@ -21,7 +21,7 @@
 | S1-T03 — Baseline SLM runner | Soulaiman | Anas | ai-slm | In review |
 | S1-T04 — FastAPI core + incident ingestion | Oussama | Soulaiman | backend | In progress |
 | S1-T05 — SOC Lab MVP | Achraf | Ahmed | soc | Backlog |
-| S1-T06 — SOC alert normalizer | Ahmed | Oussama | soc | Backlog |
+| S1-T06 — SOC alert normalizer | Ahmed | Oussama | soc | In progress (implemented locally; PR/review pending) |
 | S1-T07 — No-RAG end-to-end baseline | Anas | Ahmed | ai-slm | Backlog |
 
 # 1. Ahmed
@@ -37,7 +37,12 @@ S1-T01, S1-T06
 - Centralized Python dependencies in root `requirements.txt`; added Ruff configuration, a comment-only `.env.example`, build-context exclusions and a [development setup guide](../../development.md) linked from the root README.
 - Updated the existing required `repository-checks` CI job to use checkout v6, the Gitleaks v3 Action, Docker build, Ruff and contract tests. Removed the standalone whitespace gate at Ahmed's request. Existing repository integrity checks remain.
 
-S1-T06 has not started. This task does not claim a deployed API, SOC lab, model runner or end-to-end baseline.
+2026-10-26 — **S1-T06:** Implemented the [SOC alert normalizer](../../../backend/normalizer/README.md)
+for raw Wazuh alerts and OpenSearch exports. Added a file/stdin CLI, offline
+incident v1 validation, deterministic identity, explicit severity mapping,
+normalized fixtures for both of Achraf's real alerts and dedicated CI tests.
+Local implementation does not claim a live collector or full lab-to-model run.
+PR, hosted CI and Oussama's assigned review remain pending; S1-T06 is not Done.
 
 ## Technical approach
 
@@ -45,11 +50,20 @@ Use Docker as the shared Python environment, without requiring a local virtual e
 
 Keep CI commands explicit: build the image, run Ruff, then run the existing contract suite. Gitleaks runs through its official GitHub Action with the license supplied through GitHub Secrets; automatic PR comments are disabled. Local pre-commit scanning uses the separately installed CLI documented in the setup guide.
 
+**S1-T06:** Unwrap `_source` when present, validate required Wazuh fields,
+normalize timestamps to UTC, preserve event identity and observed address/user
+roles, then validate the completed incident against the existing offline schema.
+Keep mapping independent from API transport, database storage and inference.
+
 ## Files / components modified
 
 Added `.python-version`, `.nvmrc`, `requirements.txt`, `pyproject.toml`, `.env.example`, `.dockerignore`, `compose.yaml`, `infrastructure/docker/Dockerfile.dev` and `docs/development.md`.
 
 Updated `.github/workflows/ci.yml`, root `README.md`, `backend/contracts/README.md` and this task row/member section. Removed `tests/contracts/requirements.txt` after moving its dependency into the root requirements file.
+
+**S1-T06:** Added `backend/normalizer/`, `tests/normalizer/` and two expected
+incident fixtures. Updated `backend/README.md`, `.github/workflows/ci.yml` and
+Ahmed's journal/status row. Existing contracts and original lab evidence are unchanged.
 
 ## Tests / validation
 
@@ -64,15 +78,38 @@ Local Linux x86_64 validation during 2026-10-14/15:
 
 Fresh-checkout reproduction, hosted CI and other-platform validation remain pending. No model-quality, lab-detection or performance benchmark was run.
 
+**S1-T06 local validation (2026-10-26):** Shared Python 3.12 development image
+built successfully. All 15 normalizer tests passed, covering both real exports,
+raw/wrapped equivalence, stable replay identity and separate deployments,
+all 16 severity levels, UTC conversion, malformed inputs, IPv6, strict JSON/CLI
+behavior and real FastAPI/SQLite ingestion (201 new, 200 replay, 409 conflict).
+Ruff passed. All 109 existing contract/evaluation/backend/baseline tests also
+passed (124 tests total including the normalizer suite). Repository integrity,
+including the new source/test/documentation files, and changed whitespace checks
+passed. A standalone Docker CLI run also produced the first normalized incident.
+Gitleaks 8.30.1 scanned the staged implementation diff and found no leaks.
+No model inference or live collection is claimed by this task.
+
 ## Results / metrics
 
 One Python development service builds and runs locally; 19 package versions are recorded in one requirements file; Ruff and all 17 contract test methods pass. The CI configuration includes secret scanning, repository integrity, Docker build, lint and tests under the existing required job name.
+
+**S1-T06:** Both real alert exports produce contract-valid replay incidents.
+Same-event replay retains identity; the second observed event remains distinct.
+Wazuh level 5 maps to `low` under documented project policy `wazuh-level-v1`.
+This is detector-severity translation, not an AI risk assessment or benchmark.
 
 ## Problems encountered
 
 The host Python environment initially lacked the project's pinned format-checking dependencies and local virtual-environment support. Running the checks in the Python 3.12 Docker environment resolved the contract-test dependency mismatch.
 
 The initial draft introduced more setup layers than Ahmed wanted. It was discarded and rebuilt through small explained changes. Gitleaks' organization Action required a license key; Ahmed obtained it and stored it in GitHub Secrets, allowing removal of the temporary manual installer.
+
+**S1-T06:** Existing source exports have OpenSearch wrappers, timezone offsets
+and differently scoped IP addresses. The adapter handles wrapped/raw input and
+preserves roles explicitly. Host Docker access required sandbox escalation for
+local test execution. The earlier observed evidence-manifest line-ending mismatch
+is outside the normalizer's changes; original source evidence was preserved.
 
 ## Decisions made
 
@@ -82,13 +119,31 @@ Prefer readable direct CI steps over a custom check-runner wrapper. Keep functio
 
 The Python base image tag can receive updates and is not digest-pinned. Node.js is a version convention only and is not installed in the Python image. The full project bind mount includes local files even when `.dockerignore` excludes them from builds; read-only mounting prevents writes, not reads.
 
+**S1-T06:** Use deployment namespace `wazuh:lab` by default, original Wazuh `id`
+as `source_event_id` and UUIDv5-derived incident identity. Require explicit
+deployment namespaces for independent installations. Saved files default to
+`replay`. Severity ranges 0–3 / 4–6 / 7–9 / 10–12 / 13–15 map to informational /
+low / medium / high / critical; Oussama reviews this project policy. Missing
+required fields and malformed values fail rather than inventing facts. No verdict,
+MITRE ground truth, new contract fields or automated actions are added.
+
 ## Related Issues / Pull Requests
 
 [S1-T01 / Issue #9](https://github.com/CyberSOC-ai/cybersoc-ai/issues/9). Branch: `feature/9-reproducible-local-environment`. Assigned reviewer: Achraf (`Eachr4f`). Ahmed authorized commit and branch publication on 2026-10-15. PR creation remains pending; add the actual PR link and hosted validation evidence before completion. S1-T06 remains tracked separately in [issue #14](https://github.com/CyberSOC-ai/cybersoc-ai/issues/14).
 
+**S1-T06:** [Issue #14](https://github.com/CyberSOC-ai/cybersoc-ai/issues/14);
+input evidence from [Achraf's merged PR #80](https://github.com/CyberSOC-ai/cybersoc-ai/pull/80).
+Branch: `feature/14-soc-alert-normalizer`. Assigned reviewer: Oussama (`Ossel14`).
+No PR or approval is claimed. Keep issue #14 open pending the remaining workflow.
+
 ## Learning outcome
 
 A Dockerfile builds an image; Compose records how to build and run it; a bind mount makes local code visible without rebuilding for each edit. Requirements record installed packages, while Ruff configuration selects code checks. GitHub Actions reruns the shared checks on PRs; local success does not prove hosted CI passed. Secrets belong in protected configuration, not source files. A documented local implementation becomes Done only after the remaining project workflow requirements are satisfied.
+
+**S1-T06:** An alert reports an observation; normalization arranges the same
+facts into the shared incident form. Validation checks that form; tests check
+conversion behavior. A user account differs from a hostname, detector severity
+differs from AI risk, and replaying an event must preserve its identity.
 
 
 # 2. Soulaiman
