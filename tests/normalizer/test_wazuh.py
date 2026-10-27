@@ -65,12 +65,20 @@ class NormalizerTest(unittest.TestCase):
         self.assertEqual(original, normalize_alert(wrapped))
 
     def test_all_severity_levels_and_invalid_types(self):
-        expected = ['informational'] * 4 + ['low'] * 3 + ['medium'] * 3 + ['high'] * 3 + ['critical'] * 3
+        expected = ['informational'] * 4 + ['low'] * 3 + ['medium'] * 3 + ['high'] * 3 + ['critical'] * 4
         for level, label in enumerate(expected):
             self.assertEqual(severity(level), label)
-        for level in (-1, 16, '5', 5.0, True, None):
+        for level in (-1, 17, '5', 5.0, True, None):
             with self.subTest(level=level), self.assertRaises(NormalizationError):
                 severity(level)
+
+    def test_maximum_wazuh_level_produces_valid_critical_incident(self):
+        raw = export()
+        raw['_source']['rule']['level'] = 16
+        result = normalize_alert(raw)
+        self.assertEqual(result['severity'], 'critical')
+        self.assertIn('(level 16)', result['description'])
+        validate('incident', result)
 
     def test_offset_conversion_and_invalid_timestamps(self):
         self.assertEqual(utc_timestamp('2026-10-22T14:43:25.130+01:00'),
