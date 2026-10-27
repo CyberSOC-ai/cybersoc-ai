@@ -92,9 +92,9 @@ range monotonically into the contract's five labels.
 | 4–6 | low |
 | 7–9 | medium |
 | 10–12 | high |
-| 13–15 | critical |
+| 13–16 | critical |
 
-Both supplied level-5 alerts therefore become `low`. All 16 levels and invalid
+Both supplied level-5 alerts therefore become `low`. All 17 levels (0–16) and invalid
 types/ranges are tested. The AI's later `risk_level` is separate. No true/false
 positive label, investigation or MITRE ground truth is created here.
 

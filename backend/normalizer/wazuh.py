@@ -34,11 +34,11 @@ def obj(value, field):
 
 
 def severity(level):
-    """Project mapping v1: 0–3 info, 4–6 low, 7–9 medium, 10–12 high, 13–15 critical."""
-    if type(level) is not int or not 0 <= level <= 15:
-        raise NormalizationError('rule.level must be an integer between 0 and 15.')
+    """Project mapping v1: 0–3 info, 4–6 low, 7–9 medium, 10–12 high, 13–16 critical."""
+    if type(level) is not int or not 0 <= level <= 16:
+        raise NormalizationError('rule.level must be an integer between 0 and 16.')
     for maximum, label in ((3, 'informational'), (6, 'low'), (9, 'medium'),
-                           (12, 'high'), (15, 'critical')):
+                           (12, 'high'), (16, 'critical')):
         if level <= maximum:
             return label
 

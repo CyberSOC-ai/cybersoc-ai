@@ -90,6 +90,13 @@ passed. A standalone Docker CLI run also produced the first normalized incident.
 Gitleaks 8.30.1 scanned the staged implementation diff and found no leaks.
 No model inference or live collection is claimed by this task.
 
+**2026-10-27 correction:** Accept Wazuh's maximum level 16 and map it to
+`critical`; level 17 remains invalid. Updated the mapping documentation and
+added a full conversion/schema-validation regression for level 16. All 16
+normalizer tests, Ruff, repository integrity and whitespace checks passed.
+This follow-up is local pending commit/publication; the earlier 124-test total
+describes the original implementation run, not a rerun of all suites here.
+
 ## Results / metrics
 
 One Python development service builds and runs locally; 19 package versions are recorded in one requirements file; Ruff and all 17 contract test methods pass. The CI configuration includes secret scanning, repository integrity, Docker build, lint and tests under the existing required job name.
@@ -122,7 +129,7 @@ The Python base image tag can receive updates and is not digest-pinned. Node.js 
 **S1-T06:** Use deployment namespace `wazuh:lab` by default, original Wazuh `id`
 as `source_event_id` and UUIDv5-derived incident identity. Require explicit
 deployment namespaces for independent installations. Saved files default to
-`replay`. Severity ranges 0–3 / 4–6 / 7–9 / 10–12 / 13–15 map to informational /
+`replay`. Severity ranges 0–3 / 4–6 / 7–9 / 10–12 / 13–16 map to informational /
 low / medium / high / critical; Oussama reviews this project policy. Missing
 required fields and malformed values fail rather than inventing facts. No verdict,
 MITRE ground truth, new contract fields or automated actions are added.
