@@ -1,5 +1,8 @@
 # S2-T01 local validation — 2026-10-28
 
+[Draft PR #85](https://github.com/CyberSOC-ai/cybersoc-ai/pull/85) contains this
+implementation and its proposed handoff.
+
 This is author-side validation on `codex/16-knowledge-ingestion`, based on main
 `48c224ff6f358b0d9ffd878d4af3013b503d230b`. It is not peer approval or hosted CI.
 The [machine-readable summary](validation-summary.json) records exact snapshot,

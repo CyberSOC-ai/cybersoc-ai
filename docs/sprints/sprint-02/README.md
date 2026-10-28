@@ -94,8 +94,9 @@ remains ADR-001's team decision.
 
 [S2-T01 / issue #16](https://github.com/CyberSOC-ai/cybersoc-ai/issues/16).
 Reviewer: Soulaiman (`soulaimane-22`). Branch: `codex/16-knowledge-ingestion`.
-PR publication, assigned review handling, hosted CI, merge and issue closure are
-pending. This task is not Done. Review the record contract, SOC assignment policy
+[Draft PR #85](https://github.com/CyberSOC-ai/cybersoc-ai/pull/85) is published.
+Assigned review handling, hosted CI, merge and issue closure remain pending.
+This task is not Done. Review the record contract, SOC assignment policy
 and documented coverage/storage limitations before S2-T02 integration.
 
 ## Learning outcome
