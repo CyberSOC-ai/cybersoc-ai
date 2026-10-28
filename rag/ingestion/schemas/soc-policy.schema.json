@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cybersoc.invalid/ingestion/v1/soc-policy.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "dataset_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "splits_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "assignment_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "incident_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "record_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "group_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "split": {
+            "enum": [
+              "development",
+              "test",
+              "quarantine"
+            ]
+          },
+          "related_case_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "maxItems": 100000,
+            "uniqueItems": true
+          },
+          "sanitization_ref": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "required": [
+          "incident_id",
+          "record_sha256",
+          "group_id",
+          "run_id",
+          "split",
+          "related_case_ids",
+          "sanitization_ref"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 100000,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema_version",
+    "dataset_version",
+    "splits_sha256",
+    "assignment_ref",
+    "records"
+  ],
+  "additionalProperties": false
+}

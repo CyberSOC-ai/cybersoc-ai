@@ -7,6 +7,7 @@ Authority: [CDC §§8–9 and Sprint 0](../docs/CDC.md), [architecture](../docs/
 
 - [Source inventory, licensing and evaluation-case requirements](SOURCES.md)
 - [SLM shortlist, memory estimates and hardware gates](MODELS.md)
+- [S2-T01 knowledge ingestion and S2-T02 handoff](../rag/ingestion/README.md)
 
 This inventory supplies S0-T06, S1-T02, S2-T01, S2-T08 and S3-T01. Exact schemas come from S0-T03; metric/version conventions from S0-T06; collection and evaluation execution from S1 onward. S0-T03 contracts are now merged; this follow-up changes only S0-T05 documentation.
 

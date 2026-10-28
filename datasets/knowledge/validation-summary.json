@@ -1,0 +1,155 @@
+{
+  "task": "S2-T01 / #16",
+  "date": "2026-10-28",
+  "base_commit": "48c224ff6f358b0d9ffd878d4af3013b503d230b",
+  "test_suites": {
+    "contracts": 19,
+    "evaluation": 43,
+    "backend": 20,
+    "normalizer": 16,
+    "baseline": 27,
+    "ingestion": 25
+  },
+  "test_total": 150,
+  "ruff": "passed",
+  "hosted_ci": "pending",
+  "peer_review": "pending",
+  "artifacts": "ignored local .local/ingestion; no shared artifact provider selected",
+  "sources": {
+    "cve": {
+      "local_snapshot_directory": "cve",
+      "manifest": {
+        "accepted": 1,
+        "considered": 1,
+        "corpus_use": "retrieval",
+        "excluded": {},
+        "implementation_sha256": "6bdc58527577b761609728911bfda5a0418594ed7c12b640ab54bfc0620f23e4",
+        "normalizer_version": "1.0.0",
+        "record_schema_sha256": "1b3c345e3ec574d4313f40119e3fcc94c1ecc0e79f3587773ed268a9c9351d99",
+        "records_sha256": "0021f9bca0ec4aa83e66debdd1ad7665709c4170371bb0b8c3abeb02f73e1e8e",
+        "schema_version": "1.0.0",
+        "snapshot": {
+          "acquired_at": "2026-10-28T23:33:15Z",
+          "artifact_ref": "sha256:b1672adfa6b9403b34b508b964840c977ffecb6411cc7c78f44a9ed3af5e1486",
+          "license_ref": "https://www.nist.gov/open/copyright-fair-use-and-licensing-statements-srd-data-software-and-technical-series-publications",
+          "notice_ref": "sha256:ff964b0f30d5b86b7b15dc569fee599d85d6b00513a14cdbc288b349b669f1df",
+          "notice_sha256": "ff964b0f30d5b86b7b15dc569fee599d85d6b00513a14cdbc288b349b669f1df",
+          "owner": "Ahmed",
+          "schema_version": "1.0.0",
+          "sha256": "b1672adfa6b9403b34b508b964840c977ffecb6411cc7c78f44a9ed3af5e1486",
+          "source": "cve",
+          "source_url": "https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2021-44228",
+          "upstream_version": "NVD-2.0:CVE-2021-44228:sha256:b1672adfa6b9403b34b508b964840c977ffecb6411cc7c78f44a9ed3af5e1486",
+          "usage_scope": "project-retrieval"
+        },
+        "snapshot_manifest_sha256": "357ee10711c1ce2b5d5802d6d014882d95c959c17a7efc9daacd94808a74e42c"
+      },
+      "record_bytes": 86210,
+      "replay_identical": true
+    },
+    "cwe": {
+      "local_snapshot_directory": "cwe",
+      "manifest": {
+        "accepted": 956,
+        "considered": 1477,
+        "corpus_use": "retrieval",
+        "excluded": {
+          "cwe_category_or_view": 493,
+          "deprecated_cwe": 28
+        },
+        "implementation_sha256": "6bdc58527577b761609728911bfda5a0418594ed7c12b640ab54bfc0620f23e4",
+        "normalizer_version": "1.0.0",
+        "record_schema_sha256": "1b3c345e3ec574d4313f40119e3fcc94c1ecc0e79f3587773ed268a9c9351d99",
+        "records_sha256": "91f096f7c9bbb9c9db1d9044341d9abcded83ea1a4cb178b337e0cf24dba07ca",
+        "schema_version": "1.0.0",
+        "snapshot": {
+          "acquired_at": "2026-10-28T23:31:43Z",
+          "artifact_ref": "sha256:47165a9593def89c69b9ef50c34d99ac68db55df8373613e85e9cc9ceecefb1d",
+          "license_ref": "https://cwe.mitre.org/about/termsofuse.html",
+          "notice_ref": "sha256:c572b605b5753cd67b84d12fc64e9ccbfcde0188cf1332118be04c9996a92c45",
+          "notice_sha256": "c572b605b5753cd67b84d12fc64e9ccbfcde0188cf1332118be04c9996a92c45",
+          "owner": "Ahmed",
+          "schema_version": "1.0.0",
+          "sha256": "47165a9593def89c69b9ef50c34d99ac68db55df8373613e85e9cc9ceecefb1d",
+          "source": "cwe",
+          "source_url": "https://cwe.mitre.org/data/xml/cwec_v5.0.xml.zip",
+          "upstream_version": "5.0",
+          "usage_scope": "project-retrieval"
+        },
+        "snapshot_manifest_sha256": "a99523ee9d4e1acd66ad76cd82985f0ecaecc371dd18fc987af4e14173c016ea"
+      },
+      "record_bytes": 1586471,
+      "replay_identical": true
+    },
+    "mitre_attack": {
+      "local_snapshot_directory": "attack",
+      "manifest": {
+        "accepted": 22366,
+        "considered": 26690,
+        "corpus_use": "retrieval",
+        "excluded": {
+          "inactive_relationship_endpoint": 159,
+          "revoked_or_deprecated": 161,
+          "unsupported_stix_type": 4004
+        },
+        "implementation_sha256": "6bdc58527577b761609728911bfda5a0418594ed7c12b640ab54bfc0620f23e4",
+        "normalizer_version": "1.0.0",
+        "record_schema_sha256": "1b3c345e3ec574d4313f40119e3fcc94c1ecc0e79f3587773ed268a9c9351d99",
+        "records_sha256": "bd1880ba1b24f84d297bc8a125268c62bb28c601e4914c23a2807bc894c50cb4",
+        "schema_version": "1.0.0",
+        "snapshot": {
+          "acquired_at": "2026-10-28T23:32:07Z",
+          "artifact_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+          "license_ref": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/c2494b29dd268c46a5d0ea0990553e4327cd2253/LICENSE.txt",
+          "notice_ref": "sha256:738144f7fb054722a4ef9d3367c51710341dc12fc574c6ac3a41daaaecd8bf5e",
+          "notice_sha256": "738144f7fb054722a4ef9d3367c51710341dc12fc574c6ac3a41daaaecd8bf5e",
+          "owner": "Ahmed",
+          "schema_version": "1.0.0",
+          "sha256": "81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+          "source": "mitre_attack",
+          "source_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/c2494b29dd268c46a5d0ea0990553e4327cd2253/enterprise-attack/enterprise-attack.json",
+          "upstream_version": "c2494b29dd268c46a5d0ea0990553e4327cd2253",
+          "usage_scope": "project-retrieval"
+        },
+        "snapshot_manifest_sha256": "c74d679568b27404cfeead3347885c7cc1607c49ed03438a05092e8ae15f961e"
+      },
+      "record_bytes": 42144147,
+      "relationships": 21660,
+      "replay_identical": true,
+      "techniques": 706
+    },
+    "soc_log": {
+      "local_snapshot_directory": "soc-final",
+      "manifest": {
+        "accepted": 2,
+        "considered": 2,
+        "corpus_use": "development_only",
+        "excluded": {},
+        "implementation_sha256": "6bdc58527577b761609728911bfda5a0418594ed7c12b640ab54bfc0620f23e4",
+        "normalizer_version": "1.0.0",
+        "record_schema_sha256": "1b3c345e3ec574d4313f40119e3fcc94c1ecc0e79f3587773ed268a9c9351d99",
+        "records_sha256": "ccade0b5444e1ba4865341dbce0a0bd8dcecb2038ccd22967573d17e9ba355d7",
+        "schema_version": "1.0.0",
+        "snapshot": {
+          "acquired_at": "2026-10-28T23:34:26Z",
+          "artifact_ref": "sha256:10ebc802e04ce122b2796154d6ebff8308e8f2b68a61cf608c9c213292d1f33b",
+          "license_ref": "project-internal:lab-evidence-no-new-redistribution-grant",
+          "notice_ref": "datasets/knowledge/SOC_ASSIGNMENTS.md",
+          "notice_sha256": "728b2744f4a9d17e4007a278f8a5bd6065dbff871ed355c7c0dbc995d79f059c",
+          "owner": "Ahmed",
+          "schema_version": "1.0.0",
+          "sha256": "10ebc802e04ce122b2796154d6ebff8308e8f2b68a61cf608c9c213292d1f33b",
+          "source": "soc_log",
+          "source_url": "https://github.com/CyberSOC-ai/cybersoc-ai/tree/48c224ff6f358b0d9ffd878d4af3013b503d230b/tests/normalizer/fixtures",
+          "upstream_version": "S1-T06:48c224ff6f358b0d9ffd878d4af3013b503d230b",
+          "usage_scope": "project-retrieval"
+        },
+        "snapshot_manifest_sha256": "bb709085dbc1ddcb34661eb5004a4529ff5f66536ed2e4910dc8c83e30f5a80f",
+        "soc_policy_sha256": "04ef1393ebe1747b243741123e40fd30644bd34b7f485af00de3f2b645b08cb2",
+        "splits_sha256": "ad6e12180399dcbd7fb0369fdae6ccb7eef60e6bf116f8a85b274f59afd6ba3f"
+      },
+      "record_bytes": 4506,
+      "replay_identical": true
+    }
+  }
+}

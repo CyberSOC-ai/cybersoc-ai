@@ -1,0 +1,482 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cybersoc.invalid/ingestion/v1/record.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "record_id": {
+      "type": "string",
+      "pattern": "^DOC-[a-f0-9]{64}$"
+    },
+    "source": {
+      "enum": [
+        "mitre_attack",
+        "cve",
+        "cwe",
+        "soc_log"
+      ]
+    },
+    "source_record_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "collection": {
+      "enum": [
+        "knowledge",
+        "soc_history"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "content": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200000
+    },
+    "content_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "snapshot_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "source": {
+          "enum": [
+            "mitre_attack",
+            "cve",
+            "cwe",
+            "soc_log"
+          ]
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "upstream_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "acquired_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "artifact_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "license_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "notice_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "notice_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "usage_scope": {
+          "const": "project-retrieval"
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      },
+      "required": [
+        "schema_version",
+        "source",
+        "source_url",
+        "upstream_version",
+        "acquired_at",
+        "sha256",
+        "artifact_ref",
+        "license_ref",
+        "notice_ref",
+        "notice_sha256",
+        "usage_scope",
+        "owner"
+      ],
+      "additionalProperties": false
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "record_id",
+    "source",
+    "source_record_id",
+    "collection",
+    "title",
+    "content",
+    "content_sha256",
+    "snapshot_ref",
+    "provenance",
+    "metadata"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "source": {
+            "const": "mitre_attack"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "metadata": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "stix_type": {
+                    "const": "attack-pattern"
+                  },
+                  "stix_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "technique_id": {
+                    "type": "string",
+                    "pattern": "^T\\d{4}(?:\\.\\d{3})?$"
+                  },
+                  "modified": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "revoked": {
+                    "const": false
+                  },
+                  "deprecated": {
+                    "const": false
+                  },
+                  "platforms": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    }
+                  },
+                  "tactics": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "references": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  }
+                },
+                "required": [
+                  "stix_type",
+                  "stix_id",
+                  "technique_id",
+                  "modified",
+                  "revoked",
+                  "deprecated",
+                  "platforms",
+                  "tactics",
+                  "references"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "stix_type": {
+                    "const": "relationship"
+                  },
+                  "relationship_type": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "source_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "target_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "modified": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  }
+                },
+                "required": [
+                  "stix_type",
+                  "relationship_type",
+                  "source_ref",
+                  "target_ref",
+                  "modified"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "source": {
+            "const": "cve"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "published": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "lastModified": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "vulnStatus": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "metrics": {
+                "type": "object"
+              },
+              "weaknesses": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "configurations": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "references": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            },
+            "required": [
+              "published",
+              "lastModified"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "source": {
+            "const": "cwe"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "abstraction": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "catalog_version": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "xml_namespace": {
+                "enum": [
+                  "http://cwe.mitre.org/cwe-7",
+                  "http://cwe.mitre.org/cwe-8"
+                ]
+              },
+              "xml_schema_version": {
+                "enum": [
+                  "7",
+                  "8.0"
+                ]
+              },
+              "relationships": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            },
+            "required": [
+              "status",
+              "abstraction",
+              "catalog_version",
+              "xml_namespace",
+              "xml_schema_version",
+              "relationships"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "source": {
+            "const": "soc_log"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "incident_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "source_event_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "timestamp": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              },
+              "source_severity": {
+                "enum": [
+                  "informational",
+                  "low",
+                  "medium",
+                  "high",
+                  "critical"
+                ]
+              },
+              "entities": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "ingestion_kind": {
+                "enum": [
+                  "live",
+                  "replay",
+                  "synthetic"
+                ]
+              },
+              "group_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "run_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "sanitization_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "assignment_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "dataset_version": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "split": {
+                "const": "development"
+              },
+              "test_frozen": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "incident_id",
+              "source_event_id",
+              "timestamp",
+              "source_severity",
+              "entities",
+              "ingestion_kind",
+              "group_id",
+              "run_id",
+              "sanitization_ref",
+              "assignment_ref",
+              "dataset_version",
+              "split",
+              "test_frozen"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  ]
+}

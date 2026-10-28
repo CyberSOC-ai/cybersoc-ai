@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.3",
+  "splits_sha256": "ad6e12180399dcbd7fb0369fdae6ccb7eef60e6bf116f8a85b274f59afd6ba3f",
+  "assignment_ref": "datasets/knowledge/SOC_ASSIGNMENTS.md",
+  "records": [
+    {
+      "incident_id": "INC-8a6064bd-f310-5a68-9f66-1c868418d844",
+      "record_sha256": "b527e78b837606a52131b670a54ce12dab1c629c9db2fc8696cf89c7f6c0e435",
+      "group_id": "G-SSH",
+      "run_id": "LAB01-run01",
+      "split": "development",
+      "related_case_ids": [
+        "P01",
+        "P02",
+        "P03",
+        "P04",
+        "P05",
+        "P11",
+        "P13",
+        "P14"
+      ],
+      "sanitization_ref": "tests/normalizer/fixtures/lab01-run01-incident.json"
+    },
+    {
+      "incident_id": "INC-4ae36e4c-bd1c-56ad-b5fa-68fc6347aff5",
+      "record_sha256": "b9c5144378b4350087e7efe43809d02b99f7306b33556be580219f21a891420b",
+      "group_id": "G-SSH",
+      "run_id": "LAB01-run02",
+      "split": "development",
+      "related_case_ids": [
+        "P01",
+        "P02",
+        "P03",
+        "P04",
+        "P05",
+        "P11",
+        "P13",
+        "P14"
+      ],
+      "sanitization_ref": "tests/normalizer/fixtures/lab01-run02-incident.json"
+    }
+  ]
+}
