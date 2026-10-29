@@ -25,6 +25,7 @@ entire acquired corpus. A GPU or full-corpus performance run is not a setup gate
 Check out this PR's branch, then build the environments and start Qdrant:
 
 ```powershell
+git fetch origin
 git switch codex/17-chunking-embeddings-vector-index
 docker compose build dev
 docker build -f infrastructure/docker/Dockerfile.embeddings -t cybersoc-rag-eval .

@@ -215,7 +215,11 @@ sanitized validation records; keep acquired data/model/index artifacts outside G
 ## Related Issues / Pull Requests
 
 [S2-T02 / #17](https://github.com/CyberSOC-ai/cybersoc-ai/issues/17).
-Reviewer: Ahmed. Local work only; no PR or push yet.
+[PR #87](https://github.com/CyberSOC-ai/cybersoc-ai/pull/87), ready for review on
+`codex/17-chunking-embeddings-vector-index`. Reviewer: Ahmed (`ElrhAhmed`), review
+requested. Hosted checks are tracked on the PR; merge/issue closure remain pending.
+Achraf can start S2-T03 integration using the
+[evaluator setup guide](../../../rag/vector/EVALUATOR_SETUP.md).
 
 ## Learning outcome
 

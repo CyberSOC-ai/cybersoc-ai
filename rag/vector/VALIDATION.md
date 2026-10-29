@@ -2,6 +2,7 @@
 
 Date: 2026-10-29. Owner: Soulaiman. Assigned reviewer: Ahmed.
 [Issue #17](https://github.com/CyberSOC-ai/cybersoc-ai/issues/17).
+[PR #87](https://github.com/CyberSOC-ai/cybersoc-ai/pull/87).
 Local implementation is verified and submitted for review on the task branch.
 Hosted CI and reviewer approval are recorded on the linked PR; local validation
 does not imply approval, merge or issue closure.
