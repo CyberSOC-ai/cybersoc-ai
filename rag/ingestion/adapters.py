@@ -54,11 +54,20 @@ def attack(data, snapshot):
 
 def cve(data, snapshot):
     feed = parse_json(data)
+    if isinstance(feed, dict) and feed.get("provider") == "cve_program":
+        from .extensions import cve_program
+        yield from cve_program(data, snapshot)
+        return
     if feed.get("format") != "NVD_CVE" or feed.get("version") != "2.0":
         raise IngestionError("Expected NVD CVE JSON 2.0")
     if not isinstance(feed.get("vulnerabilities"), list):
         raise IngestionError("Missing NVD vulnerabilities")
-    for wrapper in feed["vulnerabilities"]:
+    yield from cve_records(feed["vulnerabilities"], snapshot)
+
+
+def cve_records(wrappers, snapshot):
+    """Shared NVD adapter for bounded in-memory inputs and streamed bulk feeds."""
+    for wrapper in wrappers:
         item = wrapper["cve"]
         if not re.fullmatch(r"CVE-\d{4}-\d{4,}", item["id"]):
             raise IngestionError("Invalid CVE identifier")
@@ -70,8 +79,9 @@ def cve(data, snapshot):
             yield None, "missing_english_description"
             continue
         metadata = {key: item[key] for key in ("published", "lastModified")}
+        metadata["provider"] = "nvd"
         # Preserve supplied enrichment; never synthesize a score/CWE/CPE.
-        for key in ("vulnStatus", "metrics", "weaknesses", "configurations", "references"):
+        for key in ("vulnStatus", "metrics", "weaknesses", "configurations", "references", "affected"):
             if key in item:
                 metadata[key] = item[key]
         yield record(snapshot, item["id"], item["id"], description, metadata), None
@@ -120,8 +130,8 @@ def cwe(data, snapshot):
         yield None, "cwe_category_or_view"
 
 
-def split_guard(policy, splits, splits_data):
-    validate("soc-policy", policy)
+def split_guard(policy, splits, splits_data, *, schema="soc-policy", identity_field="incident_id"):
+    validate(schema, policy)
     if digest(splits_data) != policy["splits_sha256"]:
         raise IngestionError("SOC split manifest hash mismatch")
     if splits.get("dataset_version") != policy["dataset_version"]:
@@ -142,13 +152,18 @@ def split_guard(policy, splits, splits_data):
     heldout_runs = {i["run_id"] for i in policy["records"] if i["split"] == "test"}
     assignments = {}
     for item in policy["records"]:
-        if item["incident_id"] in assignments:
+        if item[identity_field] in assignments:
             raise IngestionError("Duplicate SOC assignment")
-        assignments[item["incident_id"]] = item
+        assignments[item[identity_field]] = item
     return assignments, heldout_ids, heldout_groups, heldout_runs
 
 
 def soc(data, snapshot, policy, splits, splits_data):
+    parsed = parse_json(data)
+    if isinstance(parsed, dict) and parsed.get("provider") in {"otrf", "splunk"}:
+        from .extensions import external_events
+        yield from external_events(data, snapshot, policy, splits, splits_data)
+        return
     assignments, heldout_ids, heldout_groups, heldout_runs = split_guard(policy, splits, splits_data)
     incidents = parse_json(data)
     if not isinstance(incidents, list):

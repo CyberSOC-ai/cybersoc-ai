@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "selection": "s2-t01-expanded-v1",
+  "owner": "Ahmed",
+  "sources": {
+    "cve_program": {
+      "repository": "CVEProject/cvelistV5",
+      "revision": "cf7434e6c7aba8543a26021a0dd63bbb032acb52",
+      "notice": "https://www.cve.org/Legal/TermsOfUse",
+      "files": [
+        "cves/2024/6xxx/CVE-2024-6387.json",
+        "cves/2024/3xxx/CVE-2024-3094.json",
+        "cves/2024/1xxx/CVE-2024-1086.json",
+        "cves/2024/2xxx/CVE-2024-2961.json",
+        "cves/2024/3xxx/CVE-2024-3400.json"
+      ],
+      "artifact_subdir": "expanded-cve_program"
+    },
+    "kev": {
+      "repository": "cisagov/kev-data",
+      "revision": "724bea2b5926070b9887580b570e8ae7df67056e",
+      "notice": "LICENSE",
+      "files": [
+        "known_exploited_vulnerabilities.json"
+      ],
+      "artifact_subdir": "expanded-kev"
+    },
+    "sigma": {
+      "repository": "SigmaHQ/sigma",
+      "revision": "05d1031f537e830b76da53bae2400c5814c89165",
+      "notice": "LICENSE",
+      "files": [
+        "rules/linux/auditd/syscall/lnx_auditd_create_account.yml",
+        "rules/linux/builtin/sshd/lnx_sshd_susp_ssh.yml",
+        "rules/linux/process_creation/proc_creation_lnx_local_account.yml"
+      ],
+      "artifact_subdir": "expanded-sigma"
+    },
+    "playbook": {
+      "repository": "OTRF/ThreatHunter-Playbook",
+      "revision": "9b52b40bb1d4deec9827b94a20d07e071b962ee7",
+      "notice": "LICENSE",
+      "files": [
+        "docs/hunts/windows/190410-LocalPwshExecution/notebook.md",
+        "docs/hunts/windows/170105-LSASSMemoryReadAccess/notebook.md"
+      ],
+      "artifact_subdir": "expanded-playbook"
+    },
+    "otrf": {
+      "repository": "OTRF/Security-Datasets",
+      "revision": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+      "notice": "LICENSE",
+      "files": [
+        "datasets/atomic/linux/discovery/host/sh_arp_cache.zip"
+      ],
+      "artifact_subdir": "expanded-otrf"
+    },
+    "splunk": {
+      "repository": "splunk/attack_data",
+      "revision": "b7e7e6c51581b5367a2501b74d58aa3e4018980d",
+      "notice": "LICENSE",
+      "files": [
+        "datasets/attack_techniques/T1016/linux_auditd_net_tool/linux_auditd_net_tool.log",
+        "datasets/attack_techniques/T1016/linux_auditd_net_tool/linux_auditd_net_tool.yml",
+        "datasets/attack_techniques/T1021.004/atomic_red_team/linux-sysmon.log"
+      ],
+      "artifact_subdir": "expanded-splunk"
+    }
+  },
+  "baseline": {
+    "mitre_attack_revision": "c2494b29dd268c46a5d0ea0990553e4327cd2253",
+    "cwe_version": "5.0",
+    "nvd_years": [
+      2024
+    ]
+  }
+}

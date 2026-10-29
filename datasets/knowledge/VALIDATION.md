@@ -1,93 +1,114 @@
-# S2-T01 local validation — 2026-10-28
+# S2-T01 expanded local validation — 2026-10-29
 
-[Draft PR #85](https://github.com/CyberSOC-ai/cybersoc-ai/pull/85) contains this
-implementation and its proposed handoff.
+Branch: `feature/16-knowledge-ingestion`; prior published head:
+`5aae31a793a4e2a2a54223f65b8c79b71d704b59`.
+[Draft PR #86](https://github.com/CyberSOC-ai/cybersoc-ai/pull/86) contains the earlier
+implementation. This record covers the expanded **local, unpushed follow-up**.
+No hosted CI, independent peer review, merge or issue closure is claimed for it.
 
-This is author-side validation on `codex/16-knowledge-ingestion`, based on main
-`48c224ff6f358b0d9ffd878d4af3013b503d230b`. It is not peer approval or hosted CI.
-The [machine-readable summary](validation-summary.json) records exact snapshot,
-notice, code, schema and output hashes, versions, acquisition times and exclusions.
+The user approved all proposed source additions. Exact immutable revisions/files
+are in [the source plan](sources.json), with roles/coverage in
+[SOURCE_SELECTION.md](SOURCE_SELECTION.md). Complete input/output/code/schema
+hashes, acquisition versions/times, notices and reports are preserved in the
+[machine-readable validation summary](validation-summary.json).
 
 ## Local checks
 
-The shared Docker development image built and reported Python 3.12.15; dependency
-consistency (`pip check`) passed. Ruff passed. All **150
-tests** passed: 19 contracts, 43 evaluation, 20 backend, 16 normalizer, 27 baseline,
-and 25 ingestion/acquisition. Repository integrity passed for 219 tracked text
-files; staged whitespace checks and Gitleaks 8.30.1 passed with no suspected
-secrets. The scanner ran with networking disabled. No models were loaded. The existing dependency
-stack emits a FastAPI/Starlette HTTP client deprecation warning; its tests passed.
+The development image rebuilt with Python 3.12.15, ijson 3.6.0 and PyYAML 6.0.3.
+All **169 tests** passed: 19 contracts, 43 evaluation, 20 backend, 16 normalizer,
+27 baseline and 44 ingestion/acquisition. Ruff and dependency consistency
+(`pip check`) passed. Existing FastAPI/Starlette dependencies emit an HTTP-client
+deprecation warning; their tests pass. No model, embeddings or benchmark inference
+was run. Repository integrity passed for 230 tracked text files; staged whitespace
+checks and Gitleaks 8.30.1 passed with no suspected secrets. The scanner ran with
+networking disabled. CI uses mocked source responses and synthetic parser fixtures, not live
+upstream downloads.
 
-Offline ingestion tests cover required provenance, strict JSON, byte limits,
-duplicate IDs, typed source metadata, source/notice tampering, deterministic
-identity, missing CVE enrichment, CWE namespaces 7/8, XML declaration rejection,
-revoked techniques/inactive relationships, no partial publication, source notice
-retention, pinned lab preparation and explicit SOC split/duplicate exclusions.
-Acquisition tests use mocked HTTP, including redirects, response bounds, streaming
-deadlines and failed notice requests. CI performs no upstream downloads.
+Expanded regression coverage includes annual-feed streaming, byte/depth/record
+bounds, duplicate keys/IDs, malformed/truncated JSON, NVD counts and META integrity,
+exact CVE provider/KEV joins, corpus tampering, source revision checks, safe YAML,
+Git LFS identity, real event-format handling, grouped split exclusion, and the
+new backend evidence source values. Existing backend/contract/evaluation/normalizer/
+baseline suites were retained. Parser tests do not certify retrieval relevance.
 
-## Real-source smoke and replay
+## Real-source result
 
-| Source | Accepted records | SHA-256 of normalized JSONL |
-|---|---:|---|
-| cve | 1 | `0021f9bca0ec4aa83e66debdd1ad7665709c4170371bb0b8c3abeb02f73e1e8e` |
-| cwe | 956 | `91f096f7c9bbb9c9db1d9044341d9abcded83ea1a4cb178b337e0cf24dba07ca` |
-| mitre_attack | 22366 | `bd1880ba1b24f84d297bc8a125268c62bb28c601e4914c23a2807bc894c50cb4` |
-| soc_log | 2 | `ccade0b5444e1ba4865341dbce0a0bd8dcecb2038ccd22967573d17e9ba355d7` |
+| Searchable source | Records/excerpts |
+|---|---:|
+| cve | 38,494 |
+| cwe | 956 |
+| detection_rule | 3 |
+| mitre_attack | 706 |
+| playbook | 2 |
+| soc_log | 35 |
 
-Each final corpus was normalized twice from identical retained input bytes with
-fixed implementation files. **Both `records.jsonl` and `manifest.json` were
-byte-identical for all four pairs.** SHA-256 alone is an integrity identifier,
-not proof of source trust or content safety.
+Total: **40,196** searchable documents/excerpts. An additional
+**21,660 ATT&CK relationships** are exported separately in
+`relationships.jsonl`; they are not counted as vector documents.
 
-- ATT&CK: Enterprise STIX from official commit
-  `c2494b29dd268c46a5d0ea0990553e4327cd2253`; 706 techniques and 21,660 relationships.
-  Excluded 4,004 unsupported STIX objects, 161 revoked/deprecated objects and 159
-  relationships to inactive endpoints. Some active relationship endpoints remain
-  upstream objects outside the selected technique/relationship corpus.
-- CWE: official release 5.0, namespace `http://cwe.mitre.org/cwe-8`, schema-version
-  identifier 8.0; 956 weaknesses. Excluded 493 groupings/views/categories and 28
-  deprecated weaknesses. Adapter validation covers the consumed fields, not full
-  upstream XSD validation.
-- NVD: one actual API response for CVE-2021-44228. Original modification times,
-  references and supplied CVSS/CWE/CPE enrichment are preserved. This is a bounded
-  parser/integration sample, not a comprehensive vulnerability corpus. The exact
-  response is retained because subsequent API requests can change its bytes.
-- SOC: two existing real LAB-01 authentication-failure observations normalized
-  by S1-T06. Both are explicitly assigned to the pilot's `G-SSH` family for
-  development under the proposed [policy](soc-policy.json). The current test split
-  is unfrozen; both record metadata and corpus manifest mark that limitation.
-  No analyst ground truth, model output or newly generated lab evidence is used.
+- NVD: complete official **2024** JSON 2.0 feed, verified against NVD META size
+  and SHA-256. Parsed 39,360 CVEs; excluded 866 rejected entries; retained 38,494.
+  This is one identifier year, not an all-years database mirror.
+- Official CVE Program: five pinned records joined to existing NVD documents;
+  CNA/ADP fields, alternate descriptions and provenance remain available without
+  duplicate vector records. These records do not establish lab exposure.
+- KEV: all 1,762 catalog records retained for structured
+  lookup. Exactly 164 indexed CVEs were enriched by CVE-ID
+  match; 1,598 unmatched entries remain lookup records.
+  Membership is exploitation context, not proof of exploitation in an incident.
+- ATT&CK: 706 active techniques; 21,660 active relationships. Excluded 4,004
+  unsupported objects, 161 revoked/deprecated objects and 159 relationships to
+  inactive endpoints. Some relationship endpoints remain outside this selection.
+- CWE: official release 5.0, namespace 8, 956 weaknesses; excluded 493 catalog
+  groupings/views/categories and 28 deprecated weaknesses. Consumed-field
+  validation is not full upstream XSD validation.
+- Sigma: three selected Linux rules, all with upstream status `test`; preserve
+  descriptions, detection patterns, references and false-positive guidance.
+- Playbooks: two Windows reference guides, retained as text, never executed.
+  They do not establish Windows lab deployment or coverage.
+- SOC: two existing real Wazuh observations plus 12 OTRF and 21 Splunk excerpts.
+  These 35 observations/excerpts are not 35 independent incidents. Splunk's source
+  documentation is retained but not indexed as event content; five further
+  excerpts are counted as excluded by the explicit selection limit.
 
-The early artifact mount was not writable by the container's regular user;
-corrected ownership of the newly created directory and repeated acquisitions.
-Initial CWE parsing exposed namespace 8 and initial NVD notice acquisition exposed
-an official 301 redirect. Both were corrected and covered by tests. An intermediate
-replay overlapped implementation edits and correctly produced different code
-fingerprints; only the final run with fixed source files is recorded as passing.
+The first external-format attempt assumed JSONL and failed without publishing a
+corpus. Inspection identified auditd text and Sysmon XML, so the adapter preserves
+those formats as typed observations without invented severity/time/verdict fields.
+Manual review of the selected small public files and a credential-pattern check
+found no new project credentials; this is not a privacy certification for entire
+upstream datasets. Source/dataset metadata remains separate from event content.
 
-## Reproduction and storage
+## Full replay verification
 
-Follow [the runnable guide](../../rag/ingestion/README.md). The final local smoke
-corpora are `.local/ingestion/mitre_attack-verified-final`, `cve-verified-final`,
-`cwe-verified-final` and `soc_log-verified-final`; corresponding `*-replay-final`
-directories hold the comparison outputs. Source snapshots remain in `attack`,
-`cve`, `cwe` and `soc-final`. Corpus manifests copy the exact input manifest,
-source notice and any SOC policy/split inputs. Raw snapshots, notices, generated
-corpora and temporary replay scripts are ignored local files, not Git contents.
+Two independent builds from fixed code and the same retained snapshots produced
+**24 byte-identical files**: `release.json`, composed manifest/JSONL/relationship
+export, and all ten per-source manifests/JSONL files. The SQLite binary was not
+compared; the JSON evidence and manifests define the reproducibility check.
+The implementation fingerprint also covers backend validation code, shared JSON
+schemas and root dependency pins; runtime dependency versions are recorded.
 
-Local SHA-addressed artifacts provide this machine's reproducibility. Team-wide
-artifact sharing is still unresolved under ADR-006. Retain the exact snapshots
-before cleanup; reacquiring a mutable NVD response or notice page is not an exact
-reproduction guarantee. The public receipts and hashes contain no credentials or
-raw SOC descriptions. No new redistribution permission is inferred.
+Searchable JSONL SHA-256: `081bf66fe0df5f887baefba2e02263203ac267da2b371f1fb6114c693486b885`.
+
+The final local releases are `.local/ingestion/s2-t01-release-final` and
+`.local/ingestion/s2-t01-release-replay`. Their `normalized/` directories retain
+source notices, snapshot manifests and applicable policy/split inputs. Raw source
+snapshots, ZIPs and acquisition receipts remain in their original ignored artifact
+folders. Reproduce with the [runnable guide](../../rag/ingestion/README.md).
+No raw/public-event dataset or generated corpus is committed or newly redistributed.
 
 ## Acceptance boundaries
 
-S2-T01 is implemented for review; it is **not Done**. Soulaiman must review the
-record contract and proposed SOC assignments; feedback/reviewer handling,
-hosted CI, PR merge and issue closure remain part of the project workflow.
-Before a frozen benchmark, review all incident/template families against its
-split and regenerate policy/corpora. Schema checks cannot establish prose
-sanitization or detect every near-duplicate family. No retrieval-quality,
-model-quality, serving-performance or full RAG integration result is claimed.
+The current synthetic pilot split is unfrozen. Local/external event assignments
+are proposed development groupings for review; the complete release declares
+`development_only`. Changed source/split hashes invalidate eligibility. Unknown
+files are quarantined; manual sensitive-prose and near-duplicate-family review
+remains necessary. No evaluator labels are loaded into retrieval. Public source
+availability is not independent validation of every example or a universal
+redistribution license. Retain notices and resolve OTRF's differing README/root
+license labels before external redistribution.
+
+S2-T01 is locally implemented and verified, **not formally Done**. User approval
+precedes any further push. The expanded head still needs hosted CI, Soulaiman's
+handoff/source/policy review, review handling, merge and issue closure. Shared
+artifact storage remains unresolved under ADR-006. S2-T02/S2-T03 still own indexing
+and measured retrieval quality; S2-T08 IOC feed ingestion is not completed here.

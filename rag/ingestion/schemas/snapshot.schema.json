@@ -11,7 +11,10 @@
         "mitre_attack",
         "cve",
         "cwe",
-        "soc_log"
+        "soc_log",
+        "kev",
+        "detection_rule",
+        "playbook"
       ]
     },
     "source_url": {

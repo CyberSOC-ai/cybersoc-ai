@@ -53,7 +53,7 @@ def read_bytes(path, limit=MAX_INPUT_BYTES):
     return data
 
 
-@lru_cache(maxsize=3)
+@lru_cache(maxsize=8)
 def validator_for(name):
     schema = json.loads((SCHEMA_DIR / f"{name}.schema.json").read_text())
     Draft202012Validator.check_schema(schema)
@@ -81,7 +81,8 @@ def record(snapshot, source_id, title, content, metadata):
         "record_id": "DOC-" + digest(canonical([snapshot["source"], source_id])),
         "source": snapshot["source"],
         "source_record_id": source_id,
-        "collection": "soc_history" if snapshot["source"] == "soc_log" else "knowledge",
+        "collection": ("soc_history" if snapshot["source"] == "soc_log" else
+                       "relationships" if metadata.get("stix_type") == "relationship" else "knowledge"),
         "title": text(title),
         "content": text(content),
         "content_sha256": digest(text(content).encode("utf-8")),

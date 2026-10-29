@@ -15,7 +15,10 @@
         "mitre_attack",
         "cve",
         "cwe",
-        "soc_log"
+        "soc_log",
+        "kev",
+        "detection_rule",
+        "playbook"
       ]
     },
     "source_record_id": {
@@ -26,7 +29,8 @@
     "collection": {
       "enum": [
         "knowledge",
-        "soc_history"
+        "soc_history",
+        "relationships"
       ]
     },
     "title": {
@@ -59,7 +63,10 @@
             "mitre_attack",
             "cve",
             "cwe",
-            "soc_log"
+            "soc_log",
+            "kev",
+            "detection_rule",
+            "playbook"
           ]
         },
         "source_url": {
@@ -305,6 +312,48 @@
                 "items": {
                   "type": "object"
                 }
+              },
+              "affected": {
+                "type": [
+                  "array",
+                  "object"
+                ]
+              },
+              "provider": {
+                "enum": [
+                  "nvd",
+                  "cve_program",
+                  "joined"
+                ]
+              },
+              "cve_program": {
+                "type": "object"
+              },
+              "kev": {
+                "type": "object"
+              },
+              "source_path": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "source_file_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "provenance_chain": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "alternate_descriptions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                }
               }
             },
             "required": [
@@ -387,91 +436,338 @@
       "then": {
         "properties": {
           "metadata": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "incident_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "source_event_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "Z$"
+                  },
+                  "source_severity": {
+                    "enum": [
+                      "informational",
+                      "low",
+                      "medium",
+                      "high",
+                      "critical"
+                    ]
+                  },
+                  "entities": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "ingestion_kind": {
+                    "enum": [
+                      "live",
+                      "replay",
+                      "synthetic"
+                    ]
+                  },
+                  "group_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "run_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "sanitization_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "assignment_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "dataset_version": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "split": {
+                    "const": "development"
+                  },
+                  "test_frozen": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "incident_id",
+                  "source_event_id",
+                  "timestamp",
+                  "source_severity",
+                  "entities",
+                  "ingestion_kind",
+                  "group_id",
+                  "run_id",
+                  "sanitization_ref",
+                  "assignment_ref",
+                  "dataset_version",
+                  "split",
+                  "test_frozen"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "provider": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "source_path": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "source_file_sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "event_index": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "event_sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "group_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "run_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "assignment_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "dataset_version": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "split": {
+                    "const": "development"
+                  },
+                  "test_frozen": {
+                    "type": "boolean"
+                  },
+                  "usage": {
+                    "const": "public_lab_excerpt_no_ground_truth"
+                  }
+                },
+                "required": [
+                  "provider",
+                  "source_path",
+                  "source_file_sha256",
+                  "event_index",
+                  "event_sha256",
+                  "group_id",
+                  "run_id",
+                  "assignment_ref",
+                  "dataset_version",
+                  "split",
+                  "test_frozen",
+                  "usage"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "source": {
+            "const": "kev"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "metadata": {
             "type": "object",
             "properties": {
-              "incident_id": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 256
+              "provider": {
+                "const": "cisa_kev"
               },
-              "source_event_id": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 256
-              },
-              "timestamp": {
-                "type": "string",
-                "format": "date-time",
-                "pattern": "Z$"
-              },
-              "source_severity": {
-                "enum": [
-                  "informational",
-                  "low",
-                  "medium",
-                  "high",
-                  "critical"
-                ]
-              },
-              "entities": {
-                "type": "array",
-                "items": {
-                  "type": "object"
-                }
-              },
-              "ingestion_kind": {
-                "enum": [
-                  "live",
-                  "replay",
-                  "synthetic"
-                ]
-              },
-              "group_id": {
+              "catalog_version": {
                 "type": "string",
                 "minLength": 1,
                 "maxLength": 2048
               },
-              "run_id": {
+              "catalog_released": {
                 "type": "string",
                 "minLength": 1,
                 "maxLength": 2048
               },
-              "sanitization_ref": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 2048
-              },
-              "assignment_ref": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 2048
-              },
-              "dataset_version": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 2048
-              },
-              "split": {
-                "const": "development"
-              },
-              "test_frozen": {
-                "type": "boolean"
+              "kev": {
+                "type": "object"
               }
             },
             "required": [
-              "incident_id",
-              "source_event_id",
-              "timestamp",
-              "source_severity",
-              "entities",
-              "ingestion_kind",
-              "group_id",
-              "run_id",
-              "sanitization_ref",
-              "assignment_ref",
-              "dataset_version",
-              "split",
-              "test_frozen"
+              "provider",
+              "catalog_version",
+              "catalog_released",
+              "kev"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "source": {
+            "const": "detection_rule"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "source_path": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "source_file_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "rule_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "status": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "logsource": {
+                "type": "object"
+              },
+              "detection": {
+                "type": "object"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                }
+              },
+              "falsepositives": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "references": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                }
+              }
+            },
+            "required": [
+              "provider",
+              "source_path",
+              "source_file_sha256",
+              "rule_id",
+              "status",
+              "logsource",
+              "detection",
+              "tags",
+              "falsepositives",
+              "references"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "source": {
+            "const": "playbook"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "source_path": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "source_file_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "platform": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "usage": {
+                "const": "reference_only_no_execution"
+              }
+            },
+            "required": [
+              "provider",
+              "source_path",
+              "source_file_sha256",
+              "platform",
+              "usage"
             ],
             "additionalProperties": false
           }

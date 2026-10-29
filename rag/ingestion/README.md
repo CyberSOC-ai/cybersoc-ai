@@ -1,14 +1,27 @@
-# S2-T01 — Reproducible knowledge ingestion
+# S2-T01 — Reproducible knowledge and SOC-history ingestion
 
 Owner Ahmed; reviewer Soulaiman; [issue #16](https://github.com/CyberSOC-ai/cybersoc-ai/issues/16).
-Python 3.12 in the existing development image. No new dependencies are required.
+Work branch: `feature/16-knowledge-ingestion`. The expanded implementation is local
+pending review/publication. This prepares source records; chunking, embeddings,
+retrieval scoring and vector-store selection belong to S2-T02.
 
-The pipeline turns pinned ATT&CK, NVD, CWE and normalized SOC snapshots into
-validated JSONL records and a reproducibility manifest. Acquisition is a separate,
-explicit command. Normalization and all CI tests work offline. Embeddings,
-chunking, vector-store choice and indexing belong to S2-T02.
+## Source selection
 
-## 1. Prepare the environment and artifact mount
+Read [the selection and coverage rationale](../../datasets/knowledge/SOURCE_SELECTION.md)
+and its [exact revisions/files](../../datasets/knowledge/sources.json) first.
+The corpus combines ATT&CK, a full annual NVD feed, selected official CVE records,
+KEV enrichment, CWE, selected Sigma rules/playbooks, our existing normalized lab
+observations and selected OTRF/Splunk excerpts. Current selection covers NVD 2024;
+it is not an all-years vulnerability mirror. Add explicit years to `nvd_years`
+to expand coverage. Older/current years may be important for your asset inventory.
+
+CVE providers are joined by exact CVE ID into one searchable document. KEV catalog
+entries enrich matching CVEs and remain available for structured lookup. Active
+ATT&CK relationships are exported separately rather than inflated into the vector
+text corpus. External events are explicitly assigned development examples, with
+no invented backend severity, timestamps or analyst verdicts.
+
+## 1. Environment
 
 From the repository root:
 
@@ -17,145 +30,143 @@ docker compose build dev
 mkdir -p .local/ingestion
 ```
 
-The source mount stays read-only. Each command below adds a writable artifact
-mount for generated files. `.local/` is ignored by Git. Preserve these snapshots
-and receipts; team artifact storage is still undecided in ADR-006. Do not treat
-this machine's local artifact path as shared storage.
+The image uses Python 3.12 with pinned `ijson` for streaming large feeds and
+`PyYAML` for safe Sigma parsing. Source stays mounted read-only; the commands below
+add a writable artifact mount. `.local/` is ignored by Git. Neither acquisition
+nor normalization executes rules, playbooks, event commands or source-provided
+links. All retrieved/source prose remains untrusted data.
 
-## 2. Acquire versioned public snapshots
-
-```sh
-docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion.acquire --source mitre_attack --version c2494b29dd268c46a5d0ea0990553e4327cd2253 --output /artifacts/attack
-docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion.acquire --source cve --version CVE-2021-44228 --output /artifacts/cve
-docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion.acquire --source cwe --version 5.0 --output /artifacts/cwe
-```
-
-These commands deliberately cover the Enterprise ATT&CK snapshot, one CVE for
-smoke validation, and one CWE release. One CVE demonstrates the adapter, not broad
-vulnerability coverage. The offline NVD adapter also accepts larger bounded JSON
-2.0 snapshots. Define the relevant CVE subset before expanding the corpus.
-
-ATT&CK pins an upstream Git commit. CWE pins a numeric release, catalog version
-and supported XML namespace/schema version (CWE 7 or 8). CWE parsing validates
-the consumed fields, not the full upstream XSD. NVD responses are mutable: the
-manifest pins the acquired response SHA-256 as part of its version. Reacquisition
-can change bytes; exact replay requires the retained original snapshot.
-
-Acquisition writes the original snapshot, preserved notice, manifest and receipt;
-CWE also retains the original ZIP and its hash. It uses fixed official providers,
-TLS verification, no redirects, a 128 MiB body limit, per-operation timeouts and a
-180-second streaming deadline checked between reads. The network read timeout
-bounds a stalled read. A notice request failure publishes no snapshot. There is
-no crawling, API key requirement for this single-CVE request, or advisory/payload
-download. Respect upstream usage limits when acquiring additional records.
-
-The sources and usage requirements come from [the inventory](../../datasets/SOURCES.md).
-Official format references: [ATT&CK STIX](https://github.com/mitre-attack/attack-stix-data),
-[NVD JSON API](https://nvd.nist.gov/developers/vulnerabilities) and
-[CWE downloads](https://cwe.mitre.org/data/downloads.html). Preserve the acquired
-notices and source attribution with all derived corpora. Retrieved prose remains
-untrusted input regardless of source or hash.
-
-## 3. Normalize offline
+## 2. Acquire and build a fresh selection
 
 ```sh
-docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion --input /artifacts/attack/snapshot.json --snapshot /artifacts/attack/snapshot-manifest.json --notice /artifacts/attack/notice.txt --output /artifacts/attack-corpus
-docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion --input /artifacts/cve/snapshot.json --snapshot /artifacts/cve/snapshot-manifest.json --notice /artifacts/cve/notice.txt --output /artifacts/cve-corpus
-docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion --input /artifacts/cwe/snapshot.xml --snapshot /artifacts/cwe/snapshot-manifest.json --notice /artifacts/cwe/notice.txt --output /artifacts/cwe-corpus
+docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion.build --artifacts /artifacts --output /artifacts/release-v1 --acquire --lab-acquired-at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 ```
 
-Every input and source notice must match its manifest hash. Output directories
-must be new. The pipeline validates all records before renaming a staged corpus
-directory into place; malformed input never publishes a partial corpus. It never
-overwrites an earlier corpus during ordinary sequential use. Do not run concurrent
-writers against the same output path.
+`--acquire` explicitly enables bounded provider downloads. Existing snapshots are
+reused only if their recorded revision/selection matches the plan; every source
+and notice digest is verified before normalization. Existing output directories
+are never intentionally overwritten. To refresh mutable NVD feeds/notices, use a
+new artifact root and retain the prior version. Partial snapshots/releases are
+staged and only published after success. Do not use concurrent writers for the
+same destination.
 
-For each corpus:
+Without `--acquire`, the same build is fully offline and fails if a required
+snapshot is missing:
 
-| File | Meaning |
+```sh
+docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion.build --artifacts /artifacts --output /artifacts/release-v1-replay
+```
+
+Replaying identical snapshots, policies, selection, code and dependency versions
+must reproduce normalized JSONL and manifests. The build rejects implementation
+edits made while it is running. Original acquisition timestamps are input metadata;
+normalization does not add a fresh wall-clock timestamp to every record.
+
+## 3. Outputs and downstream use
+
+| Release artifact | Purpose |
 |---|---|
-| `records.jsonl` | Canonical UTF-8 records, sorted by stable record ID |
-| `manifest.json` | Input/output hashes, implementation/schema hashes, counts and exclusions |
-| `snapshot.json` | Exact input snapshot manifest |
-| `source-notice.txt` | Byte-preserved acquired notice |
-| `soc-policy.json`, `splits.json` | Exact SOC policy/split inputs when applicable |
+| `release.json` | Complete build provenance, versions, per-source reports and composed-corpus report |
+| `selection.json` | Exact source-selection plan |
+| `normalized/<source>/` | Per-source JSONL, manifest, preserved notice and applicable policy/splits |
+| `corpus/records.jsonl` | Deterministically sorted searchable reference documents and eligible SOC excerpts |
+| `corpus/relationships.jsonl` | ATT&CK relationship records for later graph processing |
+| `corpus/facts.sqlite` | Exact CVE/KEV lookup plus stored documents/relationships; downstream internal handoff |
+| `corpus/manifest.json` | Input manifests, final hashes/counts, CVE joins, KEV coverage and corpus-use restriction |
+| `corpus/notice-*.txt` | Source notices corresponding to ordered input manifests |
 
-The acquisition snapshot itself stays in its original local artifact directory.
-Replaying the same snapshot, provenance, policy and implementation produces
-identical JSONL and manifest bytes. Acquisition timestamps are input provenance;
-the normalizer does not add a fresh wall-clock timestamp to each replay.
+The public upstream snapshots/ZIPs, selected source bytes and acquisition receipts
+remain in the artifact root. Releases preserve their hashes/references. Shared
+artifact storage is not selected by this task; local artifact paths do not provide
+team-wide availability. Retain original snapshots, especially mutable NVD data and
+notice pages, for exact replay. All raw/generated datasets remain outside Git.
 
-## 4. Prepare the eligible SOC history
-
-Read [the development assignments](../../datasets/knowledge/SOC_ASSIGNMENTS.md)
-before expanding the corpus. The supplied policy covers the two existing real
-LAB-01 observations, linked to the pilot's `G-SSH` family. It is a proposed
-development assignment for review, not a claim of a frozen test set.
+Exact lookup example (replace the release directory if needed):
 
 ```sh
-docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion.prepare_lab --output /artifacts/soc --acquired-at 2026-10-28T23:34:26Z
-docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion --input /artifacts/soc/snapshot.json --snapshot /artifacts/soc/snapshot-manifest.json --notice /artifacts/soc/notice.txt --soc-policy datasets/knowledge/soc-policy.json --splits datasets/evaluation/soc-eval-v1/splits.json --output /artifacts/soc-corpus
+docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion.corpus lookup --corpus /artifacts/release-v1/corpus --cve CVE-2024-6387
 ```
 
-The timestamp above reproduces the validation snapshot's preparation metadata.
-When preparing a new snapshot, supply its actual UTC preparation time. This is
-distinct from original event timestamps and does not invent missing lab metadata.
+This returns structured reference facts, not a judgment that the lab is vulnerable.
+It uses exact parameterized CVE-ID lookup. The SQLite file is an internal derived
+artifact, not a new backend API or the selected vector database.
 
-The policy pins the exact split file and canonical sanitized incident digests.
-Unknown records are quarantined. Test/quarantined assignments, held-out groups,
-related test case IDs and policy-held-out runs are excluded. New or changed splits
-invalidate the hash and require reviewing assignments again. The current pilot
-has `test_frozen=false`, so SOC outputs explicitly declare `development_only`.
-No evaluation labels or expected actions are loaded. Input must satisfy the
-strict incident v1 schema; extra evaluator fields fail validation. Manual review
-is still required for sensitive prose and correct near-duplicate grouping.
+## 4. Record contract and citations
 
-## 5. Handoff to S2-T02
+The [record schema](schemas/record.schema.json),
+[snapshot schema](schemas/snapshot.schema.json),
+[lab policy](schemas/soc-policy.schema.json) and
+[external policy](schemas/external-policy.schema.json) define the handoff.
 
-The [record schema](schemas/record.schema.json) is the proposed ingestion contract.
-The [snapshot schema](schemas/snapshot.schema.json) and
-[SOC policy schema](schemas/soc-policy.schema.json) are independently versioned
-under ingestion v1; existing backend interchange schemas are unchanged.
+- `record_id`: stable source/source-record identity; `content_sha256` tracks text changes.
+- `collection`: `knowledge`, `soc_history` or separate `relationships`.
+- `title`/`content`: source text for chunking; never assume it is an instruction.
+- `source`/`source_record_id`/`snapshot_ref`: citation identity preserved into evidence.
+- `provenance`: owner, original URL/version/time, input digest and notice references.
+- Typed `metadata`: source-specific fields, CVE provider data/provenance chains,
+  rule status/false positives, or event lineage and split eligibility.
 
-| Field | Downstream use |
-|---|---|
-| `record_id` | Stable hash of source and source record ID; document upsert identity |
-| `content_sha256` | Detect changed normalized text; snapshot hash tracks all input changes |
-| `collection` | Keep `knowledge` and `soc_history` separate |
-| `title`, `content` | Input for Soulaiman's chunking/embedding strategy |
-| `source`, `source_record_id`, `snapshot_ref` | Preserve into retrieval evidence and citations |
-| `provenance` | Source URL/revision/time, raw snapshot hash, notice and usage references |
-| `metadata` | Technique IDs, CVE enrichment, CWE relationships, or SOC lineage/split |
+Documents may exceed the backend evidence limit of 16,000 characters and require
+bounded chunking. Derive chunk IDs while retaining document/source/snapshot identity.
+Do not embed or send dataset paths, technique-bearing event paths, group/split
+membership or evaluator metadata as incident features. Reference technique IDs in
+ATT&CK/Sigma are knowledge; dataset labels about an evaluated incident are not.
 
-Do not concatenate lineage, split membership or evaluator metadata into model
-context. ATT&CK includes active techniques and relationships; other STIX object
-types are counted as excluded. Some relationship endpoints refer to upstream
-objects outside this corpus; this is not a complete graph export. Revoked/
-deprecated techniques and relationships to inactive endpoints are excluded.
-CVE CVSS/CWE/CPE enrichment is preserved only when supplied; missing fields stay
-missing. CWE categories, views and groupings are excluded from weakness records.
+Supplemental KEV/CNA claims need evidence cited to their corresponding provenance
+snapshot, not silently attributed to the primary NVD description. Consumers must
+render relevant structured fields into separately cited evidence as needed. The
+existing backend evidence schema now permits `detection_rule` and `playbook`;
+update any copied source enums. Ingestion does not fabricate retrieval scores or
+claim measured retrieval quality. Some graph endpoints remain outside this subset.
 
-Soulaiman must derive bounded chunks and chunk IDs, choose an embedding model
-and store through ADR-001, and supply real retrieval scores/methods at query time.
-The v1 evidence contract limits each content item to 16,000 characters; documents
-here may be larger and must be chunked. Preserve `source_record_id` and
-`snapshot_ref` for every chunk. Ingestion does not fabricate retrieval scores or
-claim retriever quality.
+## 5. SOC-history safeguards
 
-## 6. Validation and review
+Read [lab assignments](../../datasets/knowledge/SOC_ASSIGNMENTS.md) and
+[external assignments](../../datasets/knowledge/EXTERNAL_ASSIGNMENTS.md).
+Policies pin source digests and exact evaluation split bytes. Unknown inputs are
+quarantined; held-out groups/runs/related cases and test/quarantine assignments
+are excluded. Present exact held-out duplicates are excluded for normalized lab
+incidents. Manual sensitivity and near-duplicate grouping review is still required.
+External examples are excerpts, not independently labeled incidents.
+
+The current pilot has no frozen test split. All SOC outputs explicitly declare
+`development_only`, and the combined release inherits that restriction. A changed
+split invalidates the policy hash and requires reassignment/rebuild. Evaluation
+labels are never loaded into the corpus; explicit label fields are rejected.
+Playbook hypotheses and Sigma detection patterns are reference knowledge, not
+proof of the current incident's verdict. No new real lab run is claimed.
+
+## 6. Component commands and bounds
+
+For individual acquisitions use `python -m rag.ingestion.acquire` (ATT&CK, one CVE
+or CWE), `python -m rag.ingestion.nvd_bulk acquire --year 2024 --output ...`, or
+`python -m rag.ingestion.curated --selection datasets/knowledge/sources.json
+--provider sigma --output ...`. Each module has `--help`.
+
+For a bounded snapshot use `python -m rag.ingestion --input ... --snapshot ...
+--notice ... --output ...` with `--soc-policy`/`--splits` for SOC. Annual NVD feeds
+use `python -m rag.ingestion.nvd_bulk normalize --snapshot-dir ... --output ...`.
+The in-memory path is limited to 128 MiB. The annual path streams JSON and uses
+SQLite for identity checks/sorting; compressed acquisition is capped at 128 MiB,
+decompressed input at 2 GiB, nesting at 64 and per-record parse/output budgets at
+8 MiB. It rejects malformed/truncated JSON, duplicate keys/IDs, count mismatches,
+META integrity mismatches and feed changes during acquisition.
+
+Curated sources permit only the selected official repositories, pinned commits
+and at most 50 named files per provider. HTTP redirects are disabled. Git LFS size
+and SHA-256 are checked. ZIP contents are bounded and read without extracting
+upstream paths. YAML aliases, duplicate keys and executable tags are rejected;
+only a safe loader is used. Source-specific notices and usage restrictions apply.
+
+## 7. Checks and acceptance
 
 ```sh
 docker compose run --rm -T dev ruff check --no-cache .
 docker compose run --rm -T dev python -B -m unittest discover -s tests/ingestion -v
 ```
 
-CI includes this offline suite alongside all existing project suites. Tests
-cover deterministic replay, malformed input, duplicate IDs, required provenance,
-notice/snapshot tampering, optional enrichment, both CWE namespaces, XML entity
-rejection, redirects, acquisition bounds, atomic publication and SOC exclusions.
-They use synthetic parser fixtures and mocked HTTP; real-source smoke evidence
-is recorded separately in [the validation record](../../datasets/knowledge/VALIDATION.md).
-
-Before Done: review the proposed record/policy interface with Soulaiman, resolve
-feedback, pass hosted CI, merge the reviewed PR and close issue #16 through the
-project workflow. Local checks are not hosted CI or independent peer approval.
+The offline suite runs in CI alongside existing contract/evaluation/backend/
+normalizer/baseline suites. No upstream downloads or model runs are required in
+CI. See [validation](../../datasets/knowledge/VALIDATION.md) for actual results
+and exact hashes. S2-T01 remains under review until required publication, hosted
+CI, reviewer handling, merge and linked issue closure are completed.

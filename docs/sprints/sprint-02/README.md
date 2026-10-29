@@ -26,85 +26,100 @@
 # 1. Ahmed
 ## Assigned tasks
 
-S2-T01, S2-T08. This update covers S2-T01 only; S2-T08 remains Backlog.
+S2-T01, S2-T08. This update covers S2-T01 and the user-approved source expansion;
+S2-T08 IOC-feed ingestion remains Backlog.
 
 ## Work completed
 
-2026-10-28 — Implemented [offline knowledge ingestion](../../../rag/ingestion/README.md)
-on `codex/16-knowledge-ingestion`, based on main `48c224f`. Added separate bounded
-public acquisition and offline adapters for Enterprise ATT&CK STIX, NVD CVE JSON
-2.0, CWE XML namespaces 7/8, and eligible normalized SOC history. Every record
-preserves source identity, provenance, notice references and snapshot hashes.
-This is implemented for review; no peer approval, hosted CI or merge is claimed.
+2026-10-29 — Completed the expanded local [knowledge-ingestion implementation](../../../rag/ingestion/README.md)
+on `feature/16-knowledge-ingestion`. The user approved including bulk CVE/NVD,
+CISA KEV, Sigma, playbooks and selected OTRF/Splunk examples alongside ATT&CK,
+CWE and existing lab history. The earlier draft is [PR #86](https://github.com/CyberSOC-ai/cybersoc-ai/pull/86);
+these follow-up changes are local and have not been pushed. User review precedes
+any further push. No merge, issue closure or independent peer approval is claimed.
 
 ## Technical approach
 
-Use the existing Python 3.12/Docker environment and JSON Schema dependency. Emit
-canonical JSONL plus manifests with source/output/code/schema hashes, counts and
-exclusion reasons. Validate the entire corpus before atomic directory publication.
-Keep knowledge and SOC history logically separate for Soulaiman's S2-T02 handoff.
-No embeddings, vector store, model run or S2-T08 feed is introduced.
+Stream annual NVD JSON into a disk-backed identity/sort stage; verify compressed
+feed acquisition against NVD META size/SHA-256 and detect concurrent feed changes.
+Acquire only named public files at pinned official-repository commits, retaining
+licenses/notices, Git LFS identity, ZIP checks and receipts. Normalize with typed
+schemas; reject unsafe YAML and XML, duplicate identities and changed source bytes.
+Join NVD/CVE Program records and KEV by exact CVE ID. Keep ATT&CK relationships
+separate from searchable prose. Compose a reproducible offline release with
+structured CVE/KEV lookup. No models, embeddings, rule deployment or notebook
+execution occur.
 
 ## Files / components modified
 
-Added `rag/ingestion/`, versioned input/record/policy schemas, offline tests and
-`datasets/knowledge/` assignment/validation records. Added the ingestion suite to
-CI and linked the guide from the dataset inventory. Existing backend contracts,
-other members' sections and shared sprint sections are unchanged.
+Extended `rag/ingestion/`, versioned ingestion schemas, offline tests and source/
+assignment/validation records in `datasets/knowledge/`. Added pinned ijson/PyYAML
+dependencies. Extended the draft backend evidence source enum with `detection_rule`
+and `playbook`, retaining existing examples/fields; consumers with frozen enums
+must refresh them. Other members' journals and shared sprint sections are unchanged.
 
 ## Tests / validation
 
-Python 3.12 development image built. All 150 tests passed: 19 contracts, 43
-evaluation, 20 backend, 16 normalizer, 27 baseline and 25 ingestion/acquisition.
-Ruff, dependency consistency, repository integrity, staged whitespace and
-Gitleaks 8.30.1 passed. The ingestion tests use mocked HTTP and synthetic parser examples;
-actual source smoke/replay evidence is separate in the
-[validation record](../../../datasets/knowledge/VALIDATION.md).
+Python 3.12.15 development image rebuilt. All 169 tests passed: 19 contracts,
+43 evaluation, 20 backend, 16 normalizer, 27 baseline and 44 ingestion/acquisition.
+Ruff passed. Expanded tests cover streaming bounds/counts/duplicate keys, NVD META
+integrity, exact vulnerability joins, input-corpus tampering, source revision pins,
+Git LFS identity, safe YAML and real external event formats/split exclusion.
+Full-source replay and final check details are in the
+[validation record](../../../datasets/knowledge/VALIDATION.md). CI for the previously
+published draft does not validate these unpushed changes.
 
 ## Results / metrics
 
-Real-source normalization produced 706 active ATT&CK techniques and 21,660
-relationships (22,366 records), 956 CWE weaknesses, one bounded CVE sample and two
-real LAB-01 development observations. These are corpus counts, not retrieval or
-model-quality metrics. Exact snapshot/output hashes and replay outcomes are in
-the validation record. The single CVE does not establish broad CVE coverage.
+The local collection contains 40,196 searchable documents/excerpts: 38,494 CVEs
+from the full NVD 2024 feed, 706 ATT&CK techniques, 956 CWE weaknesses, three Linux
+Sigma rules, two Windows playbooks and 35 SOC excerpts/observations. Exported 21,660
+ATT&CK relationships separately. Five selected official CVE records join existing
+CVE documents; 164 CVEs gain KEV context from a 1,762-record catalog. The remaining
+1,598 KEV records remain structured lookup entries without duplicate vector docs.
+These are collection counts, not model/retrieval-quality results. The annual feed
+is not an all-years mirror, the official CVE supplement is five records, and the
+external event selection is 33 excerpts rather than independent incidents.
 
 ## Problems encountered
 
-The current CWE 5.0 release uses namespace 8 and Groupings; added support while
-retaining namespace 7 compatibility. NIST's former license URL redirects, so
-acquisition now uses the current official destination without enabling arbitrary
-redirects. The new Docker artifact mount initially had the wrong ownership;
-repaired the newly created directory and repeated failed acquisitions. The
-existing FastAPI/Starlette dependency emits a deprecation warning; its tests pass.
+The initially selected external logs were auditd text and Sysmon XML, so added
+format-aware observation parsing instead of treating them as JSONL or inventing
+backend incident fields. Some selected Sigma rules have upstream `test` status;
+retain it rather than claiming production readiness. The selected playbooks are
+Windows reference content, not deployed Windows-lab evidence. Existing dependency
+stack emits an HTTP-client deprecation warning; tests pass.
 
 ## Decisions made
 
-Exclude revoked/deprecated ATT&CK objects and relationships to inactive endpoints.
-Preserve missing CVE enrichment as missing. Admit only hash-pinned, explicitly
-assigned development SOC records; exclude held-out groups/runs, related test cases
-and exact present duplicates. Near-duplicate grouping and sensitive prose still
-require manual owner/reviewer checking. Both real SSH observations are grouped
-with `G-SSH`. Current evaluation splits are unfrozen, so SOC corpus use is
-explicitly development-only. Raw/downloaded and generated corpora remain ignored
-local artifacts; shared artifact storage is unresolved. The vector database
-remains ADR-001's team decision.
+Use [the explicit source plan](../../../datasets/knowledge/sources.json) and
+[coverage rationale](../../../datasets/knowledge/SOURCE_SELECTION.md). Preserve
+NVD/CNA/ADP/KEV provenance separately and cite claims to the correct snapshot.
+Keep source text as untrusted data. Both local SSH observations and the selected
+external SSH run share `G-SSH`; network-discovery examples share their own family.
+Unknown/unassigned files are quarantined. Changed split/source hashes invalidate
+eligibility. The current pilot is unfrozen; all SOC material and the combined
+release remain development-only. Manual prose-sensitivity and near-duplicate
+review are still required. Retain source-specific notices; resolve OTRF's differing
+README/root-license labels before external redistribution. Raw/generated artifacts
+stay ignored locally; shared storage remains unresolved under ADR-006. Vector
+store/embedding choices remain S2-T02/ADR-001 work.
 
 ## Related Issues / Pull Requests
 
-[S2-T01 / issue #16](https://github.com/CyberSOC-ai/cybersoc-ai/issues/16).
-Reviewer: Soulaiman (`soulaimane-22`). Branch: `codex/16-knowledge-ingestion`.
-[Draft PR #85](https://github.com/CyberSOC-ai/cybersoc-ai/pull/85) is published.
-Assigned review handling, hosted CI, merge and issue closure remain pending.
-This task is not Done. Review the record contract, SOC assignment policy
-and documented coverage/storage limitations before S2-T02 integration.
+[S2-T01 / #16](https://github.com/CyberSOC-ai/cybersoc-ai/issues/16).
+Reviewer: Soulaiman (`soulaimane-22`). Branch: `feature/16-knowledge-ingestion`.
+[Draft PR #86](https://github.com/CyberSOC-ai/cybersoc-ai/pull/86) contains the earlier
+implementation. User approval to push this expanded follow-up, hosted CI for its
+head, assigned review handling, merge and issue closure remain pending. This task
+is not formally Done. No merge or new reviewer notification was performed.
 
 ## Learning outcome
 
-Stable source identity and immutable snapshot provenance serve different purposes.
-Deterministic offline preparation makes ingestion reproducible, while grouped
-split exclusions prevent SOC history from contaminating evaluation. A clean
-corpus and passing parsers alone do not demonstrate retrieval quality.
+A large vulnerability reference needs bounded acquisition, incremental parsing
+and exact identity joins. Reference knowledge, event examples and evaluator labels
+have different roles. Preserving provenance and separating relationship exports
+helps downstream retrieval; corpus size alone does not demonstrate answer quality.
 
 
 # 2. Soulaiman

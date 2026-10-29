@@ -140,7 +140,9 @@
             "cwe",
             "threat_intel",
             "soc_log",
-            "graph"
+            "graph",
+            "detection_rule",
+            "playbook"
           ]
         },
         "source_record_id": {
