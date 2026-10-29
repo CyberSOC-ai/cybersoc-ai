@@ -2,9 +2,11 @@
 
 Branch: `feature/16-knowledge-ingestion`; prior published head:
 `5aae31a793a4e2a2a54223f65b8c79b71d704b59`.
-[Draft PR #86](https://github.com/CyberSOC-ai/cybersoc-ai/pull/86) contains the earlier
-implementation. This record covers the expanded **local, unpushed follow-up**.
-No hosted CI, independent peer review, merge or issue closure is claimed for it.
+[Draft PR #86](https://github.com/CyberSOC-ai/cybersoc-ai/pull/86) is the publication
+and review target for the expanded implementation. Ahmed authorized pushing it
+on 2026-10-29 and retains review/merge control. This record documents local
+validation; final-head hosted CI is tracked in PR checks. No independent peer
+approval, merge or issue closure is claimed.
 
 The 2024–2026 coverage update extends local commit `0eff293`. It changes the
 source plan and documentation only; ingestion code and schemas are unchanged.
@@ -124,8 +126,8 @@ availability is not independent validation of every example or a universal
 redistribution license. Retain notices and resolve OTRF's differing README/root
 license labels before external redistribution.
 
-S2-T01 is locally implemented and verified, **not formally Done**. User approval
-precedes any further push. The expanded head still needs hosted CI, Soulaiman's
+S2-T01 is locally implemented and verified, **not formally Done**. Ahmed authorized
+publication and retains merge control. The expanded head still needs hosted CI, Soulaiman's
 handoff/source/policy review, review handling, merge and issue closure. Shared
 artifact storage remains unresolved under ADR-006. S2-T02/S2-T03 still own indexing
 and measured retrieval quality; S2-T08 IOC feed ingestion is not completed here.

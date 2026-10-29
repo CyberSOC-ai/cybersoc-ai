@@ -1,8 +1,9 @@
 # S2-T01 — Reproducible knowledge and SOC-history ingestion
 
 Owner Ahmed; reviewer Soulaiman; [issue #16](https://github.com/CyberSOC-ai/cybersoc-ai/issues/16).
-Work branch: `feature/16-knowledge-ingestion`. The expanded implementation is local
-pending review/publication. This prepares source records; chunking, embeddings,
+Work branch: `feature/16-knowledge-ingestion`; review target:
+[PR #86](https://github.com/CyberSOC-ai/cybersoc-ai/pull/86). Ahmed authorized
+publication and retains merge control. This prepares source records; chunking, embeddings,
 retrieval scoring and vector-store selection belong to S2-T02.
 
 ## Source selection

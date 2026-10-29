@@ -2,7 +2,7 @@
   "date": "2026-10-29",
   "branch": "feature/16-knowledge-ingestion",
   "base_commit": "0eff293c092b44f8a13beac16bbb46a0ee4e5111",
-  "publication_status": "2024_2026_followup_local_not_pushed",
+  "publication_status": "authorized_for_PR_86",
   "coverage_years": [
     2024,
     2025,
@@ -769,5 +769,6 @@
   },
   "repository_integrity": "passed: 230 tracked text files",
   "staged_whitespace": "passed",
-  "gitleaks": "8.30.1: staged scan passed, network disabled"
+  "gitleaks": "8.30.1: staged scan passed, network disabled",
+  "publication_note": "Local validation precedes approved publication; final-head hosted CI is tracked on PR #86. Merge remains with Ahmed."
 }

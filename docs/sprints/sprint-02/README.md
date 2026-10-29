@@ -14,7 +14,7 @@
 
 | Task | Owner | Reviewer | Domain | Status |
 |---|---|---|---|---|
-| S2-T01 — Cybersecurity knowledge normalization / ingestion | Ahmed | Soulaiman | rag | In progress (implemented; review/CI pending) |
+| S2-T01 — Cybersecurity knowledge normalization / ingestion | Ahmed | Soulaiman | rag | In review (PR #86; merge pending) |
 | S2-T02 — Chunking, embeddings and vector index | Soulaiman | Ahmed | rag | Backlog |
 | S2-T03 — Retriever evaluation | Achraf | Anas | rag | Backlog |
 | S2-T04 — Vector-RAG generation pipeline | Anas | Oussama | rag | Backlog |
@@ -36,9 +36,9 @@ on `feature/16-knowledge-ingestion`. The user approved including bulk CVE/NVD,
 CISA KEV, Sigma, playbooks and selected OTRF/Splunk examples alongside ATT&CK,
 CWE and existing lab history. The user subsequently authorized adding the 2025
 and 2026 annual NVD feeds alongside 2024; the selection now covers all three
-identifier years through their acquisition snapshots. The earlier draft is [PR #86](https://github.com/CyberSOC-ai/cybersoc-ai/pull/86);
-these follow-up changes are local and have not been pushed. User review precedes
-any further push. No merge, issue closure or independent peer approval is claimed.
+identifier years through their acquisition snapshots. [PR #86](https://github.com/CyberSOC-ai/cybersoc-ai/pull/86) is the publication
+and review target. Ahmed authorized pushing the completed work; review and merge
+remain with him. No merge, issue closure or independent peer approval is claimed.
 
 ## Technical approach
 
@@ -70,7 +70,8 @@ Git LFS identity, safe YAML and real external event formats/split exclusion.
 The 44 ingestion tests passed again for the three-year selection update; its
 code/schemas are unchanged. Full-source replay and final check details are in the
 [validation record](../../../datasets/knowledge/VALIDATION.md). CI for the previously
-published draft does not validate these unpushed changes.
+published draft does not validate later commits; use PR #86 checks for the
+final published head.
 
 ## Results / metrics
 
@@ -118,10 +119,11 @@ store/embedding choices remain S2-T02/ADR-001 work.
 
 [S2-T01 / #16](https://github.com/CyberSOC-ai/cybersoc-ai/issues/16).
 Reviewer: Soulaiman (`soulaimane-22`). Branch: `feature/16-knowledge-ingestion`.
-[Draft PR #86](https://github.com/CyberSOC-ai/cybersoc-ai/pull/86) contains the earlier
-implementation. User approval to push this expanded follow-up, hosted CI for its
-head, assigned review handling, merge and issue closure remain pending. This task
-is not formally Done. No merge or new reviewer notification was performed.
+[Draft PR #86](https://github.com/CyberSOC-ai/cybersoc-ai/pull/86) tracks this
+implementation and includes `Closes #16` for closure when Ahmed merges. Publication
+is authorized. Final-head hosted CI, assigned review handling, merge and issue
+closure remain required before formal Done. No merge or new reviewer notification
+was performed by the assistant.
 
 ## Learning outcome
 
