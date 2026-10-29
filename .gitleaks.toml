@@ -2,7 +2,7 @@
 [extend]
 useDefault = true
 
-[[allowlists]]
+[allowlist]
 description = "Public BAAI/bge-small-en-v1.5 revision and tokenizer SHA-256"
 regexTarget = "secret"
 regexes = [
