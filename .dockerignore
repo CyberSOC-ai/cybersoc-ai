@@ -1,5 +1,7 @@
 **
 !requirements.txt
+!requirements-embeddings.txt
 !infrastructure/
 !infrastructure/docker/
 !infrastructure/docker/Dockerfile.dev
+!infrastructure/docker/Dockerfile.embeddings

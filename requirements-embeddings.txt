@@ -1,0 +1,19 @@
+# Optional Linux/amd64 CPU inference environment; install with requirements.txt.
+# The direct official CPU wheel avoids pulling CUDA dependencies.
+torch @ https://download-r2.pytorch.org/whl/cpu/torch-2.9.0%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl#sha256=28f6eb31b08180a5c5e98d5bc14eef6909c9f5a1dbff9632c3e02a8773449349
+sentence-transformers==5.1.2
+transformers==4.57.1
+numpy==2.3.4
+scipy==1.16.3
+scikit-learn==1.7.2
+Pillow==12.0.0
+safetensors==0.6.2
+regex==2025.10.23
+sympy==1.14.0
+mpmath==1.3.0
+networkx==3.5
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+joblib==1.5.2
+threadpoolctl==3.6.0
+setuptools==84.2.1

@@ -124,3 +124,20 @@ schema. This pre-merge schema extension requires Soulaiman's handoff review.
 KEV/CNA enrichment remains attached to CVE records with source provenance chains;
 consumers must cite supplemental claims to their own snapshots. Dataset split
 metadata is not model evidence. See the [source-selection rationale](../../datasets/knowledge/SOURCE_SELECTION.md).
+
+## S2-T02 request-filter alignment — 2026-10-29
+
+The local draft retrieval-request source enum now includes the `detection_rule`
+and `playbook` values already added to evidence by S2-T01. Its unique-item bound
+is eight, matching the complete evidence source enum. This completes that draft
+extension for request filters; request/response shapes and version envelopes are
+unchanged. Consumers with copied enums/bounds must refresh both validators.
+This local correction and downstream impact require review before publication;
+it does not authorize changing an adopted immutable contract release in place.
+
+The S2-T02 vector adapter accepts vector mode and source/snapshot filters, emits
+only closed evidence objects and preserves request/trace IDs. Empty results are
+successful responses; dependency/integrity/eligibility failures are errors with
+empty evidence. Runtime query-token limits can reject a query that fits the
+4,000-character schema bound. Unsupported graph/hybrid modes are explicit errors
+in this adapter. API transport integration remains S2-T05 work.

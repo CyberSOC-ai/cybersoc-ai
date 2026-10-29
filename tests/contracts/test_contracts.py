@@ -55,6 +55,17 @@ class ContractsTest(unittest.TestCase):
             with self.subTest(contract=name):
                 self.validators[name].validate(value)
 
+    def test_retrieval_sources_match_evidence_sources(self):
+        sources = self.schemas['common']['$defs']['evidence']['properties']['source']['enum']
+        record = deepcopy(self.examples['retrieval-request'])
+        record['filters']['sources'] = sources
+        self.validators['retrieval-request'].validate(record)
+        record['filters']['sources'] = ['detection_rule', 'playbook']
+        self.validators['retrieval-request'].validate(record)
+        for values in (['playbook', 'playbook'], ['invented']):
+            record['filters']['sources'] = values
+            self.assertInvalid('retrieval-request', record)
+
     def test_required_fields_and_closed_objects(self):
         for name in NAMES:
             for field in self.schemas[name]['required']:

@@ -1,0 +1,90 @@
+{
+  "record_version": "1.0.0",
+  "task_id": "S2-T02",
+  "status": "proposed_design_not_runnable",
+  "selected_at": "2026-10-29",
+  "chunking_config": "chunking-v1.json",
+  "embedding": {
+    "model_id": "BAAI/bge-small-en-v1.5",
+    "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+    "tokenizer_id": "BAAI/bge-small-en-v1.5",
+    "tokenizer_revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+    "license": "MIT",
+    "weights_file": "model.safetensors",
+    "expected_weights_sha256": "3c9f31665447c8911517620762200d2245a2518d6e7208acc78cd9db317e21ad",
+    "expected_weights_bytes": 133466304,
+    "weights_verification": "required_before_local_loading",
+    "runtime": "sentence-transformers",
+    "python_target": "3.12",
+    "dependency_lock": "requirements.txt + requirements-embeddings.txt (Linux/amd64 Python 3.12)",
+    "device": "cpu",
+    "dtype": "float32",
+    "quantization": "none",
+    "trust_remote_code": false,
+    "pooling": "cls",
+    "normalize_embeddings": true,
+    "dimensions": 384,
+    "max_input_tokens_including_special_tokens": 512,
+    "document_prefix": "",
+    "query_prefix": "Represent this sentence for searching relevant passages: ",
+    "document_overflow": "split_before_encoding",
+    "query_overflow": "reject_with_explicit_error",
+    "initial_batch_size": 16,
+    "initial_cpu_threads": 4
+  },
+  "vector_store": {
+    "engine": "qdrant",
+    "mode": "local_docker_server",
+    "server_version": "1.20.0",
+    "server_commit": "222b2e44ab1c3f17e8246396ead6558e45041df7",
+    "license": "Apache-2.0",
+    "platform": "linux/amd64",
+    "image": "qdrant/qdrant:v1.20.0@sha256:2d1b0bfd0a961275481ea09400fc98008216ae54e1b52ed7d24520d63050c644",
+    "transport": "rest",
+    "host_endpoint": "http://127.0.0.1:6333",
+    "persistence": {
+      "type": "docker_named_volume",
+      "planned_volume_name": "cybersoc-s2t02-qdrant",
+      "container_path": "/qdrant/storage"
+    },
+    "collection_name_templates": {
+      "knowledge": "knowledge_{build_id}",
+      "soc_history": "soc_history_{build_id}"
+    },
+    "create_collection_request": {
+      "vectors": {
+        "size": 384,
+        "distance": "Cosine",
+        "datatype": "float32",
+        "memory": "cold"
+      },
+      "payload": { "memory": "cold" },
+      "hnsw_config": {
+        "m": 16,
+        "ef_construct": 100,
+        "memory": "cached"
+      },
+      "shard_number": 1,
+      "replication_factor": 1,
+      "write_consistency_factor": 1
+    },
+    "quantization": "none",
+    "initial_search_params": { "hnsw_ef": 128, "exact": false },
+    "score_threshold": null,
+    "planned_payload_indexes": {
+      "source": "keyword",
+      "snapshot_ref": "keyword",
+      "source_record_id": "keyword",
+      "platforms": "keyword",
+      "source_status": "keyword",
+      "split": "keyword",
+      "incident_group_id": "keyword",
+      "test_frozen": "bool"
+    }
+  },
+  "pending_before_build": [
+    "Bind a verified corpus release and eligibility policy to the immutable build manifest.",
+    "Record configuration digest, code revision/dirty state and all effective server settings.",
+    "Implement and test acquisition, embedding, filtered indexing and restart/reload in later steps."
+  ]
+}
