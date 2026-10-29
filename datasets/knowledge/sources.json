@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "selection": "s2-t01-expanded-v1",
+  "selection": "s2-t01-expanded-v2",
   "owner": "Ahmed",
   "sources": {
     "cve_program": {
@@ -71,7 +71,9 @@
     "mitre_attack_revision": "c2494b29dd268c46a5d0ea0990553e4327cd2253",
     "cwe_version": "5.0",
     "nvd_years": [
-      2024
+      2024,
+      2025,
+      2026
     ]
   }
 }

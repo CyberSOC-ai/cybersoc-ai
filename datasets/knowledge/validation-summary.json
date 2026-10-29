@@ -1,8 +1,14 @@
 {
   "date": "2026-10-29",
   "branch": "feature/16-knowledge-ingestion",
-  "base_commit": "5aae31a793a4e2a2a54223f65b8c79b71d704b59",
-  "publication_status": "expanded_followup_local_not_pushed",
+  "base_commit": "0eff293c092b44f8a13beac16bbb46a0ee4e5111",
+  "publication_status": "2024_2026_followup_local_not_pushed",
+  "coverage_years": [
+    2024,
+    2025,
+    2026
+  ],
+  "ingestion_tests_rerun": 44,
   "test_suites": {
     "contracts": 19,
     "evaluation": 43,
@@ -31,6 +37,10 @@
       "normalized/mitre_attack/records.jsonl",
       "normalized/nvd-2024/manifest.json",
       "normalized/nvd-2024/records.jsonl",
+      "normalized/nvd-2025/manifest.json",
+      "normalized/nvd-2025/records.jsonl",
+      "normalized/nvd-2026/manifest.json",
+      "normalized/nvd-2026/records.jsonl",
       "normalized/otrf/manifest.json",
       "normalized/otrf/records.jsonl",
       "normalized/playbook/manifest.json",
@@ -46,9 +56,9 @@
   },
   "release": {
     "corpus": {
-      "accepted": 40196,
+      "accepted": 164201,
       "by_source": {
-        "cve": 38494,
+        "cve": 162499,
         "cwe": 956,
         "detection_rule": 3,
         "mitre_attack": 706,
@@ -145,6 +155,62 @@
             "usage_scope": "project-retrieval"
           },
           "snapshot_manifest_sha256": "34a5443128a4611173362d5f860ea89b70d862f8d8089bb29081efebcf719c4c"
+        },
+        {
+          "accepted": 43642,
+          "considered": 45432,
+          "corpus_use": "retrieval",
+          "excluded": {
+            "rejected_cve": 1790
+          },
+          "implementation_sha256": "4f37e6dcb611d54f5b9682138d24d2850500bd891634e7e862e8908c61c51243",
+          "normalizer_version": "1.0.0",
+          "record_schema_sha256": "65dccf7b24de2ec6c094b94437023ae0be4afff78aed27c53ef7bc00f56b59b6",
+          "records_sha256": "6525e9a659a2d39551e7833f6286fb7bb09c992c21a6a6e0477a2f101c56efad",
+          "schema_version": "1.0.0",
+          "snapshot": {
+            "acquired_at": "2026-10-29T00:41:58Z",
+            "artifact_ref": "sha256:a4efc99c24c6cef42ed575556e2b097069c913704b8f40904ca83b4cdfefab2f",
+            "license_ref": "https://www.nist.gov/open/copyright-fair-use-and-licensing-statements-srd-data-software-and-technical-series-publications",
+            "notice_ref": "sha256:098dcf399d9aa4a476db44ea6da3dac7d895eaf2693ada39367c7670ed8a9dfb",
+            "notice_sha256": "098dcf399d9aa4a476db44ea6da3dac7d895eaf2693ada39367c7670ed8a9dfb",
+            "owner": "Ahmed",
+            "schema_version": "1.0.0",
+            "sha256": "a4efc99c24c6cef42ed575556e2b097069c913704b8f40904ca83b4cdfefab2f",
+            "source": "cve",
+            "source_url": "https://nvd.nist.gov/feeds/json/cve/2.0/nvdcve-2.0-2025.json.gz",
+            "upstream_version": "NVD-2.0:2025:sha256:a4efc99c24c6cef42ed575556e2b097069c913704b8f40904ca83b4cdfefab2f",
+            "usage_scope": "project-retrieval"
+          },
+          "snapshot_manifest_sha256": "2656022cbe8ffa9468ac1b7466b5dee7ab0de968c4ba5a91ac59c67493bddb3a"
+        },
+        {
+          "accepted": 80363,
+          "considered": 81464,
+          "corpus_use": "retrieval",
+          "excluded": {
+            "rejected_cve": 1101
+          },
+          "implementation_sha256": "4f37e6dcb611d54f5b9682138d24d2850500bd891634e7e862e8908c61c51243",
+          "normalizer_version": "1.0.0",
+          "record_schema_sha256": "65dccf7b24de2ec6c094b94437023ae0be4afff78aed27c53ef7bc00f56b59b6",
+          "records_sha256": "2394f88480a7d2a2f33886641f41fc03853b0327bf463c9abee3578ce5258e71",
+          "schema_version": "1.0.0",
+          "snapshot": {
+            "acquired_at": "2026-10-29T00:41:58Z",
+            "artifact_ref": "sha256:852cad2fad04e4256bc6c58f816cedc503f2bfa680b5e4be773e2d3a8d45e529",
+            "license_ref": "https://www.nist.gov/open/copyright-fair-use-and-licensing-statements-srd-data-software-and-technical-series-publications",
+            "notice_ref": "sha256:7d473cac86a94654d5b1d7a7cedf8cb17a6d2704500706a09db6ac1bd41fc5d9",
+            "notice_sha256": "7d473cac86a94654d5b1d7a7cedf8cb17a6d2704500706a09db6ac1bd41fc5d9",
+            "owner": "Ahmed",
+            "schema_version": "1.0.0",
+            "sha256": "852cad2fad04e4256bc6c58f816cedc503f2bfa680b5e4be773e2d3a8d45e529",
+            "source": "cve",
+            "source_url": "https://nvd.nist.gov/feeds/json/cve/2.0/nvdcve-2.0-2026.json.gz",
+            "upstream_version": "NVD-2.0:2026:sha256:852cad2fad04e4256bc6c58f816cedc503f2bfa680b5e4be773e2d3a8d45e529",
+            "usage_scope": "project-retrieval"
+          },
+          "snapshot_manifest_sha256": "ca6a23feb54d7caddca3b7b9753b358ac97a9e4acbcc00f7dd3305a77f6ce412"
         },
         {
           "accepted": 5,
@@ -340,9 +406,9 @@
       ],
       "joined_cve_records": 5,
       "kev_catalog_records": 1762,
-      "kev_enriched_cves": 164,
-      "kev_without_indexed_cve": 1598,
-      "records_sha256": "081bf66fe0df5f887baefba2e02263203ac267da2b371f1fb6114c693486b885",
+      "kev_enriched_cves": 544,
+      "kev_without_indexed_cve": 1218,
+      "records_sha256": "d2226bce888a6ca57f21616b61a16e4569b8525ce04582f93d3c847cd46dda83",
       "relationships_sha256": "baba176a41b46d273895c85a64283788b85c3fae6c0477d7ec943a8099e538b9",
       "schema_version": "1.0.0"
     },
@@ -357,7 +423,7 @@
     },
     "implementation_sha256": "4f37e6dcb611d54f5b9682138d24d2850500bd891634e7e862e8908c61c51243",
     "schema_version": "1.0.0",
-    "selection_sha256": "7094722d1c79655affa33930cb679b8564a6b04acd8269500b8be4bbab84bd6e",
+    "selection_sha256": "ebf89d0306041e0d2a3647d14179febbe81c8685e0688b1248577e851f9f73c5",
     "sources": {
       "cve_program": {
         "accepted": 5,
@@ -497,6 +563,62 @@
           "usage_scope": "project-retrieval"
         },
         "snapshot_manifest_sha256": "34a5443128a4611173362d5f860ea89b70d862f8d8089bb29081efebcf719c4c"
+      },
+      "nvd-2025": {
+        "accepted": 43642,
+        "considered": 45432,
+        "corpus_use": "retrieval",
+        "excluded": {
+          "rejected_cve": 1790
+        },
+        "implementation_sha256": "4f37e6dcb611d54f5b9682138d24d2850500bd891634e7e862e8908c61c51243",
+        "normalizer_version": "1.0.0",
+        "record_schema_sha256": "65dccf7b24de2ec6c094b94437023ae0be4afff78aed27c53ef7bc00f56b59b6",
+        "records_sha256": "6525e9a659a2d39551e7833f6286fb7bb09c992c21a6a6e0477a2f101c56efad",
+        "schema_version": "1.0.0",
+        "snapshot": {
+          "acquired_at": "2026-10-29T00:41:58Z",
+          "artifact_ref": "sha256:a4efc99c24c6cef42ed575556e2b097069c913704b8f40904ca83b4cdfefab2f",
+          "license_ref": "https://www.nist.gov/open/copyright-fair-use-and-licensing-statements-srd-data-software-and-technical-series-publications",
+          "notice_ref": "sha256:098dcf399d9aa4a476db44ea6da3dac7d895eaf2693ada39367c7670ed8a9dfb",
+          "notice_sha256": "098dcf399d9aa4a476db44ea6da3dac7d895eaf2693ada39367c7670ed8a9dfb",
+          "owner": "Ahmed",
+          "schema_version": "1.0.0",
+          "sha256": "a4efc99c24c6cef42ed575556e2b097069c913704b8f40904ca83b4cdfefab2f",
+          "source": "cve",
+          "source_url": "https://nvd.nist.gov/feeds/json/cve/2.0/nvdcve-2.0-2025.json.gz",
+          "upstream_version": "NVD-2.0:2025:sha256:a4efc99c24c6cef42ed575556e2b097069c913704b8f40904ca83b4cdfefab2f",
+          "usage_scope": "project-retrieval"
+        },
+        "snapshot_manifest_sha256": "2656022cbe8ffa9468ac1b7466b5dee7ab0de968c4ba5a91ac59c67493bddb3a"
+      },
+      "nvd-2026": {
+        "accepted": 80363,
+        "considered": 81464,
+        "corpus_use": "retrieval",
+        "excluded": {
+          "rejected_cve": 1101
+        },
+        "implementation_sha256": "4f37e6dcb611d54f5b9682138d24d2850500bd891634e7e862e8908c61c51243",
+        "normalizer_version": "1.0.0",
+        "record_schema_sha256": "65dccf7b24de2ec6c094b94437023ae0be4afff78aed27c53ef7bc00f56b59b6",
+        "records_sha256": "2394f88480a7d2a2f33886641f41fc03853b0327bf463c9abee3578ce5258e71",
+        "schema_version": "1.0.0",
+        "snapshot": {
+          "acquired_at": "2026-10-29T00:41:58Z",
+          "artifact_ref": "sha256:852cad2fad04e4256bc6c58f816cedc503f2bfa680b5e4be773e2d3a8d45e529",
+          "license_ref": "https://www.nist.gov/open/copyright-fair-use-and-licensing-statements-srd-data-software-and-technical-series-publications",
+          "notice_ref": "sha256:7d473cac86a94654d5b1d7a7cedf8cb17a6d2704500706a09db6ac1bd41fc5d9",
+          "notice_sha256": "7d473cac86a94654d5b1d7a7cedf8cb17a6d2704500706a09db6ac1bd41fc5d9",
+          "owner": "Ahmed",
+          "schema_version": "1.0.0",
+          "sha256": "852cad2fad04e4256bc6c58f816cedc503f2bfa680b5e4be773e2d3a8d45e529",
+          "source": "cve",
+          "source_url": "https://nvd.nist.gov/feeds/json/cve/2.0/nvdcve-2.0-2026.json.gz",
+          "upstream_version": "NVD-2.0:2026:sha256:852cad2fad04e4256bc6c58f816cedc503f2bfa680b5e4be773e2d3a8d45e529",
+          "usage_scope": "project-retrieval"
+        },
+        "snapshot_manifest_sha256": "ca6a23feb54d7caddca3b7b9753b358ac97a9e4acbcc00f7dd3305a77f6ce412"
       },
       "otrf": {
         "accepted": 12,
@@ -638,6 +760,12 @@
         "splits_sha256": "ad6e12180399dcbd7fb0369fdae6ccb7eef60e6bf116f8a85b274f59afd6ba3f"
       }
     }
+  },
+  "change_scope": "source selection and documentation only; ingestion code and schemas unchanged",
+  "sqlite_cve_year_counts": {
+    "2024": 38494,
+    "2025": 43642,
+    "2026": 80363
   },
   "repository_integrity": "passed: 230 tracked text files",
   "staged_whitespace": "passed",

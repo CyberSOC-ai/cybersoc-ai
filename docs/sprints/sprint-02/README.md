@@ -34,7 +34,9 @@ S2-T08 IOC-feed ingestion remains Backlog.
 2026-10-29 — Completed the expanded local [knowledge-ingestion implementation](../../../rag/ingestion/README.md)
 on `feature/16-knowledge-ingestion`. The user approved including bulk CVE/NVD,
 CISA KEV, Sigma, playbooks and selected OTRF/Splunk examples alongside ATT&CK,
-CWE and existing lab history. The earlier draft is [PR #86](https://github.com/CyberSOC-ai/cybersoc-ai/pull/86);
+CWE and existing lab history. The user subsequently authorized adding the 2025
+and 2026 annual NVD feeds alongside 2024; the selection now covers all three
+identifier years through their acquisition snapshots. The earlier draft is [PR #86](https://github.com/CyberSOC-ai/cybersoc-ai/pull/86);
 these follow-up changes are local and have not been pushed. User review precedes
 any further push. No merge, issue closure or independent peer approval is claimed.
 
@@ -65,21 +67,28 @@ Python 3.12.15 development image rebuilt. All 169 tests passed: 19 contracts,
 Ruff passed. Expanded tests cover streaming bounds/counts/duplicate keys, NVD META
 integrity, exact vulnerability joins, input-corpus tampering, source revision pins,
 Git LFS identity, safe YAML and real external event formats/split exclusion.
-Full-source replay and final check details are in the
+The 44 ingestion tests passed again for the three-year selection update; its
+code/schemas are unchanged. Full-source replay and final check details are in the
 [validation record](../../../datasets/knowledge/VALIDATION.md). CI for the previously
 published draft does not validate these unpushed changes.
 
 ## Results / metrics
 
-The local collection contains 40,196 searchable documents/excerpts: 38,494 CVEs
-from the full NVD 2024 feed, 706 ATT&CK techniques, 956 CWE weaknesses, three Linux
-Sigma rules, two Windows playbooks and 35 SOC excerpts/observations. Exported 21,660
-ATT&CK relationships separately. Five selected official CVE records join existing
-CVE documents; 164 CVEs gain KEV context from a 1,762-record catalog. The remaining
-1,598 KEV records remain structured lookup entries without duplicate vector docs.
-These are collection counts, not model/retrieval-quality results. The annual feed
-is not an all-years mirror, the official CVE supplement is five records, and the
-external event selection is 33 excerpts rather than independent incidents.
+The updated local collection contains 164,201 prepared documents/excerpts:
+162,499 CVEs across 2024 (38,494), 2025 (43,642) and 2026 (80,363),
+706 ATT&CK techniques, 956 CWE weaknesses, three Linux Sigma rules, two Windows
+playbooks and 35 SOC excerpts/observations. Exported 21,660 ATT&CK relationships
+separately. Five official CVE records join existing documents; 544 CVEs gain KEV
+context from a 1,762-record catalog, with 1,218 unmatched entries retained for
+structured lookup. Two independent full builds reproduced 28 JSONL/report files
+byte-for-byte, and exact CVE-year counts were checked in SQLite.
+
+These are collection counts, not retrieval/model-quality results. The three-year
+selection is not an all-years mirror; 2026 covers records available at acquisition.
+The official CVE supplement is five records, and the external event selection is
+33 excerpts rather than independent incidents. Data lives on this PC under
+`.local/ingestion/`; the container mount is the same host directory. Git excludes
+these datasets. S2-T02 will build the vector index from the prepared records.
 
 ## Problems encountered
 

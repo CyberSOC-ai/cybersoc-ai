@@ -11,9 +11,10 @@ Read [the selection and coverage rationale](../../datasets/knowledge/SOURCE_SELE
 and its [exact revisions/files](../../datasets/knowledge/sources.json) first.
 The corpus combines ATT&CK, a full annual NVD feed, selected official CVE records,
 KEV enrichment, CWE, selected Sigma rules/playbooks, our existing normalized lab
-observations and selected OTRF/Splunk excerpts. Current selection covers NVD 2024;
-it is not an all-years vulnerability mirror. Add explicit years to `nvd_years`
-to expand coverage. Older/current years may be important for your asset inventory.
+observations and selected OTRF/Splunk excerpts. Current selection covers the NVD 2024, 2025 and 2026 identifier-year feeds,
+with 2026 limited to records available at acquisition. It is not an all-years
+vulnerability mirror. Add explicit years to `nvd_years` to expand coverage;
+older vulnerabilities may still matter for your asset inventory.
 
 CVE providers are joined by exact CVE ID into one searchable document. KEV catalog
 entries enrich matching CVEs and remain available for structured lookup. Active
@@ -39,7 +40,7 @@ links. All retrieved/source prose remains untrusted data.
 ## 2. Acquire and build a fresh selection
 
 ```sh
-docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion.build --artifacts /artifacts --output /artifacts/release-v1 --acquire --lab-acquired-at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion.build --artifacts /artifacts --output /artifacts/s2-t01-2024-2026-release --acquire --lab-acquired-at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 ```
 
 `--acquire` explicitly enables bounded provider downloads. Existing snapshots are
@@ -54,7 +55,7 @@ Without `--acquire`, the same build is fully offline and fails if a required
 snapshot is missing:
 
 ```sh
-docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion.build --artifacts /artifacts --output /artifacts/release-v1-replay
+docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion.build --artifacts /artifacts --output /artifacts/s2-t01-2024-2026-replay
 ```
 
 Replaying identical snapshots, policies, selection, code and dependency versions
@@ -75,6 +76,14 @@ normalization does not add a fresh wall-clock timestamp to every record.
 | `corpus/manifest.json` | Input manifests, final hashes/counts, CVE joins, KEV coverage and corpus-use restriction |
 | `corpus/notice-*.txt` | Source notices corresponding to ordered input manifests |
 
+All source and release files live on the host PC under `.local/ingestion/`.
+The `/artifacts` container path is a bind mount of that same local directory,
+not remote storage. `nvd-2024/`, `nvd-2025/` and `nvd-2026/` retain the raw annual
+feeds. The derived `facts.sqlite` is a reference store, not the future vector
+index. S2-T02 will create embeddings and load the selected index from these
+prepared records; the model will receive retrieved passages rather than the whole
+database. Neither model training nor per-question annual-feed downloads occur.
+
 The public upstream snapshots/ZIPs, selected source bytes and acquisition receipts
 remain in the artifact root. Releases preserve their hashes/references. Shared
 artifact storage is not selected by this task; local artifact paths do not provide
@@ -84,7 +93,7 @@ notice pages, for exact replay. All raw/generated datasets remain outside Git.
 Exact lookup example (replace the release directory if needed):
 
 ```sh
-docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion.corpus lookup --corpus /artifacts/release-v1/corpus --cve CVE-2024-6387
+docker compose run --rm -T -v "$PWD/.local/ingestion:/artifacts" dev python -B -m rag.ingestion.corpus lookup --corpus /artifacts/s2-t01-2024-2026-release/corpus --cve CVE-2024-6387
 ```
 
 This returns structured reference facts, not a judgment that the lab is vulnerable.

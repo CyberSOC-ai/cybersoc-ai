@@ -8,7 +8,7 @@ security coverage.
 | Source | Acquisition and role | Coverage boundary |
 |---|---|---|
 | MITRE ATT&CK Enterprise | Existing commit-pinned STIX snapshot; active techniques for reference and separate relationships for graph preparation | Other STIX object types excluded; graph endpoints can refer to upstream objects outside this selection |
-| NVD | Entire official annual JSON 2.0 feed for **2024**, verified against its META size/SHA-256; bulk vulnerability reference | Covers that identifier year, not all historical/current CVEs; add explicit years in the selection for a broader mirror |
+| NVD | Official annual JSON 2.0 feeds for **2024, 2025 and 2026**, each verified against its META size/SHA-256; bulk vulnerability reference | Covers these three identifier years through their acquisition timestamps; 2026 is year-to-date, not the full future year; earlier CVEs are outside this selection |
 | Official CVE List V5 | Five commit-pinned CVE records: CVE-2024-6387, CVE-2024-3094, CVE-2024-1086, CVE-2024-2961, CVE-2024-3400 | Focused primary-record supplement; not a complete CVE List mirror and not evidence our lab has these vulnerabilities |
 | CISA KEV | Full commit-pinned catalog; exact CVE-ID enrichment plus structured lookup | Catalog membership is known-exploitation context; absence is not evidence of safety, and membership does not prove our incident was exploited |
 | MITRE CWE | Existing release 5.0 snapshot; active weakness descriptions/relationships | Consumed XML fields validated; no full upstream XSD validation |
@@ -22,6 +22,22 @@ methods. Current Wazuh observations remain the evidence for what occurred in an
 actual incident. External examples provide development material; their labels
 must not become retrieval answers. Keep a separately reviewed frozen evaluation
 set outside the corpus.
+
+## Local storage and RAG handoff
+
+Downloads and generated artifacts are ordinary files on the project computer in
+`.local/ingestion/`. Docker mounts that same host directory as `/artifacts`; it
+is not a cloud upload or a second remote database. The annual source directories
+are `nvd-2024/`, `nvd-2025/` and `nvd-2026/`; each retains compressed JSON,
+decompressed JSON, META integrity data, its source notice and acquisition manifest.
+
+The combined release contains normalized JSONL and a derived `facts.sqlite`
+reference store. Neither is the vector database. S2-T02 will chunk/embed the
+prepared text and load the selected vector index. At query time retrieval will
+select bounded evidence from that index; the language model does not receive the
+entire CVE database or download the annual feeds for each question. Raw/generated
+artifacts remain ignored by Git; another machine must acquire or receive the
+snapshots through the agreed artifact workflow. No model training happens here.
 
 ## Vulnerability joins
 
