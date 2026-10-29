@@ -136,43 +136,93 @@ helps downstream retrieval; corpus size alone does not demonstrate answer qualit
 # 2. Soulaiman
 ## Assigned tasks
 
-S2-T02
+S2-T02 — Chunking, embeddings and vector index. Reviewer: Ahmed.
 
 ## Work completed
 
-> To be completed from validated sprint evidence.
+2026-10-29 — Local implementation and validation completed on
+`codex/17-chunking-embeddings-vector-index`, ready for review. Implemented pinned
+model acquisition, token-aware chunking, CPU embeddings, persistent separate
+knowledge/SOC collections, metadata filters and query-to-cited-evidence retrieval.
+The implementation was validated using a documented development corpus; formal
+Done still requires the PR/CI/review/closure workflow.
 
 ## Technical approach
 
-> To be completed from validated sprint evidence.
+Use the hash-pinned BGE-small model/tokenizer on CPU with CLS pooling, normalized
+384-value float32 vectors and cosine search. Chunk exact source slices at 384 total
+tokens with up to 48 overlap and a 16,000-character cap. Preserve deterministic
+IDs, citation provenance, notices, source status and SOC split/group/run lineage.
+Verify eligibility/hashes before publishing artifacts. Store vectors in pinned
+local Qdrant on a named volume with typed payload indexes. Query filters apply
+before global top-K; only closed evidence-contract fields cross the model boundary.
 
 ## Files / components modified
 
-> To be completed from validated sprint evidence.
+Added `rag/vector/` acquisition/chunking/embedding/index/retrieval modules,
+configuration and guide, `tests/vector/`, optional CPU embedding requirements and
+Dockerfile. Updated regular dependency pins, Compose's optional Qdrant profile,
+CI, ADR-001 and contract documentation/tests. Corrected the draft request source
+enum/bound to match the existing eight evidence sources. Added the evaluator
+preparation command and S2-T03 setup guide for rebuilding an index from approved
+inputs without private local artifacts.
 
 ## Tests / validation
 
-> To be completed from validated sprint evidence.
+Validation covers real tokenizer bounds/coverage, model/file integrity, finite
+normalized embeddings, CLS pooling and batch agreement, repeatable saved vectors,
+artifact tampering, atomic failure, source separation, typed filters, persistence,
+readback, snapshot recovery, query/error behavior and closed citation projection.
+The final 406-point development index is the review target. Source data, model
+weights and large/generated evidence remain ignored locally. Hosted CI and peer
+review have not been claimed from local tests.
+All 220 project tests passed, including 50 vector tests. All 380 filter-value checks
+passed before/after container recreation; snapshot recovery reproduced all 406
+points and settings. Six real query cases and reader reload passed. See the
+[final validation record](../../../rag/vector/VALIDATION.md).
 
 ## Results / metrics
 
-> To be completed from validated sprint evidence.
+Validation selection: 340 records -> 406 passages/vectors: 369 knowledge points
+and 37 SOC points. It contains 100 CVEs, 100 CWEs, 100 ATT&CK techniques, all three
+selected Sigma rules, both playbooks and all 35 prepared SOC records. The selection
+limit is explicit in manifests; this is not full knowledge-corpus coverage.
+
+Additional evidence: fresh ingestion replay contained 164,793 records and 21,660
+separate relationships. Complete chunking produced 174,883 passages in 868 seconds,
+about 65 MiB peak process RSS. The 406-passage CPU encoding build took about 136
+seconds total, 114 seconds inference/write, about 735 MiB peak RSS. These are
+exploratory measurements; no gold-label retrieval-quality or full-index scale
+benchmark is claimed.
 
 ## Problems encountered
 
-> To be completed from validated sprint evidence.
+Normalized text has flattened whitespace; splitting uses actual tokenizer offsets.
+Distinct CVE identities with shared descriptions remain separate. One heading-only
+placeholder is excluded explicitly and ten short descriptions retain flags.
+SOC data remains development-only with no frozen test split. Copied source-enum
+validators must refresh for detection-rule/playbook request filters.
 
 ## Decisions made
 
-> To be completed from validated sprint evidence.
+[Issue #17](https://github.com/CyberSOC-ai/cybersoc-ai/issues/17) does not explicitly
+mandate GPU execution or indexing every acquired record. A full-corpus run was
+an expanded validation proposal and is not treated as a completion gate. Corpus
+coverage is disclosed for Ahmed to assess against downstream needs. Keep CPU
+configuration reproducible and ADR-001 Proposed until reviewed. Publish code and
+sanitized validation records; keep acquired data/model/index artifacts outside Git.
 
 ## Related Issues / Pull Requests
 
-> To be completed from validated sprint evidence.
+[S2-T02 / #17](https://github.com/CyberSOC-ai/cybersoc-ai/issues/17).
+Reviewer: Ahmed. Local work only; no PR or push yet.
 
 ## Learning outcome
 
-> To be completed from validated sprint evidence.
+The embedding model turns source passages into vectors; Qdrant persists and filters
+them. Query encoding must match the indexed model, and retrieved source slices
+need explicit citations. Passing pipeline checks does not establish retrieval
+relevance, independent test eligibility or complete source coverage.
 
 
 # 3. Anas

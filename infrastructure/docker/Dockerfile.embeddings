@@ -1,0 +1,11 @@
+FROM python:3.12-slim-bookworm
+
+COPY requirements.txt requirements-embeddings.txt /tmp/
+RUN python -m pip install --no-cache-dir -r /tmp/requirements.txt -r /tmp/requirements-embeddings.txt \
+    && python -m pip check
+
+WORKDIR /workspace
+RUN useradd --create-home --uid 1000 dev
+USER dev
+ENV HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 TOKENIZERS_PARALLELISM=false
+CMD ["python", "--version"]

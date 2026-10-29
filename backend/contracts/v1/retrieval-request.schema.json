@@ -42,10 +42,12 @@
               "cwe",
               "threat_intel",
               "soc_log",
-              "graph"
+              "graph",
+              "detection_rule",
+              "playbook"
             ]
           },
-          "maxItems": 6,
+          "maxItems": 8,
           "uniqueItems": true
         },
         "snapshot_refs": {

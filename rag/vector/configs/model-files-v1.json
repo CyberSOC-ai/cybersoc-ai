@@ -1,0 +1,51 @@
+{
+  "files": {
+    "tokenizer.json": {
+      "bytes": 711396,
+      "git_blob_sha1": "688882a79f44442ddc1f60d70334a7ff5df0fb47"
+    },
+    "README.md": {
+      "bytes": 94783,
+      "git_blob_sha1": "8b8567d75ffa619486d9590cb0eb76d66ad46c49"
+    },
+    "tokenizer_config.json": {
+      "bytes": 366,
+      "git_blob_sha1": "37fca74771bc76a8e01178ce3a6055a0995f8093"
+    },
+    "vocab.txt": {
+      "bytes": 231508,
+      "git_blob_sha1": "fb140275c155a9c7c5a3b3e0e77a9e839594a938"
+    },
+    "1_Pooling/config.json": {
+      "bytes": 190,
+      "git_blob_sha1": "1da070f0993788c8851a652170ff013aa54dd519"
+    },
+    "sentence_bert_config.json": {
+      "bytes": 52,
+      "git_blob_sha1": "ea85692bff64b0d1917833c31ddbca8ab10f5455"
+    },
+    "config_sentence_transformers.json": {
+      "bytes": 124,
+      "git_blob_sha1": "dcb0c0d97d09b930d13600b1a773ddb27e441aab"
+    },
+    "modules.json": {
+      "bytes": 349,
+      "git_blob_sha1": "952a9b81c0bfd99800fabf352f69c7ccd46c5e43"
+    },
+    "special_tokens_map.json": {
+      "bytes": 125,
+      "git_blob_sha1": "a8b3208c2884c4efb86e49300fdd3dc877220cdf"
+    },
+    "config.json": {
+      "bytes": 743,
+      "git_blob_sha1": "3992bf890728a92476c700e6e657fd696eb94160"
+    },
+    "model.safetensors": {
+      "bytes": 133466304,
+      "sha256": "3c9f31665447c8911517620762200d2245a2518d6e7208acc78cd9db317e21ad",
+      "git_blob_sha1": "a4fef68c99b10468206a9bc1d54d0112d87c5557"
+    }
+  },
+  "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+  "model_id": "BAAI/bge-small-en-v1.5"
+}
