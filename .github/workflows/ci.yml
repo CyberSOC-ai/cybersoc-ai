@@ -36,5 +36,7 @@ jobs:
         run: docker compose run --rm -T dev python -B -m unittest discover -s tests/backend -v
       - name: Run SOC normalizer tests
         run: docker compose run --rm -T dev python -B -m unittest discover -s tests/normalizer -v
+      - name: Run offline knowledge ingestion tests
+        run: docker compose run --rm -T dev python -B -m unittest discover -s tests/ingestion -v
       - name: Run baseline runner tests (no models required)
         run: docker compose run --rm -T dev python -B -m unittest discover -s tests/baseline -v

@@ -35,3 +35,7 @@ pydantic_core==2.50.1
 starlette==1.9.0
 typing-inspection==0.4.4
 uvicorn==0.54.0
+
+# S2-T01 streaming bulk JSON and safe upstream Sigma YAML parsing.
+ijson==3.6.0
+PyYAML==6.0.3

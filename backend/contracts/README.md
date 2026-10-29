@@ -111,3 +111,16 @@ test dependency on Python 3.12 and runs the full suite after repository checks.
 Existing PR/main triggers, read-only workflow permissions and the required job
 name remain unchanged. Hosted CI execution remains pending an authorized push
 and PR; local test results are not a hosted CI result.
+
+## S2-T01 source extension — 2026-10-29
+
+The draft v1 evidence source enum additionally accepts `detection_rule` and
+`playbook` for the user-approved corpus expansion. Existing sources and valid
+examples remain accepted; no API operation or result shape changes. Consumers
+that copied/froze the enum must refresh it before ingesting these sources.
+The expanded offline tests validate both values against the retrieval-response
+schema. This pre-merge schema extension requires Soulaiman's handoff review.
+
+KEV/CNA enrichment remains attached to CVE records with source provenance chains;
+consumers must cite supplemental claims to their own snapshots. Dataset split
+metadata is not model evidence. See the [source-selection rationale](../../datasets/knowledge/SOURCE_SELECTION.md).

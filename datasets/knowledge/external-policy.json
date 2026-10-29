@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_version": "soc-eval-v1-pilot.3",
+  "splits_sha256": "ad6e12180399dcbd7fb0369fdae6ccb7eef60e6bf116f8a85b274f59afd6ba3f",
+  "assignment_ref": "datasets/knowledge/EXTERNAL_ASSIGNMENTS.md",
+  "records": [
+    {
+      "source_record": "otrf:datasets/atomic/linux/discovery/host/sh_arp_cache.zip!sh_arp_cache_2020-11-10074812.log",
+      "sha256": "6a938e0a94f2f26c153e4c8a37ef0df960b2cb46147407fda00d0344e8f375fc",
+      "group_id": "G-NETWORK-DISCOVERY",
+      "run_id": "otrf:datasets/atomic/linux/discovery/host/sh_arp_cache.zip!sh_arp_cache_2020-11-10074812.log",
+      "split": "development",
+      "related_case_ids": [],
+      "max_events": 20
+    },
+    {
+      "source_record": "splunk:datasets/attack_techniques/T1016/linux_auditd_net_tool/linux_auditd_net_tool.log",
+      "sha256": "d416f83636399c4fc3d16e05cf8865ad4b37ad09b1e9b24b2c3edf3d02f13431",
+      "group_id": "G-NETWORK-DISCOVERY",
+      "run_id": "splunk:datasets/attack_techniques/T1016/linux_auditd_net_tool/linux_auditd_net_tool.log",
+      "split": "development",
+      "related_case_ids": [],
+      "max_events": 20
+    },
+    {
+      "source_record": "splunk:datasets/attack_techniques/T1021.004/atomic_red_team/linux-sysmon.log",
+      "sha256": "5e95992f72e785344c18a10ca80a7465ce16eec4e4307566169c3619f98e6c1e",
+      "group_id": "G-SSH",
+      "run_id": "splunk:datasets/attack_techniques/T1021.004/atomic_red_team/linux-sysmon.log",
+      "split": "development",
+      "related_case_ids": [
+        "P01",
+        "P02",
+        "P03",
+        "P04",
+        "P05",
+        "P11",
+        "P13",
+        "P14"
+      ],
+      "max_events": 20
+    }
+  ]
+}
