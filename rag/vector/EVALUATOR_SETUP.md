@@ -79,6 +79,10 @@ used for preparation; retain the same `/artifacts` mount for the example below.
 
 ## Call the retriever from the evaluator
 
+For later corpus updates, use [incremental preparation](INCREMENTAL.md) to reuse
+unchanged chunks/embeddings and publish a separate index version. Keep the index
+fixed during an evaluation run.
+
 Inside the CPU inference environment with the same mount and Qdrant namespace:
 
 ```python

@@ -101,7 +101,7 @@ class Chunker:
             # Pathological offsets (e.g. normalized Unicode) must still progress.
             start = next_start if start < next_start <= end else end
 
-    def chunks(self, record):
+    def chunks(self, record, *, previous=None):
         """Return chunks plus quality decision; eligibility is enforced by the builder."""
         validate("record", record)
         source = record["source"]
@@ -125,10 +125,13 @@ class Chunker:
         flags = ["short_primary_text"] if len(body.strip()) <= self.config["short_text_characters"] else []
         prefix = reference_prefix(record)
         output = []
-        for ordinal, (start, end, count) in enumerate(self.spans(body, prefix)):
+        spans = ([(c["start_char"], c["end_char"], c["token_count"]) for c in previous]
+                 if previous else self.spans(body, prefix))
+        record_sha = digest(canonical(record))
+        for ordinal, (start, end, count) in enumerate(spans):
             content = body[start:end]
             # Full record digest binds metadata and supplemental provenance too.
-            identity = digest(canonical(["chunk-v1", digest(canonical(record)),
+            identity = digest(canonical(["chunk-v1", record_sha,
                                          self.config_sha256, ordinal, start, end, prefix, content]))
             item = {
                 "schema_version": "1.0.0", "chunk_id": "CHK-" + identity,
@@ -140,7 +143,7 @@ class Chunker:
                 "content": content, "content_sha256": digest(content.encode()),
                 "embedding_text": prefix + content, "token_count": count,
                 "parent_content_sha256": record["content_sha256"],
-                "parent_record_sha256": digest(canonical(record)),
+                "parent_record_sha256": record_sha,
                 "config_sha256": self.config_sha256, "quality_flags": flags,
                 "provenance": deepcopy(record["provenance"]),
                 "metadata": deepcopy(record["metadata"]),

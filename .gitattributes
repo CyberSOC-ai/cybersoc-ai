@@ -1,2 +1,8 @@
 # Keep the versioned inference prompt byte-stable across Windows/Linux checkouts.
 ai/baseline/prompt.txt text eol=lf
+
+# These vector-pipeline files are byte-pinned in artifact receipts. Keep
+# their checkout bytes stable on Windows and Linux (including Docker bind mounts).
+rag/vector/configs/*.json text eol=lf
+requirements-embeddings.txt text eol=lf
+infrastructure/docker/Dockerfile.embeddings text eol=lf

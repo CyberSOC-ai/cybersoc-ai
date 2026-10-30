@@ -1,6 +1,7 @@
 """Stream verified chunks through BGE in bounded batches and publish vectors."""
 
 import argparse
+from contextlib import ExitStack
 from importlib.metadata import distributions
 import hashlib
 import os
@@ -15,9 +16,10 @@ from .chunk import ROOT, git_state, implementation_identity
 from .chunking import load_config
 from .embedding import BGEEncoder, validate_vectors
 from .model import verify_model
+from .reuse import ReuseCache
 
 
-def read_manifest(directory, expected):
+def read_manifest(directory, expected, *, check_eligibility=True):
     directory = Path(directory)
     raw = read_bytes(directory / "manifest.json", 4 * 1024**2)
     if digest(raw) != expected:
@@ -28,6 +30,10 @@ def read_manifest(directory, expected):
     config, checksum, _ = load_config(directory / "chunking-config.json")
     if checksum != manifest["config_sha256"] or config != manifest["config"]:
         raise IngestionError("Chunk configuration mismatch")
+    # Historical artifacts may supply cached text/vectors after policy changes.
+    # New corpus eligibility is always checked; live index/query callers use True.
+    if not check_eligibility:
+        return manifest
     splits = read_bytes(ROOT / "datasets/evaluation/soc-eval-v1/splits.json", 16 * 1024**2)
     policies = [parse_json(read_bytes(ROOT / f"datasets/knowledge/{name}-policy.json", 16 * 1024**2))
                 for name in ("soc", "external")]
@@ -66,7 +72,7 @@ def chunk_records(directory, manifest):
         raise IngestionError("Chunk stream count/hash mismatch")
 
 
-def build(chunks, manifest_sha256, model, output, batch_size=16):
+def build(chunks, manifest_sha256, model, output, batch_size=16, *, previous=None):
     if type(batch_size) is not int or not 1 <= batch_size <= 16:
         raise IngestionError("Batch size must be between 1 and 16")
     output = Path(output)
@@ -76,20 +82,49 @@ def build(chunks, manifest_sha256, model, output, batch_size=16):
     implementation = implementation_identity()
     locks = {name: digest(read_bytes(ROOT / name, 65536)) for name in (
         "requirements.txt", "requirements-embeddings.txt", "infrastructure/docker/Dockerfile.embeddings")}
-    encoder = BGEEncoder(model)
+    encoder = BGEEncoder(model) if previous is None else None
+    model_identity = verify_model(model) if previous is not None else None
     started = time.perf_counter()
     output.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix=".embed-", dir=output.parent) as tmp:
+    with tempfile.TemporaryDirectory(prefix=".embed-", dir=output.parent) as tmp, ExitStack() as resources:
         stage = Path(tmp) / "release"
         stage.mkdir()
+        cache = None
+        if previous is not None:
+            cache = ReuseCache(Path(tmp) / "cache.sqlite")
+            resources.callback(cache.close)
+            cache.load_vectors(*previous, model_identity, locks)
+        encoded = 0
         count, checksum = 0, hashlib.sha256()
         with (stage / "vectors.jsonl").open("xb") as target:
             pending = []
 
             def flush():
-                nonlocal count
-                values = validate_vectors(encoder.encode([c["embedding_text"] for c in pending],
-                                                         [c["token_count"] for c in pending]), len(pending))
+                nonlocal count, encoded, encoder
+                if cache is None:
+                    values = validate_vectors(encoder.encode([c["embedding_text"] for c in pending],
+                                                             [c["token_count"] for c in pending]), len(pending))
+                    encoded += len(pending)
+                else:
+                    missing = {}
+                    for chunk in pending:
+                        key = digest(chunk["embedding_text"].encode())
+                        if cache.get_vector(key, chunk["token_count"]) is None:
+                            missing[key] = chunk
+                    if missing:
+                        if encoder is None:
+                            encoder = BGEEncoder(model)
+                            if encoder.identity != model_identity:
+                                raise IngestionError("Encoder model differs from cache model")
+                        texts = list(missing.values())
+                        fresh = validate_vectors(encoder.encode([c["embedding_text"] for c in texts],
+                                                                [c["token_count"] for c in texts]), len(texts))
+                        for (key, chunk), vector in zip(missing.items(), fresh, strict=True):
+                            cache.put_vector(key, chunk["token_count"], vector)
+                        encoded += len(texts)
+                    values = [cache.get_vector(digest(c["embedding_text"].encode()), c["token_count"])
+                              for c in pending]
+                    validate_vectors(values, len(pending))
                 for chunk, vector in zip(pending, values, strict=True):
                     raw = canonical({"chunk_id": chunk["chunk_id"], "point_id": chunk["point_id"],
                                      "embedding_text_sha256": digest(chunk["embedding_text"].encode()),
@@ -107,9 +142,10 @@ def build(chunks, manifest_sha256, model, output, batch_size=16):
                 flush()
         if count == 0:
             raise IngestionError("No chunks to embed")
+        effective_model = encoder.identity if encoder is not None else model_identity
         if (implementation_identity() != implementation or
                 read_manifest(chunks, manifest_sha256) != manifest or
-                verify_model(model) != encoder.identity or
+                verify_model(model) != effective_model or
                 any(digest(read_bytes(ROOT / name, 65536)) != checksum for name, checksum in locks.items())):
             raise IngestionError("Embedding inputs or implementation changed during run")
         report = {
@@ -117,14 +153,19 @@ def build(chunks, manifest_sha256, model, output, batch_size=16):
             "chunk_manifest_sha256": manifest_sha256, "chunk_build_id": manifest["build_id"],
             "chunk_stream_sha256": manifest["output_sha256"]["chunks.jsonl"],
             "corpus_use": manifest["corpus_use"], "preview_limit_per_source": manifest["preview_limit_per_source"],
-            "model": encoder.identity, "dimensions": 384, "dtype": "float32", "normalize": "l2",
-            "pooling": "cls", "device": "cpu", "batch_size": batch_size, "threads": encoder.threads,
+            "model": effective_model, "dimensions": 384, "dtype": "float32", "normalize": "l2",
+            "pooling": "cls", "device": "cpu", "batch_size": batch_size,
+            "threads": encoder.threads if encoder is not None else 4,
             "vectors": count, "vectors_sha256": checksum.hexdigest(),
             "inference_and_write_seconds": time.perf_counter() - started,
             "implementation_files": implementation, "dependency_files": locks, "git": git_state(),
             "environment": {"python": platform.python_version(), "system": platform.system(),
                             "packages": dict(sorted((d.metadata["Name"], d.version) for d in distributions()))},
         }
+        if previous is not None:
+            report["incremental"] = {"previous_chunk_manifest_sha256": previous[1],
+                                     "previous_embedding_manifest_sha256": previous[3],
+                                     "encoded_texts": encoded, "reused_vectors": count - encoded}
         report["build_id"] = digest(canonical(report))
         (stage / "manifest.json").write_bytes(canonical(report) + b"\n")
         if output.exists():

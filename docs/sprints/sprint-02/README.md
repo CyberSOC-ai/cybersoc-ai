@@ -147,6 +147,15 @@ knowledge/SOC collections, metadata filters and query-to-cited-evidence retrieva
 The implementation was validated using a documented development corpus; formal
 Done still requires the PR/CI/review/closure workflow.
 
+2026-10-30 — Local follow-up on `codex/incremental-vector-index`: added versioned
+incremental preparation, preserving the previous index and reusing unchanged
+passage spans and embedding text. Corpus additions, edits and omissions produce
+a new verified release with parent hashes and work counters. Added the
+[incremental guide](../../../rag/vector/INCREMENTAL.md) and
+[local validation record](../../../rag/vector/INCREMENTAL_VALIDATION.md).
+Publication and CI are tracked in the follow-up PR. The original S2-T02
+implementation remains in PR #87.
+
 ## Technical approach
 
 Use the hash-pinned BGE-small model/tokenizer on CPU with CLS pooling, normalized
