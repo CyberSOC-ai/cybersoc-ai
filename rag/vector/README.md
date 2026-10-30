@@ -12,6 +12,8 @@ See [VALIDATION.md](VALIDATION.md) for final coverage, artifact identities, chec
 and the remaining review/publication steps.
 Achraf can start from [EVALUATOR_SETUP.md](EVALUATOR_SETUP.md), which provides
 fresh-corpus setup and the evaluator API without laptop-specific artifact paths.
+For updated corpora, [incremental preparation](INCREMENTAL.md) reuses unchanged
+passage spans and embeddings while preserving the previous index version.
 
 The selected flow is:
 

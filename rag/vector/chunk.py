@@ -2,6 +2,7 @@
 
 import argparse
 from collections import Counter
+from contextlib import ExitStack
 import hashlib
 import os
 from pathlib import Path
@@ -10,8 +11,9 @@ import subprocess
 import tempfile
 
 from rag.ingestion.core import IngestionError, canonical, digest
-from .chunking import Chunker, DEFAULT_CONFIG
+from .chunking import Chunker, DEFAULT_CONFIG, reference_prefix
 from .inputs import CorpusInput
+from .reuse import ReuseCache
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -38,7 +40,7 @@ def git_state():
 
 def build(corpus, manifest_sha256, tokenizer, output, *, config=DEFAULT_CONFIG,
           splits=ROOT / "datasets/evaluation/soc-eval-v1/splits.json",
-          policies=None, limit_per_source=None):
+          policies=None, limit_per_source=None, previous=None):
     if limit_per_source is not None and (type(limit_per_source) is not int or limit_per_source < 1):
         raise IngestionError("Preview limit must be a positive integer")
     output = Path(output)
@@ -51,9 +53,15 @@ def build(corpus, manifest_sha256, tokenizer, output, *, config=DEFAULT_CONFIG,
     implementation = implementation_identity()
     state = git_state()
     output.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix=".chunks-", dir=output.parent) as tmp:
+    with tempfile.TemporaryDirectory(prefix=".chunks-", dir=output.parent) as tmp, ExitStack() as resources:
         stage = Path(tmp) / "release"
         stage.mkdir()
+        cache = None
+        reused_records = reused_chunks = 0
+        if previous is not None:
+            cache = ReuseCache(Path(tmp) / "cache.sqlite")
+            resources.callback(cache.close)
+            cache.load_chunks(*previous, chunker.config_sha256)
         counts, selected, excluded, flags, chunks_by_source = (Counter() for _ in range(5))
         checksums = {name: hashlib.sha256() for name in ("chunks.jsonl", "decisions.jsonl")}
         total_chunks, max_tokens, max_characters = 0, 0, 0
@@ -64,7 +72,11 @@ def build(corpus, manifest_sha256, tokenizer, output, *, config=DEFAULT_CONFIG,
                 if limit_per_source is not None and selected[source] >= limit_per_source:
                     continue
                 selected[source] += 1
-                chunks, decision = chunker.chunks(record)
+                cached = cache.chunks_for(record, reference_prefix(record)) if cache else None
+                chunks, decision = (chunker.chunks(record, previous=cached) if cached else chunker.chunks(record))
+                if cached:
+                    reused_records += 1
+                    reused_chunks += len(chunks)
                 if decision["excluded"]:
                     excluded[decision["excluded"]] += 1
                 flags.update(decision["flags"])
@@ -106,6 +118,11 @@ def build(corpus, manifest_sha256, tokenizer, output, *, config=DEFAULT_CONFIG,
             "maximum_tokens": max_tokens, "maximum_characters": max_characters,
             "output_sha256": {name: h.hexdigest() for name, h in checksums.items()},
         }
+        if previous is not None:
+            manifest["incremental"] = {
+                "previous_chunk_manifest_sha256": previous[1], "reused_span_records": reused_records,
+                "reused_span_chunks": reused_chunks, "rechunked_records": sum(selected.values()) - reused_records,
+                "removed_previously_chunked_records": cache.removed_records()}
         manifest["build_id"] = digest(canonical(manifest))
         (stage / "manifest.json").write_bytes(canonical(manifest) + b"\n")
         (stage / "chunking-config.json").write_bytes(chunker.config_bytes)
