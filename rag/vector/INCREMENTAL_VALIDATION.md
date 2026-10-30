@@ -1,7 +1,8 @@
 # Incremental preparation: local validation
 
 Date: 2026-10-30. Local branch: `codex/incremental-vector-index`.
-Publication and hosted CI are tracked on the follow-up PR. This document records
+Publication and hosted CI are tracked on
+[PR #88](https://github.com/CyberSOC-ai/cybersoc-ai/pull/88). This document records
 local evidence; it does not claim independent peer approval.
 
 ## Automated checks

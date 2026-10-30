@@ -153,7 +153,8 @@ passage spans and embedding text. Corpus additions, edits and omissions produce
 a new verified release with parent hashes and work counters. Added the
 [incremental guide](../../../rag/vector/INCREMENTAL.md) and
 [local validation record](../../../rag/vector/INCREMENTAL_VALIDATION.md).
-Publication and CI are tracked in the follow-up PR. The original S2-T02
+Publication and CI are tracked in
+[PR #88](https://github.com/CyberSOC-ai/cybersoc-ai/pull/88). The original S2-T02
 implementation remains in PR #87.
 
 ## Technical approach
