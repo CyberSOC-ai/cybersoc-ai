@@ -855,7 +855,7 @@ gantt
 |---|---|---|---|
 | **S2-T01 — Cybersecurity knowledge normalization / ingestion**<br>• Normalized MITRE ATT&CK and CVE / CWE records; reproducible ingestion scripts<br>• **SOC-log corpus**: normalized lab alerts / log excerpts and historical lab incidents prepared for retrieval, excluding test-split evaluation incidents<br>• Source provenance recorded for every record (RAG-poisoning control)<br>*Note: v2.2 — adds SOC logs as a retrieval source (brief: MITRE, CVE/CWE, threat intelligence and SOC logs).* | **Ahmed**<br>Rev. Soulaiman | Blocking<br>P1 | S0-T05, S1-T06 |
 | **S2-T02 — Chunking, embeddings and vector index**<br>• Chunking strategy, embedding model and vector index (config recorded)<br>• Separate collections for knowledge (MITRE, CVE / CWE) and for SOC logs / past incidents, with provenance metadata and filters | **Soulaiman**<br>Rev. Ahmed | Blocking<br>P0 | S2-T01 |
-| **S2-T03 — Retriever evaluation**<br>• Retrieval evaluated independently before generation (Recall@K, Precision@K, MRR) | **Achraf**<br>Rev. Anas | Blocking<br>P1 | S1-T02, S2-T02 |
+| **S2-T03 — Retriever evaluation**<br>• Retrieval evaluated independently before generation (Recall@K, Precision@K, MRR) | **Ahmed**<br>Rev. Anas | Blocking<br>P1 | S1-T02, S2-T02 |
 | **S2-T04 — Vector-RAG generation pipeline**<br>• Evidence-grounded generation with structured output and cited evidence | **Anas**<br>Rev. Oussama | Blocking<br>P0 | S1-T03, S2-T02, S2-T03 |
 | **S2-T05 — RAG API integration**<br>• Vector-RAG exposed through the FastAPI investigation endpoint | **Oussama**<br>Rev. Anas | Integration<br>P0 | S1-T04, S2-T04 |
 | **S2-T06 — No-RAG vs Vector-RAG experiment**<br>• First retrieval ablation with stored metrics and written conclusion | **Achraf**<br>Rev. Soulaiman | Integration<br>P1 | S2-T05 |
@@ -876,7 +876,7 @@ gantt
 
 | Task | Owner · Reviewer | Type · Priority | Blocked by |
 |---|---|---|---|
-| **S3-T01 — Knowledge Graph ontology / schema**<br>• Node and relationship types: users, hosts, IPs, alerts, vulnerabilities, malware, ATT&CK techniques, threat indicators | **Ahmed**<br>Rev. Achraf | Blocking<br>P0 | S0-T03, S0-T05 |
+| **S3-T01 — Knowledge Graph ontology / schema**<br>• Node and relationship types: users, hosts, IPs, alerts, vulnerabilities, malware, ATT&CK techniques, threat indicators | **Achraf**<br>Rev. Ahmed | Blocking<br>P0 | S0-T03, S0-T05 |
 | **S3-T02 — Graph ingestion / ETL**<br>• Reproducible ETL from knowledge sources, threat-intel IOCs and lab incidents into the graph model | **Soulaiman**<br>Rev. Ahmed | Blocking<br>P0 | S3-T01, S2-T08 |
 | **S3-T03 — Neo4j population + Cypher validation**<br>• Populated Neo4j instance; validated Cypher queries | **Oussama**<br>Rev. Soulaiman | Blocking<br>P0 | S3-T02 |
 | **S3-T04 — Graph retrieval service**<br>• Graph retrieval following the retrieval contract | **Anas**<br>Rev. Oussama | Blocking<br>P0 | S3-T03 |
@@ -1288,14 +1288,18 @@ Every requirement of the six-page brief is mapped to the CDC sections and tasks 
 
 ## Appendix C — Ownership & Domain Exposure Matrix
 
+Ownership update (2026-11-04): Ahmed authorized exchanging S2-T03 and S3-T01.
+Ahmed owns S2-T03 (Anas reviews); Achraf owns S3-T01 (Ahmed reviews).
+The sprint tables, registry and matrix below reflect that exchange.
+
 **Counting rule (v2.2).** Computed from the task registry of Appendix D, which lists every task with its owner, reviewer and one domain tag. Each task counts once as *primary* for its owner (Sprint 8 leads included) and once as *reviewer* for its named reviewer. Sprint 8 tasks are reviewed by the entire team and S7-T06 is assigned per issue to the team, so neither is counted as a review. Cells show **primary / reviewer**; `·` means no task. Total tasks counted: 63 (primary 63, reviews 58).
 
 | Member | SOC | SLM | RAG | KG | AGT | API | UI | OPS | MLO | SEC | TST | DOC | Total |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Ahmed | 3/2 | 0/1 | 1/2 | 1/1 | 1/1 | 0/1 | 1/1 | 4/0 | 0/2 | · | 2/1 | 2/0 | 15/12 |
+| Ahmed | 3/2 | 0/1 | 2/2 | 0/2 | 1/1 | 0/1 | 1/1 | 4/0 | 0/2 | · | 2/1 | 2/0 | 15/13 |
 | Soulaiman | 0/1 | 2/2 | 1/2 | 1/1 | 2/2 | 1/1 | 1/1 | 0/2 | · | 1/0 | · | 2/1 | 11/13 |
 | Anas | · | 3/1 | 2/3 | 1/0 | 1/1 | 0/2 | 1/1 | 0/1 | 2/1 | · | 0/1 | 2/0 | 12/11 |
-| Achraf | 2/0 | 1/2 | 3/1 | 0/1 | 1/1 | · | 1/1 | 1/1 | · | 2/2 | · | 1/1 | 12/10 |
+| Achraf | 2/0 | 1/2 | 2/1 | 1/0 | 1/1 | · | 1/1 | 1/1 | · | 2/2 | · | 1/1 | 12/9 |
 | Oussama | 1/3 | 1/1 | 2/1 | 1/1 | · | 3/0 | 1/1 | 0/1 | 1/0 | 1/2 | 1/1 | 1/1 | 13/12 |
 
 Legend: SOC = soc · SLM = ai-slm · RAG = rag · KG = knowledge-graph · AGT = agents · API = backend · UI = frontend · OPS = devops · MLO = llmops · SEC = llm-security · TST = testing · DOC = documentation.
@@ -1325,13 +1329,13 @@ One domain tag per task (the main domain of the work). This table is the source 
 | S1-T07 | No-RAG end-to-end baseline | Anas | Ahmed | SLM |
 | S2-T01 | Cybersecurity knowledge normalization / ingestion | Ahmed | Soulaiman | RAG |
 | S2-T02 | Chunking, embeddings and vector index | Soulaiman | Ahmed | RAG |
-| S2-T03 | Retriever evaluation | Achraf | Anas | RAG |
+| S2-T03 | Retriever evaluation | Ahmed | Anas | RAG |
 | S2-T04 | Vector-RAG generation pipeline | Anas | Oussama | RAG |
 | S2-T05 | RAG API integration | Oussama | Anas | API |
 | S2-T06 | No-RAG vs Vector-RAG experiment | Achraf | Soulaiman | RAG |
 | S2-T07 | SOC Lab scenario set v1 | Oussama | Ahmed | SOC |
 | S2-T08 | Threat-intelligence ingestion | Ahmed | Oussama | SOC |
-| S3-T01 | Knowledge Graph ontology / schema | Ahmed | Achraf | KG |
+| S3-T01 | Knowledge Graph ontology / schema | Achraf | Ahmed | KG |
 | S3-T02 | Graph ingestion / ETL | Soulaiman | Ahmed | KG |
 | S3-T03 | Neo4j population + Cypher validation | Oussama | Soulaiman | KG |
 | S3-T04 | Graph retrieval service | Anas | Oussama | KG |

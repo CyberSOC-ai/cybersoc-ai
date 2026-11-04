@@ -1,8 +1,10 @@
-# S2-T03 start guide for Achraf
+# S2-T03 evaluator setup
 
-This branch supplies the retriever needed by [issue #18](https://github.com/CyberSOC-ai/cybersoc-ai/issues/18).
-Use it for integration/development while #17 is reviewed; formal dependency closure
-still follows review/CI/merge. Ahmed reviews #17; Anas reviews the evaluation task.
+This repository supplies the retriever needed by [issue #18](https://github.com/CyberSOC-ai/cybersoc-ai/issues/18).
+Owner: Ahmed (task swap recorded 2026-11-04); reviewer: Anas.
+The first [development evaluation and offline replay](../../datasets/evaluation/retrieval-dev-v1/README.md)
+uses this adapter. The instructions below rebuild search artifacts; they are not
+needed just to replay the published metrics.
 
 ## Inputs and coverage
 
@@ -22,11 +24,11 @@ entire acquired corpus. A GPU or full-corpus performance run is not a setup gate
 
 ## Rebuild your local index (PowerShell, repository root)
 
-Check out this PR's branch, then build the environments and start Qdrant:
+Use the merged `main` retriever implementation, then build the environments and start Qdrant:
 
 ```powershell
 git fetch origin
-git switch codex/17-chunking-embeddings-vector-index
+git switch main
 docker compose build dev
 docker build -f infrastructure/docker/Dockerfile.embeddings -t cybersoc-rag-eval .
 docker compose --profile vector up -d qdrant
@@ -115,7 +117,7 @@ closed evidence fields. Source/snapshot identity plus stable chunk evidence IDs
 allow relevance judgments at an explicitly chosen granularity. Treat errors
 separately from successful empty results.
 
-Achraf owns query/relevance judgments, K choices, Recall@K/Precision@K/MRR and
+Ahmed owns query/relevance judgments, K choices, Recall@K/Precision@K/MRR and
 their report. Freeze the corpus/chunk/model/config identities before labeling or
 comparing runs. The current SOC set is development-only and unfrozen; exclude
 evaluated incident families from retrieval as required by the protocol (or use

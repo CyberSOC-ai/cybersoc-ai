@@ -15,7 +15,7 @@
 
 | Task | Owner | Reviewer | Domain | Status |
 |---|---|---|---|---|
-| S3-T01 — Knowledge Graph ontology / schema | Ahmed | Achraf | knowledge-graph | Backlog |
+| S3-T01 — Knowledge Graph ontology / schema | Achraf | Ahmed | knowledge-graph | Backlog |
 | S3-T02 — Graph ingestion / ETL | Soulaiman | Ahmed | knowledge-graph | Backlog |
 | S3-T03 — Neo4j population + Cypher validation | Oussama | Soulaiman | knowledge-graph | Backlog |
 | S3-T04 — Graph retrieval service | Anas | Oussama | knowledge-graph | Backlog |
@@ -26,7 +26,8 @@
 # 1. Ahmed
 ## Assigned tasks
 
-S3-T01
+Reviewer for S3-T01. Ownership transferred to Achraf on 2026-11-04 in exchange
+for S2-T03; Ahmed remains the graph-schema reviewer.
 
 ## Work completed
 
@@ -152,7 +153,7 @@ S3-T04, S3-T06
 # 4. Achraf
 ## Assigned tasks
 
-S3-T05
+S3-T01, S3-T05. S3-T01 transferred from Ahmed on 2026-11-04; Ahmed reviews.
 
 ## Work completed
 

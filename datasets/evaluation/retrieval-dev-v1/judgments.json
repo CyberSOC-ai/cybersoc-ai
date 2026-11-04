@@ -1,0 +1,551 @@
+[
+  {
+    "query_id": "Q01",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--692074ae-bb62-4a5e-a735-02cb6bde458c",
+    "relevant": 0,
+    "rationale": "Décrit une forme d’essais de mots de passe ; ce n’est pas la protection manquante.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "a6351956d43951c68a1450aee52134f802544b5bd3bc53d1b0f5a5d7380e3d91"
+  },
+  {
+    "query_id": "Q01",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--a93494bb-4b80-4ea1-8695-3236a49916fd",
+    "relevant": 0,
+    "rationale": "Décrit la méthode d’attaque favorisée par la faiblesse, sans identifier CWE-307.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "149dff7bcae944e5423d44ddd9f974749cb2419ff5cc6fd0ce531fa4c0db0e00"
+  },
+  {
+    "query_id": "Q01",
+    "snapshot_ref": "sha256:47165a9593def89c69b9ef50c34d99ac68db55df8373613e85e9cc9ceecefb1d",
+    "source_record_id": "CWE-523",
+    "relevant": 0,
+    "rationale": "Porte sur la protection des identifiants pendant leur transport, pas sur la limitation des essais.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "10a20056f4ea7a4ded0cbf0c02dcac8ba067e97d1be8330a2974a6ab593a7fb9"
+  },
+  {
+    "query_id": "Q01",
+    "snapshot_ref": "sha256:47165a9593def89c69b9ef50c34d99ac68db55df8373613e85e9cc9ceecefb1d",
+    "source_record_id": "CWE-549",
+    "relevant": 0,
+    "rationale": "Porte sur le masquage du champ de mot de passe, pas sur la fréquence des essais.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "6423fa1022557a260fe960308c61f2a8cd63894c6c024b1d531d64a00730ea42"
+  },
+  {
+    "query_id": "Q01",
+    "snapshot_ref": "sha256:47165a9593def89c69b9ef50c34d99ac68db55df8373613e85e9cc9ceecefb1d",
+    "source_record_id": "CWE-307",
+    "relevant": 1,
+    "rationale": "La définition du document porte précisément sur la limitation des tentatives d’authentification échouées, et non sur le transport ou l’affichage des mots de passe.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "12f101ff20d5132eff9ebec02bb91f5651016f6435800f7ebc8ad3e87cea4e1b"
+  },
+  {
+    "query_id": "Q02",
+    "snapshot_ref": "sha256:852cad2fad04e4256bc6c58f816cedc503f2bfa680b5e4be773e2d3a8d45e529",
+    "source_record_id": "CVE-2026-72811",
+    "relevant": 0,
+    "rationale": "Le document décrit une injection SQL dans SiYuan, pas une injection LDAP.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "2abfa785271183c0b2ec7f980988ed0e02d09a4d155d41b89eeca529e8515a24"
+  },
+  {
+    "query_id": "Q02",
+    "snapshot_ref": "sha256:47165a9593def89c69b9ef50c34d99ac68db55df8373613e85e9cc9ceecefb1d",
+    "source_record_id": "CWE-90",
+    "relevant": 1,
+    "rationale": "Le document décrit explicitement une requête LDAP construite à partir d’une entrée externe insuffisamment neutralisée.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "b42a3f99aa832f7371e8c14615b7c156f8b017c79be70cb33a624f3ab5e5997c"
+  },
+  {
+    "query_id": "Q02",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--d7e9cba9-3b43-4208-8e90-fdb18bff4a6a",
+    "relevant": 0,
+    "rationale": "Concerne les instructions soumises à un modèle, pas la syntaxe d’une requête LDAP.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "c1c284a0e2f4338a564f3c5b3470bfc6b58beb017f803b2cfe3b01d48185d9bc"
+  },
+  {
+    "query_id": "Q03",
+    "snapshot_ref": "sha256:47165a9593def89c69b9ef50c34d99ac68db55df8373613e85e9cc9ceecefb1d",
+    "source_record_id": "CWE-1466",
+    "relevant": 1,
+    "rationale": "La définition associe directement un changement d’identifiants à une invalidation insuffisante des sessions courantes.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "3693073acebef53679dfc6967e41e7760d9de09611899ceda8f1a8a5c72977a1"
+  },
+  {
+    "query_id": "Q03",
+    "snapshot_ref": "sha256:47165a9593def89c69b9ef50c34d99ac68db55df8373613e85e9cc9ceecefb1d",
+    "source_record_id": "CWE-620",
+    "relevant": 0,
+    "rationale": "Concerne un changement de mot de passe insuffisamment vérifié ; le mécanisme est différent.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "85f20d71b7c6b2057e429ba959ea1a1664692bbd1435c81fe4e7d8f95abac457"
+  },
+  {
+    "query_id": "Q03",
+    "snapshot_ref": "sha256:a4efc99c24c6cef42ed575556e2b097069c913704b8f40904ca83b4cdfefab2f",
+    "source_record_id": "CVE-2025-36359",
+    "relevant": 0,
+    "rationale": "Décrit la non-invalidation après expiration, sans établir le déclencheur changement de mot de passe.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "f1bb7ba9b5686f5e5ea6f53265850fa23707f77e3e9f51479b1fe002f997ba47"
+  },
+  {
+    "query_id": "Q03",
+    "snapshot_ref": "sha256:47165a9593def89c69b9ef50c34d99ac68db55df8373613e85e9cc9ceecefb1d",
+    "source_record_id": "CWE-1463",
+    "relevant": 0,
+    "rationale": "Concerne un délai de session insuffisant, pas spécifiquement l’invalidation après changement d’identifiants.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "52d51f047d1c3f42286cbc1b90ba8d1df458cb78f6d6e04dc9a3453c0d688ff3"
+  },
+  {
+    "query_id": "Q04",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--a2029942-0a85-4947-b23c-ca434698171d",
+    "relevant": 0,
+    "rationale": "Capture d’entrées utilisateur ; ne répond pas directement au mécanisme d’extraction depuis le stockage du système.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "3cdb45eb205d929348c9dcaa7f32a2a3d29ff40b95975e824a88b42e8e8a83c4"
+  },
+  {
+    "query_id": "Q04",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--09a60ea3-a8d1-4ae5-976e-5783248b72a4",
+    "relevant": 0,
+    "rationale": "Capture des frappes au moment de la saisie ; ce n’est pas, en soi, une extraction d’identifiants stockés.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "da40236021a86260157c4a4a60ca7ca704e8c3152ab3bf93f3d84785c37d61c5"
+  },
+  {
+    "query_id": "Q04",
+    "snapshot_ref": "sha256:f610ef530b361cc0ad1bdcc834913e8b10348cc6f68ce4dadf08f2ee4854b523",
+    "source_record_id": "docs/hunts/windows/170105-LSASSMemoryReadAccess/notebook.md",
+    "relevant": 0,
+    "rationale": "Cas particulier lié à l’extraction depuis LSASS ; utile au contexte mais le document demandé est une technique ATT&CK.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "765701465eb457cf05e0fe5f5e845e72eb912465ebed7542d22d2e4f88f84d73"
+  },
+  {
+    "query_id": "Q05",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--9efb1ea7-c37b-4595-9640-b7680cd84279",
+    "relevant": 1,
+    "rationale": "Le mécanisme précis de la question, clé de registre de démarrage et ouverture de session utilisateur, est directement documenté.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "5d5556e9037c453f67c635a3e22e09fd73c345a2d2f87f9c3429b5abc5ffd403"
+  },
+  {
+    "query_id": "Q05",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--cc89ecbd-3d33-4a41-bcca-001e702d18fd",
+    "relevant": 0,
+    "rationale": "Autre mécanisme de chargement de DLL ; ne suffit pas à identifier le scénario des clés Run.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "d0fddc0d717e3c3ae7f1be42dc1fe6b9ae1a20bee4c54878a4b8b75e377cb27e"
+  },
+  {
+    "query_id": "Q05",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--0f2c410d-d740-4ed9-abb1-b8f4a7faf6c3",
+    "relevant": 0,
+    "rationale": "Exécute un profil au démarrage de PowerShell, pas directement via la clé Run décrite.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "d151f947367a4db0beb57af60f1e8f6dbc3ce08460985cc67ba69bb818b84d8c"
+  },
+  {
+    "query_id": "Q05",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--6d4a7fb3-5a24-42be-ae61-6728a2b581f6",
+    "relevant": 0,
+    "rationale": "Mécanisme différent, lié à l’exécution d’une image ciblée.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "cd9eaa5647df48c6ce6d7d6476026e1cf4a50da833a58f69c580074356344ae5"
+  },
+  {
+    "query_id": "Q06",
+    "snapshot_ref": "sha256:ea6bffc4deb936048e6d3b88a5087f3172f336e76c2bdd4f9f6289b86b6806cb",
+    "source_record_id": "759d0d51-bc99-4b5e-9add-8f5b2c8e7512",
+    "relevant": 1,
+    "rationale": "Les deux branches de détection demandées, ADD_USER et SYSCALL avec /useradd, sont présentes dans la règle.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "eb2b131ffa0206bdaf97cc1968bca9bf217a00fa440f2186c576e22334e0816f"
+  },
+  {
+    "query_id": "Q06",
+    "snapshot_ref": "sha256:ea6bffc4deb936048e6d3b88a5087f3172f336e76c2bdd4f9f6289b86b6806cb",
+    "source_record_id": "b45e3d6f-42c6-47d8-a478-df6bd6cf534c",
+    "relevant": 0,
+    "rationale": "Détecte l’énumération de comptes existants, pas leur création.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "46f4f0a5b71e2d2bd9242af219206e045f1443a80861d7fb5a3e0534ac528510"
+  },
+  {
+    "query_id": "Q06",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--e01be9c5-e763-4caf-aeb7-000b416aef67",
+    "relevant": 0,
+    "rationale": "Explique le comportement ATT&CK, sans fournir la règle auditd demandée.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "287be07cddb9544ba7786fa9c9f2a957ecc7029954c7a7fd0d1b327f90957af7"
+  },
+  {
+    "query_id": "Q07",
+    "snapshot_ref": "sha256:ea6bffc4deb936048e6d3b88a5087f3172f336e76c2bdd4f9f6289b86b6806cb",
+    "source_record_id": "b45e3d6f-42c6-47d8-a478-df6bd6cf534c",
+    "relevant": 1,
+    "rationale": "Les sélections de la règle contiennent explicitement lastlog et les chemins de fichiers mentionnés dans la question.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "46f4f0a5b71e2d2bd9242af219206e045f1443a80861d7fb5a3e0534ac528510"
+  },
+  {
+    "query_id": "Q07",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--25659dd6-ea12-45c4-97e6-381e3e4b593e",
+    "relevant": 0,
+    "rationale": "Décrit la technique de découverte de comptes ; utile au contexte, mais ce n’est pas la règle Sigma demandée.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "b18406cc1406cd22f6ec0277b90eaa21d2b5b6229a47e58bb3a5247b7d9d4d0a"
+  },
+  {
+    "query_id": "Q07",
+    "snapshot_ref": "sha256:ea6bffc4deb936048e6d3b88a5087f3172f336e76c2bdd4f9f6289b86b6806cb",
+    "source_record_id": "759d0d51-bc99-4b5e-9add-8f5b2c8e7512",
+    "relevant": 0,
+    "rationale": "Détecte une création de compte via auditd, pas l’énumération de comptes.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "eb2b131ffa0206bdaf97cc1968bca9bf217a00fa440f2186c576e22334e0816f"
+  },
+  {
+    "query_id": "Q07",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--866d0d6d-02c6-42bd-aa2f-02907fdc0969",
+    "relevant": 0,
+    "rationale": "Porte sur l’énumération des journaux, pas sur l’identification des comptes locaux demandée.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "01dc4dd1791c0c03aa22cbd72d4a22cbf81395cdaa948dea906427e7a9836097"
+  },
+  {
+    "query_id": "Q08",
+    "snapshot_ref": "sha256:f610ef530b361cc0ad1bdcc834913e8b10348cc6f68ce4dadf08f2ee4854b523",
+    "source_record_id": "docs/hunts/windows/170105-LSASSMemoryReadAccess/notebook.md",
+    "relevant": 1,
+    "rationale": "Le document fournit des pistes d’analyse et de corrélation directement centrées sur les accès mémoire à LSASS.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "765701465eb457cf05e0fe5f5e845e72eb912465ebed7542d22d2e4f88f84d73"
+  },
+  {
+    "query_id": "Q08",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--0a3ead4e-6d47-4ccb-854c-a6a4f9d96b22",
+    "relevant": 0,
+    "rationale": "Explique la famille d’attaque correspondante ; sa description normalisée apporte du contexte, mais pas à elle seule un guide d’investigation complet.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "0933feabbe97fc25410c17683454eb540121a56fc7458a08d3ce901e753630da"
+  },
+  {
+    "query_id": "Q08",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--09a60ea3-a8d1-4ae5-976e-5783248b72a4",
+    "relevant": 0,
+    "rationale": "Mécanisme de capture différent ; la question porte sur la lecture mémoire de LSASS.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "da40236021a86260157c4a4a60ca7ca704e8c3152ab3bf93f3d84785c37d61c5"
+  },
+  {
+    "query_id": "Q08",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--d336b553-5da9-46ca-98a8-0b23f49fb447",
+    "relevant": 0,
+    "rationale": "Concerne un autre magasin d’identifiants ; ne fournit pas les analyses LSASS demandées.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "73ac879f53e64cef43d311b2fc9b7df664ad0ae0d8ff4d27a3d2bd443a2fda50"
+  },
+  {
+    "query_id": "Q09",
+    "snapshot_ref": "sha256:f610ef530b361cc0ad1bdcc834913e8b10348cc6f68ce4dadf08f2ee4854b523",
+    "source_record_id": "docs/hunts/windows/190410-LocalPwshExecution/notebook.md",
+    "relevant": 1,
+    "rationale": "Le document contient plusieurs analyses concrètes portant sur les traces produites par PowerShell localement.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "52a00d54f49d81b7c15735183d58c6c7919bfe782b7c9be53127ec796a3f9ae3"
+  },
+  {
+    "query_id": "Q09",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--0f2c410d-d740-4ed9-abb1-b8f4a7faf6c3",
+    "relevant": 0,
+    "rationale": "Pertinent pour un scénario particulier de persistance via profil, mais plus étroit que la question générale.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "d151f947367a4db0beb57af60f1e8f6dbc3ce08460985cc67ba69bb818b84d8c"
+  },
+  {
+    "query_id": "Q09",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+    "relevant": 0,
+    "rationale": "Fournit le contexte ATT&CK de l’exécution via interpréteur ; ce n’est pas le guide pratique principal.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "cd059bc6f97a28df748c194c112107bd07aa551197e332cfe09a88b4c1c2bcf0"
+  },
+  {
+    "query_id": "Q09",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--d336b553-5da9-46ca-98a8-0b23f49fb447",
+    "relevant": 0,
+    "rationale": "Porte sur le vol d’identifiants, sans répondre à la demande de guide sur l’exécution locale de PowerShell.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "73ac879f53e64cef43d311b2fc9b7df664ad0ae0d8ff4d27a3d2bd443a2fda50"
+  },
+  {
+    "query_id": "Q10",
+    "snapshot_ref": "sha256:852cad2fad04e4256bc6c58f816cedc503f2bfa680b5e4be773e2d3a8d45e529",
+    "source_record_id": "CVE-2026-14226",
+    "relevant": 1,
+    "rationale": "Le document correspond au produit, à la borne de version, au rôle abonné et à l’impact décrits dans la question. L’avis WPScan cité par le snapshot confirme ces éléments.",
+    "annotation_origin": "inherited_from_Ahmed_validated_note",
+    "content_sha256": "cd500d8ccae3ccbfeadfb102ddf43afbc7cf1f3effcfebfb184d2d8e950eda71"
+  },
+  {
+    "query_id": "Q01",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--48b836c6-e4ca-435a-82a3-29c03e5b492e",
+    "relevant": 0,
+    "rationale": "Le document décrit un faux point d’accès Wi-Fi et la capture d’identifiants ; il n’identifie pas une absence de limitation des tentatives d’authentification.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "54071851ab9495eb9ef4d638f4e3283fd112d6cdaff32f1201db015ea13b72e7"
+  },
+  {
+    "query_id": "Q02",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--f5946b5e-9408-485f-a7f7-b5efc88909b6",
+    "relevant": 0,
+    "rationale": "Interception de fonctions manipulant des identifiants ; le mécanisme de construction d’une requête LDAP n’est pas traité.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "301b370b844cedd2ae42a67ea1d2a6b7f5b349f819c3abb7d0868cb172fb0dcb"
+  },
+  {
+    "query_id": "Q02",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--09a60ea3-a8d1-4ae5-976e-5783248b72a4",
+    "relevant": 0,
+    "rationale": "Capture de frappes utilisateur ; ne décrit pas la neutralisation des caractères d’une requête LDAP.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "da40236021a86260157c4a4a60ca7ca704e8c3152ab3bf93f3d84785c37d61c5"
+  },
+  {
+    "query_id": "Q03",
+    "snapshot_ref": "sha256:ea6bffc4deb936048e6d3b88a5087f3172f336e76c2bdd4f9f6289b86b6806cb",
+    "source_record_id": "759d0d51-bc99-4b5e-9add-8f5b2c8e7512",
+    "relevant": 0,
+    "rationale": "La règle détecte une création de compte Linux ; elle ne traite pas la révocation des sessions après changement de mot de passe.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "eb2b131ffa0206bdaf97cc1968bca9bf217a00fa440f2186c576e22334e0816f"
+  },
+  {
+    "query_id": "Q03",
+    "snapshot_ref": "sha256:47165a9593def89c69b9ef50c34d99ac68db55df8373613e85e9cc9ceecefb1d",
+    "source_record_id": "CWE-523",
+    "relevant": 0,
+    "rationale": "Le document traite la protection des identifiants en transit, sans traiter la durée ou la révocation des sessions.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "10a20056f4ea7a4ded0cbf0c02dcac8ba067e97d1be8330a2974a6ab593a7fb9"
+  },
+  {
+    "query_id": "Q04",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--f5946b5e-9408-485f-a7f7-b5efc88909b6",
+    "relevant": 0,
+    "rationale": "Le document décrit principalement l’interception de paramètres d’API contenant des identifiants, pas l’extraction depuis les structures de stockage ou la mémoire d’authentification visée par la référence retenue. Décision stricte à revoir dans le cadre de la clarification Q04.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "301b370b844cedd2ae42a67ea1d2a6b7f5b349f819c3abb7d0868cb172fb0dcb"
+  },
+  {
+    "query_id": "Q05",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--692074ae-bb62-4a5e-a735-02cb6bde458c",
+    "relevant": 0,
+    "rationale": "Essais de mots de passe sur plusieurs comptes ; ce n’est pas un mécanisme de démarrage automatique via registre.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "a6351956d43951c68a1450aee52134f802544b5bd3bc53d1b0f5a5d7380e3d91"
+  },
+  {
+    "query_id": "Q05",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--63220765-d418-44de-8fae-694b3912317d",
+    "relevant": 0,
+    "rationale": "Mécanisme de gestion des signaux shell ; ne correspond pas aux clés Run de Windows.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "c0de29bcc6f7b3c8eb3998bfec84f71380cd16b629d7afdb97a579b8e7de32ff"
+  },
+  {
+    "query_id": "Q06",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--6fa224c7-5091-4595-bf15-3fc9fe2f2c7c",
+    "relevant": 0,
+    "rationale": "Traite des privilèges temporaires dans le cloud ; ne fournit pas une règle auditd pour ADD_USER ou useradd.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "23eeee007c0c4a6c3631bbc18a36416d2359e7818733be2e30ca65c8a7dbf3b4"
+  },
+  {
+    "query_id": "Q06",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--692074ae-bb62-4a5e-a735-02cb6bde458c",
+    "relevant": 0,
+    "rationale": "Décrit des tentatives d’authentification ; ne fournit pas la règle de création de compte Linux demandée.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "a6351956d43951c68a1450aee52134f802544b5bd3bc53d1b0f5a5d7380e3d91"
+  },
+  {
+    "query_id": "Q06",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--1365fe3b-0f50-455d-b4da-266ce31c23b0",
+    "relevant": 0,
+    "rationale": "Traite de sudo et de la mise en cache des autorisations ; ne fournit pas la règle auditd de création de compte.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "1ab95da6fec6e9ddbc27ae3cca8b09e26d52f12551ff9bac6085fa48845c5234"
+  },
+  {
+    "query_id": "Q07",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--6fa224c7-5091-4595-bf15-3fc9fe2f2c7c",
+    "relevant": 0,
+    "rationale": "Traite des autorisations cloud temporaires, pas de la règle Linux d’énumération via lastlog ou les fichiers de comptes.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "23eeee007c0c4a6c3631bbc18a36416d2359e7818733be2e30ca65c8a7dbf3b4"
+  },
+  {
+    "query_id": "Q08",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--2339cf19-8f1e-48f7-8a91-0262ba547b6f",
+    "relevant": 0,
+    "rationale": "Reconnaissance des horaires et activités d’une organisation ; aucun guide d’investigation des accès mémoire à LSASS.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "92533b786e2a75e492e7044c04369ab0030ee04ba4d0dacdd80598a405df37f8"
+  },
+  {
+    "query_id": "Q09",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--9efb1ea7-c37b-4595-9640-b7680cd84279",
+    "relevant": 0,
+    "rationale": "Décrit la persistance via démarrage automatique ; ne fournit pas le guide d’analyse des traces d’exécution locale PowerShell demandé.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "5d5556e9037c453f67c635a3e22e09fd73c345a2d2f87f9c3429b5abc5ffd403"
+  },
+  {
+    "query_id": "Q09",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--0c2d00da-7742-49e7-9928-4514e5075d32",
+    "relevant": 0,
+    "rationale": "Décrit le détournement de résolution des exécutables par PATH ; ne fournit pas les analyses de journaux PowerShell demandées.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "04ee8563555459795f586e2685d7a1180c6b35b641a7b2261ccb56d13a569a97"
+  },
+  {
+    "query_id": "Q10",
+    "snapshot_ref": "sha256:852cad2fad04e4256bc6c58f816cedc503f2bfa680b5e4be773e2d3a8d45e529",
+    "source_record_id": "CVE-2026-97634",
+    "relevant": 0,
+    "rationale": "Autre produit : Event Tickets and Registration. Autre mécanisme : injection SQL par un utilisateur de niveau contributeur. Ne correspond pas à Easy Appointments.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "a1f9cebd9ff187c01e03adcf01ee92d4f34b9fd9b676623d1dc052223c10de97"
+  },
+  {
+    "query_id": "Q10",
+    "snapshot_ref": "sha256:8b7de9b45e10ddf64d840e43a727629d5ca404cc892b4f4e00f75ba53b1254ca",
+    "source_record_id": "CVE-2024-4091",
+    "relevant": 0,
+    "rationale": "Autre produit : Responsive Gallery Grid. Décrit du XSS avec privilèges élevés, pas une lecture de réservations par un abonné.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "b407cd81225992054a02390c95d2fb6db8bddfc09a1069c28fa05b19a0a96602"
+  },
+  {
+    "query_id": "Q10",
+    "snapshot_ref": "sha256:852cad2fad04e4256bc6c58f816cedc503f2bfa680b5e4be773e2d3a8d45e529",
+    "source_record_id": "CVE-2026-4683",
+    "relevant": 0,
+    "rationale": "Autre produit : Smartcat Translator for WPML. Décrit une modification non authentifiée de configuration, pas la divulgation des réservations Easy Appointments.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "be8519628918b7e2e3f1adab07ee16bc517309c318dd26b3728feca0c513be7d"
+  },
+  {
+    "query_id": "Q10",
+    "snapshot_ref": "sha256:a4efc99c24c6cef42ed575556e2b097069c913704b8f40904ca83b4cdfefab2f",
+    "source_record_id": "CVE-2025-54729",
+    "relevant": 0,
+    "rationale": "Autre produit : Webba Booking. Le mécanisme est un XSS stocké, pas l’accès aux réservations via le contrôle de capacité Easy Appointments.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "d34c5ab4fe3faa045f901b3655c7b64b9b9b22d31baad5e704bc33ed26b10d97"
+  },
+  {
+    "query_id": "Q04",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--0a3ead4e-6d47-4ccb-854c-a6a4f9d96b22",
+    "relevant": 1,
+    "rationale": "Question v2 précise le dumping depuis mémoire/caches/structures et demande la technique parente ATT&CK. T1003 répond directement ; le coffre Windows correspond à un autre mécanisme.",
+    "annotation_origin": "assistant_technical_review_for_clarified_query_v2",
+    "content_sha256": "0933feabbe97fc25410c17683454eb540121a56fc7458a08d3ce901e753630da"
+  },
+  {
+    "query_id": "Q04",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--d336b553-5da9-46ca-98a8-0b23f49fb447",
+    "relevant": 0,
+    "rationale": "Question v2 précise le dumping depuis mémoire/caches/structures et demande la technique parente ATT&CK. T1003 répond directement ; le coffre Windows correspond à un autre mécanisme.",
+    "annotation_origin": "assistant_technical_review_for_clarified_query_v2",
+    "content_sha256": "73ac879f53e64cef43d311b2fc9b7df664ad0ae0d8ff4d27a3d2bd443a2fda50"
+  },
+  {
+    "query_id": "Q01",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--6fa224c7-5091-4595-bf15-3fc9fe2f2c7c",
+    "relevant": 0,
+    "rationale": "Décrit un mécanisme de privilèges cloud ou de furtivité, pas la faiblesse de limitation des tentatives d’authentification demandée.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "23eeee007c0c4a6c3631bbc18a36416d2359e7818733be2e30ca65c8a7dbf3b4"
+  },
+  {
+    "query_id": "Q01",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--fe926152-f431-4baf-956c-4ad3cb0bf23b",
+    "relevant": 0,
+    "rationale": "Décrit un mécanisme de privilèges cloud ou de furtivité, pas la faiblesse de limitation des tentatives d’authentification demandée.",
+    "annotation_origin": "assistant_technical_review_for_development",
+    "content_sha256": "edf01728938f4ccffe057f6f6c199ebb71ce8d3a2f8add665b8fe4b06ca1ddfa"
+  },
+  {
+    "query_id": "Q03",
+    "snapshot_ref": "sha256:47165a9593def89c69b9ef50c34d99ac68db55df8373613e85e9cc9ceecefb1d",
+    "source_record_id": "CWE-307",
+    "relevant": 0,
+    "rationale": "La question clarifiée porte sur la révocation de sessions après changement de mot de passe. CWE-307 traite de la fréquence des tentatives d’authentification, mécanisme différent.",
+    "annotation_origin": "assistant_technical_review_after_clarified_query_run",
+    "content_sha256": "12f101ff20d5132eff9ebec02bb91f5651016f6435800f7ebc8ad3e87cea4e1b"
+  },
+  {
+    "query_id": "Q04",
+    "snapshot_ref": "sha256:81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352",
+    "source_record_id": "attack-pattern--bbc3cba7-84ae-410d-b18b-16750731dfa2",
+    "relevant": 0,
+    "rationale": "La technique Exploits décrit le développement de capacités d’exploitation. Elle n’identifie pas la technique parente d’extraction des identifiants depuis les structures d’authentification demandée.",
+    "annotation_origin": "assistant_technical_review_after_clarified_query_run",
+    "content_sha256": "d594b1cffdb9bc403c901228563ee00d19ab60e2e47b7f76ffd268d3df631528"
+  },
+  {
+    "query_id": "Q04",
+    "snapshot_ref": "sha256:47165a9593def89c69b9ef50c34d99ac68db55df8373613e85e9cc9ceecefb1d",
+    "source_record_id": "CWE-1423",
+    "relevant": 0,
+    "rationale": "Cette faiblesse décrit une fuite via prédicteurs microarchitecturaux et exécution transitoire, pas la technique ATT&CK parente de credential dumping demandée.",
+    "annotation_origin": "assistant_technical_review_after_clarified_query_run",
+    "content_sha256": "66598303a68d53d5d23b85c3691f4a7ae57dc9ca419d1caf585418824e0d85ac"
+  }
+]
