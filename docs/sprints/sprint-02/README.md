@@ -308,7 +308,7 @@ S2-T04
 # 4. Achraf
 ## Assigned tasks
 
-S2-T03, S2-T06
+S2-T06. S2-T03 transferred to Ahmed on 2026-11-04; Anas remains reviewer.
 
 ## Work completed
 

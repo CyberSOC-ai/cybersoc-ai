@@ -16,7 +16,7 @@ assistant, at Ahmed's request. No independent human/Anas sign-off is asserted.
 | Local scripts assumed exactly ten complete successes. | Reusable evaluator counts all intended queries, rejects missing/duplicate run IDs and reports failures and metric-specific exclusions. |
 | Relevance/query choices followed prior corpus inspection. | Explicit development-only classification and history; Q03/Q04 rerun; no blind-test or retriever-improvement claim. |
 | Strict lookup questions have one known positive. | Precision ceiling and incomplete recall denominator are explained alongside results. |
-| Ownership swap only existed on GitHub. | S2-T03 owner updated to Ahmed in the Sprint 2 table and his work journal; older historical member journals are preserved. The CDC table remains the older baseline until a dedicated governance update. |
+| Ownership swap only existed on GitHub. | Aligned S2-T03/S3-T01 owners and reviewers across the CDC sprint tables, task registry, recomputed domain matrix and sprint assignment lists, matching the user-authorized GitHub swap. Historical implementation journals are preserved. |
 
 ## Acceptance assessment
 
