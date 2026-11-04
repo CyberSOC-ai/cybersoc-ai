@@ -16,7 +16,7 @@
 |---|---|---|---|---|
 | S2-T01 — Cybersecurity knowledge normalization / ingestion | Ahmed | Soulaiman | rag | In review (PR #86; merge pending) |
 | S2-T02 — Chunking, embeddings and vector index | Soulaiman | Ahmed | rag | Backlog |
-| S2-T03 — Retriever evaluation | Ahmed | Anas | rag | In progress (development evaluation validated locally; PR pending) |
+| S2-T03 — Retriever evaluation | Ahmed | Anas | rag | Development evaluation delivered ([PR #89](https://github.com/CyberSOC-ai/cybersoc-ai/pull/89); formal state tracked on GitHub) |
 | S2-T04 — Vector-RAG generation pipeline | Anas | Oussama | rag | Backlog |
 | S2-T05 — RAG API integration | Oussama | Anas | backend | Backlog |
 | S2-T06 — No-RAG vs Vector-RAG experiment | Achraf | Soulaiman | rag | Backlog |
@@ -49,9 +49,11 @@ not claimed. Queries are corpus-informed, judgments are pooled/incomplete and th
 index covers 340 source records, not the full acquired corpus. Public replay uses
 source identities only; large/private source/model/index artifacts stay local.
 All 248 project tests passed locally, including 16 new retrieval checks; Ruff,
-repository integrity and the staged secret scan passed. Publication, assigned-review
-handling, hosted CI, merge and issue closure remain required before formal Done.
-Anas is the assigned PR reviewer.
+repository integrity and the staged secret scan passed.
+[PR #89](https://github.com/CyberSOC-ai/cybersoc-ai/pull/89) publishes the release
+and requests Anas's review. Ahmed authorized the technical audit, branch publication
+and finalization if checks pass. Hosted CI, review handling, merge and linked issue
+closure are tracked on that PR; no independent Anas approval is claimed.
 
 2026-10-29 — Completed the expanded local [knowledge-ingestion implementation](../../../rag/ingestion/README.md)
 on `feature/16-knowledge-ingestion`. The user approved including bulk CVE/NVD,
