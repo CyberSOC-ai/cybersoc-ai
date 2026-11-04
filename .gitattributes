@@ -6,3 +6,6 @@ ai/baseline/prompt.txt text eol=lf
 rag/vector/configs/*.json text eol=lf
 requirements-embeddings.txt text eol=lf
 infrastructure/docker/Dockerfile.embeddings text eol=lf
+
+# Public retrieval replay assets are SHA-256 pinned across Linux/Windows clones.
+datasets/evaluation/retrieval-dev-v1/*.json text eol=lf

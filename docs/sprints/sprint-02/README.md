@@ -16,7 +16,7 @@
 |---|---|---|---|---|
 | S2-T01 — Cybersecurity knowledge normalization / ingestion | Ahmed | Soulaiman | rag | In review (PR #86; merge pending) |
 | S2-T02 — Chunking, embeddings and vector index | Soulaiman | Ahmed | rag | Backlog |
-| S2-T03 — Retriever evaluation | Achraf | Anas | rag | Backlog |
+| S2-T03 — Retriever evaluation | Ahmed | Anas | rag | In progress (development evaluation validated locally; PR pending) |
 | S2-T04 — Vector-RAG generation pipeline | Anas | Oussama | rag | Backlog |
 | S2-T05 — RAG API integration | Oussama | Anas | backend | Backlog |
 | S2-T06 — No-RAG vs Vector-RAG experiment | Achraf | Soulaiman | rag | Backlog |
@@ -26,10 +26,32 @@
 # 1. Ahmed
 ## Assigned tasks
 
-S2-T01, S2-T08. This update covers S2-T01 and the user-approved source expansion;
+S2-T01, S2-T03, S2-T08. S2-T03 transferred from Achraf to Ahmed on 2026-11-04;
+Anas remains reviewer. The earlier update below covers S2-T01 and source expansion;
 S2-T08 IOC-feed ingestion remains Backlog.
 
 ## Work completed
+
+2026-11-04 — S2-T03: completed the first bounded development retrieval evaluation
+on `codex/18-retriever-evaluation`. Added the hash-pinned
+[replay release](../../../datasets/evaluation/retrieval-dev-v1/README.md),
+[technical audit](../../../datasets/evaluation/retrieval-dev-v1/AUDIT.md), reusable
+`ai.evaluation.retrieval` scorer/CLI and regression tests. The same pinned CPU
+BGE/Qdrant index supplied 100 passage candidates per query; document deduplication
+precedes K=5. All ten revised development queries succeeded: Precision@5 0.18,
+Recall@5 over known labeled references 0.90, MRR 0.8625. Eight references ranked
+first, Q02 second and Q01 eighth. Model, corpus, environment, run and label identities
+are recorded in the release manifest; no answer-generation evaluation is claimed.
+
+Ahmed validated the reference-answer note/35 existing decisions; 26 additional
+technical labels were reviewed with AI assistance. Independent Anas approval is
+not claimed. Queries are corpus-informed, judgments are pooled/incomplete and the
+index covers 340 source records, not the full acquired corpus. Public replay uses
+source identities only; large/private source/model/index artifacts stay local.
+All 248 project tests passed locally, including 16 new retrieval checks; Ruff,
+repository integrity and the staged secret scan passed. Publication, assigned-review
+handling, hosted CI, merge and issue closure remain required before formal Done.
+Anas is the assigned PR reviewer.
 
 2026-10-29 — Completed the expanded local [knowledge-ingestion implementation](../../../rag/ingestion/README.md)
 on `feature/16-knowledge-ingestion`. The user approved including bulk CVE/NVD,
