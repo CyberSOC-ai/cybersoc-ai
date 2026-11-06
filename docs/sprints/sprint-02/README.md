@@ -264,46 +264,19 @@ relevance, independent test eligibility or complete source coverage.
 
 
 # 3. Anas
-## Assigned tasks
+## S2-T04 — Vector-RAG generation ([#19](https://github.com/CyberSOC-ai/cybersoc-ai/issues/19))
 
-S2-T04
+The pipeline reuses the existing retriever and model client. The model selects one retrieved evidence ID for its claim. Code validates the selection, renders it inline and copies the retriever's evidence into the v1 result. Empty retrieval and invalid selections fail explicitly. Oussama is the assigned reviewer.
 
-## Work completed
+### Development evidence reported by Anas, 2026-11-06
 
-> To be completed from validated sprint evidence.
+On revision `fe9c9ab`, the two-order LSASS/SSH probe selected the LSASS passage in both orders and correctly attributed the single-sign-on explanation. Earlier P01 attempts omitted the inline citation or reached the 512-token limit with a decoding pattern. Those failures were retained.
 
-## Technical approach
+Full run `P01-selection-f40eaf64ad59` used Qwen 1.5B Q4_K_M, llama.cpp CPU b11827, exact MITRE-only retrieval and K=2 on the 406-passage preview. The result passed structural and citation-ID validation. The incident supports the summary of eight failed passwords in 57 seconds. The selected passage about throttled password spraying does not substantiate that host, account, count or timing. No P01 claim-support pass is claimed.
 
-> To be completed from validated sprint evidence.
+Verdict and risk match the pending-review pilot label (true positive, medium). Returned T1078 and T1098 differ from expected T1110.001. The preview had zero dedicated T1110.001 passages among 138 MITRE passages. The proposed approval-required block on linux-01 for 192.0.2.10, TCP/22, 300 seconds matches the required action and permitted duration. The rollback text describes SSH configuration rather than removing the proposed block. No execution was reported.
 
-## Files / components modified
-
-> To be completed from validated sprint evidence.
-
-## Tests / validation
-
-> To be completed from validated sprint evidence.
-
-## Results / metrics
-
-> To be completed from validated sprint evidence.
-
-## Problems encountered
-
-> To be completed from validated sprint evidence.
-
-## Decisions made
-
-> To be completed from validated sprint evidence.
-
-## Related Issues / Pull Requests
-
-> To be completed from validated sprint evidence.
-
-## Learning outcome
-
-> To be completed from validated sprint evidence.
-
+At the source-selection revision, 70 vector and 27 baseline tests passed locally, along with Ruff and repository integrity. Raw real-run artifacts remain on Anas's PC. These are exploratory development observations. General accuracy, hosted CI and peer approval require separate evidence. Follow-up for Oussama: exposing structured claim-to-source links publicly would require contract review.
 
 # 4. Achraf
 ## Assigned tasks
