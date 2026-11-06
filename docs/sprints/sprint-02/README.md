@@ -297,6 +297,13 @@ service are missing. No generated-answer quality metrics are claimed.
 Issue #19; local branch `feature/19-vector-rag-generation`. Peer review and real
 execution evidence remain outstanding; this entry does not claim formal Done.
 
+2026-11-06 follow-up: user supplied a real P01 run with missing summary citation,
+rejected as InvalidOutput at citations. Added per-request summary decoding
+constraints using only retrieved IDs; v1 contracts and final validator unchanged.
+Vector and baseline suites, Ruff and repository integrity passed locally after
+this change. Real constrained-decoding compatibility and answer support remain
+unverified; retain the failed run. See `rag/generation/README.md`.
+
 # 4. Achraf
 ## Assigned tasks
 

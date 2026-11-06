@@ -43,3 +43,16 @@ See the existing vector evaluator setup and baseline configuration documentation
 Follow-up for Oussama: a structured claim-to-evidence field requires a reviewed
 contract change. The current v1 schema remains unchanged. API integration (#20)
 and the formal comparison experiment (#21) remain separate tasks.
+
+## Development follow-up: decoding constraint
+
+The first user-reported real P01 run (RUN-20261106T144718Z-8661d1b8)
+produced JSON with no summary citation and was rejected at the citations stage.
+This is a reported local failure, not independently rerun here. ContextGenerator
+now constrains summary decoding to contain one or more exact retrieved markers,
+with no other square brackets. The per-request model decision schema and prompt
+payload share this constraint; interchange schemas are unchanged. Final strict
+validation still rejects generators that ignore the constraint. No repair or
+retry is added. This addresses syntax only: neither reference support nor improved
+SOC accuracy is established. Real runtime grammar compatibility remains to be
+verified in a new development run; retain the earlier failed attempt.

@@ -46,7 +46,16 @@ class ContextGenerator:
 
     def generate(self, messages, schema, deadline):
         messages = deepcopy(messages)
+        schema = deepcopy(schema)
+        # This is a per-request decoding constraint, not a v1 contract change.
+        # Evidence IDs were validated by the pipeline before reaching this adapter.
+        choices = "|".join(re.escape(e["evidence_id"]) for e in self.evidence)
+        marker = r"\[\[(?:" + choices + r")\]\]"
+        schema["properties"]["summary"]["pattern"] = (
+            r"^[^\[\]]*" + marker + r"(?:[^\[\]]|" + marker + r")*$"
+        )
         payload = json.loads(messages[1]["content"])
+        payload["required_output"] = schema
         payload["untrusted_evidence"] = self.evidence
         messages[1]["content"] = json.dumps(payload, ensure_ascii=False)
         return self.generator.generate(messages, schema, deadline)
