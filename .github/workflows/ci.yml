@@ -42,3 +42,5 @@ jobs:
         run: docker compose run --rm -T dev python -B -m unittest discover -s tests/vector -v
       - name: Run baseline runner tests (no models required)
         run: docker compose run --rm -T dev python -B -m unittest discover -s tests/baseline -v
+      - name: Run knowledge graph schema tests
+        run: docker compose run --rm -T dev python -B -m unittest discover -s tests/knowledge_graph -v

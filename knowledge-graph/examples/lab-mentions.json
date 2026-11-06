@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.0.0",
+  "ontology_version": "1.0.0",
+  "nodes": [
+    {
+      "uid": "KG-a94f6bc1ea1941879756211fc1048823d97221e6f2e4ab91e7cda5e0a5805d87",
+      "label": "SourceRecord",
+      "properties": {
+        "record_id": "fixture:lab01-run01",
+        "source": "soc_log",
+        "source_record_id": "INC-8a6064bd-f310-5a68-9f66-1c868418d844",
+        "snapshot_ref": "tests/normalizer/fixtures/lab01-run01-incident.json",
+        "content_sha256": "a3b6c2d390b783f9906b032426ca5ab6fb65ed78e9cbb974346038b04abc0690"
+      }
+    },
+    {
+      "uid": "KG-c52288316d892283a0af146747a9b6b5763b2b4136b0f58fb92f081c9e440184",
+      "label": "Alert",
+      "properties": {
+        "incident_id": "INC-8a6064bd-f310-5a68-9f66-1c868418d844",
+        "timestamp": "2026-10-22T13:43:25.130000Z",
+        "source": "wazuh:lab",
+        "source_event_id": "1792676605.79530",
+        "severity": "low",
+        "ingestion_kind": "replay"
+      },
+      "source_record_uids": [
+        "KG-a94f6bc1ea1941879756211fc1048823d97221e6f2e4ab91e7cda5e0a5805d87"
+      ]
+    },
+    {
+      "uid": "KG-b09105efc0c2507d67ddc0a0c16e5172eb19ad129f062a9acf662b6ad7b12ffc",
+      "label": "Host",
+      "properties": {
+        "name": "linux-01",
+        "scope": "fixture:lab01-run01:unresolved-host"
+      },
+      "source_record_uids": [
+        "KG-a94f6bc1ea1941879756211fc1048823d97221e6f2e4ab91e7cda5e0a5805d87"
+      ]
+    },
+    {
+      "uid": "KG-f95d20f3c2eef4e54e791624f84e49fa7597629df29fedaff3b8504fc3747321",
+      "label": "Host",
+      "properties": {
+        "name": "linuxsoc",
+        "scope": "fixture:lab01-run01:unresolved-host"
+      },
+      "source_record_uids": [
+        "KG-a94f6bc1ea1941879756211fc1048823d97221e6f2e4ab91e7cda5e0a5805d87"
+      ]
+    },
+    {
+      "uid": "KG-92acb5e1c5d512b1f8539b60e68986d0ca433acb957bd165588f8fd4ad447b3c",
+      "label": "IPAddress",
+      "properties": {
+        "address": "192.168.77.30",
+        "scope": "fixture:lab01-run01:unresolved-network",
+        "version": 4
+      },
+      "source_record_uids": [
+        "KG-a94f6bc1ea1941879756211fc1048823d97221e6f2e4ab91e7cda5e0a5805d87"
+      ]
+    },
+    {
+      "uid": "KG-d267dddfe56be9f6448218c88346d8d455a9ecd141d195a9bb299bb3ed68b242",
+      "label": "IPAddress",
+      "properties": {
+        "address": "192.168.56.20",
+        "scope": "fixture:lab01-run01:unresolved-network",
+        "version": 4
+      },
+      "source_record_uids": [
+        "KG-a94f6bc1ea1941879756211fc1048823d97221e6f2e4ab91e7cda5e0a5805d87"
+      ]
+    },
+    {
+      "uid": "KG-3c1d09c2bfffb51158a36714e10282394f7e418461097d2e88158d1b3fc52606",
+      "label": "User",
+      "properties": {
+        "username": "labtest",
+        "scope": "fixture:lab01-run01:unresolved-account"
+      },
+      "source_record_uids": [
+        "KG-a94f6bc1ea1941879756211fc1048823d97221e6f2e4ab91e7cda5e0a5805d87"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "uid": "KG-f852d824868d6d0394cefbc89379a952d479921c6a10cc61cc227f1dc997d994",
+      "type": "MENTIONS_HOST",
+      "from_uid": "KG-c52288316d892283a0af146747a9b6b5763b2b4136b0f58fb92f081c9e440184",
+      "to_uid": "KG-b09105efc0c2507d67ddc0a0c16e5172eb19ad129f062a9acf662b6ad7b12ffc",
+      "source_record_uid": "KG-a94f6bc1ea1941879756211fc1048823d97221e6f2e4ab91e7cda5e0a5805d87",
+      "properties": {}
+    },
+    {
+      "uid": "KG-0eee09b822d6531b3d48d9b7f2019f08e817ea2dda2a33d49b9b0b99fb258e98",
+      "type": "MENTIONS_HOST",
+      "from_uid": "KG-c52288316d892283a0af146747a9b6b5763b2b4136b0f58fb92f081c9e440184",
+      "to_uid": "KG-f95d20f3c2eef4e54e791624f84e49fa7597629df29fedaff3b8504fc3747321",
+      "source_record_uid": "KG-a94f6bc1ea1941879756211fc1048823d97221e6f2e4ab91e7cda5e0a5805d87",
+      "properties": {}
+    },
+    {
+      "uid": "KG-927d3af39d8272796d23a76c463486f8d69f471da6d17e7cd0d240db200a9946",
+      "type": "MENTIONS_IP",
+      "from_uid": "KG-c52288316d892283a0af146747a9b6b5763b2b4136b0f58fb92f081c9e440184",
+      "to_uid": "KG-92acb5e1c5d512b1f8539b60e68986d0ca433acb957bd165588f8fd4ad447b3c",
+      "source_record_uid": "KG-a94f6bc1ea1941879756211fc1048823d97221e6f2e4ab91e7cda5e0a5805d87",
+      "properties": {}
+    },
+    {
+      "uid": "KG-b05e1ad6c208dee7b55023b72535cf97a14a1d7762e96a4a890e196ba27e09f4",
+      "type": "MENTIONS_IP",
+      "from_uid": "KG-c52288316d892283a0af146747a9b6b5763b2b4136b0f58fb92f081c9e440184",
+      "to_uid": "KG-d267dddfe56be9f6448218c88346d8d455a9ecd141d195a9bb299bb3ed68b242",
+      "source_record_uid": "KG-a94f6bc1ea1941879756211fc1048823d97221e6f2e4ab91e7cda5e0a5805d87",
+      "properties": {}
+    },
+    {
+      "uid": "KG-89cf22bbe0d56a4d7bc9b80e60d48fa8da2942768910079f8d0a5db10594b9ca",
+      "type": "MENTIONS_USER",
+      "from_uid": "KG-c52288316d892283a0af146747a9b6b5763b2b4136b0f58fb92f081c9e440184",
+      "to_uid": "KG-3c1d09c2bfffb51158a36714e10282394f7e418461097d2e88158d1b3fc52606",
+      "source_record_uid": "KG-a94f6bc1ea1941879756211fc1048823d97221e6f2e4ab91e7cda5e0a5805d87",
+      "properties": {}
+    }
+  ]
+}

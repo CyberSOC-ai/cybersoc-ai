@@ -1,0 +1,187 @@
+{
+  "schema_version": "1.0.0",
+  "ontology_version": "1.0.0",
+  "nodes": [
+    {
+      "uid": "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf",
+      "label": "SourceRecord",
+      "properties": {
+        "record_id": "synthetic-ontology-v1",
+        "source": "synthetic",
+        "source_record_id": "synthetic-ontology-v1",
+        "snapshot_ref": "synthetic:ontology-v1",
+        "content_sha256": "42ead9044fe09a4f7d389cb4f90793cf10df41a74474879dbd832f98b5d1ca7d"
+      }
+    },
+    {
+      "uid": "KG-7196282e5c2867bbf92b9635b318dcde160c1c05d676d4c9a9e138b083e9a16c",
+      "label": "User",
+      "properties": {
+        "username": "labtest",
+        "scope": "synthetic:lab:linux-01"
+      },
+      "source_record_uids": [
+        "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf"
+      ]
+    },
+    {
+      "uid": "KG-ae2f52c305ec9be92b3d91db3eff5eb82bf4d4f511280c9930c2bc588448071d",
+      "label": "Host",
+      "properties": {
+        "name": "linux-01",
+        "scope": "synthetic:lab"
+      },
+      "source_record_uids": [
+        "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf"
+      ]
+    },
+    {
+      "uid": "KG-823c10455f834e7290c2dc48093c74419cd59c407b245264620db97e48121c30",
+      "label": "IPAddress",
+      "properties": {
+        "address": "192.0.2.10",
+        "scope": "synthetic:lab",
+        "version": 4
+      },
+      "source_record_uids": [
+        "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf"
+      ]
+    },
+    {
+      "uid": "KG-fc267fb3ff18144c258fffb66a99408481f4ce091634c8cff1db62fad4630af0",
+      "label": "Alert",
+      "properties": {
+        "incident_id": "SYNTH-ALERT-001",
+        "timestamp": "2026-11-06T12:00:00Z",
+        "source": "synthetic:lab",
+        "source_event_id": "event-001",
+        "severity": "low",
+        "ingestion_kind": "synthetic"
+      },
+      "source_record_uids": [
+        "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf"
+      ]
+    },
+    {
+      "uid": "KG-f0e4482520703a822d8ca073ad0ed6155ca928e5faee4dd5d4a993f35a901a72",
+      "label": "Vulnerability",
+      "properties": {
+        "cve_id": "CVE-2024-6387"
+      },
+      "source_record_uids": [
+        "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf"
+      ]
+    },
+    {
+      "uid": "KG-a13dde56bd1a7fd614c3b7e28308b63a90612e101f45e8c600c79d999c80fd37",
+      "label": "Malware",
+      "properties": {
+        "name": "Synthetic Example Malware",
+        "provider": "synthetic",
+        "provider_id": "malware-001"
+      },
+      "source_record_uids": [
+        "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf"
+      ]
+    },
+    {
+      "uid": "KG-10654250d30baccfcbbe1db36c5d1e82b21ea9583998ab0f0c4887eddf9ae11f",
+      "label": "AttackTechnique",
+      "properties": {
+        "technique_id": "T1110",
+        "name": "Brute Force",
+        "attack_domain": "enterprise"
+      },
+      "source_record_uids": [
+        "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf"
+      ]
+    },
+    {
+      "uid": "KG-c2689e6000d1936ea65c7622dc695e67a92e9cc23336dd9be991a5de3d22f795",
+      "label": "ThreatIndicator",
+      "properties": {
+        "provider": "synthetic",
+        "provider_id": "ioc-001",
+        "indicator_type": "ipv4",
+        "value": "192.0.2.10"
+      },
+      "source_record_uids": [
+        "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "uid": "KG-984e7b4c6108c5a2943b82fd1ba9f85f351da0f2a7cb3301bfa754792f1e1f45",
+      "type": "MENTIONS_HOST",
+      "from_uid": "KG-fc267fb3ff18144c258fffb66a99408481f4ce091634c8cff1db62fad4630af0",
+      "to_uid": "KG-ae2f52c305ec9be92b3d91db3eff5eb82bf4d4f511280c9930c2bc588448071d",
+      "source_record_uid": "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf",
+      "properties": {}
+    },
+    {
+      "uid": "KG-c2169ba365df4902258e1c2255e77da6cebba8a5a8993b4be4153b45f509e91f",
+      "type": "MENTIONS_USER",
+      "from_uid": "KG-fc267fb3ff18144c258fffb66a99408481f4ce091634c8cff1db62fad4630af0",
+      "to_uid": "KG-7196282e5c2867bbf92b9635b318dcde160c1c05d676d4c9a9e138b083e9a16c",
+      "source_record_uid": "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf",
+      "properties": {}
+    },
+    {
+      "uid": "KG-770b812df6ffde1a65214b7546d0f5e47683796414b5cc2386f491ca6c90cf09",
+      "type": "MENTIONS_IP",
+      "from_uid": "KG-fc267fb3ff18144c258fffb66a99408481f4ce091634c8cff1db62fad4630af0",
+      "to_uid": "KG-823c10455f834e7290c2dc48093c74419cd59c407b245264620db97e48121c30",
+      "source_record_uid": "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf",
+      "properties": {}
+    },
+    {
+      "uid": "KG-619ae1e4f45d201883b199a0202568099284ebaf14e24f9968768b6a73a891d2",
+      "type": "HAS_IP",
+      "from_uid": "KG-ae2f52c305ec9be92b3d91db3eff5eb82bf4d4f511280c9930c2bc588448071d",
+      "to_uid": "KG-823c10455f834e7290c2dc48093c74419cd59c407b245264620db97e48121c30",
+      "source_record_uid": "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf",
+      "properties": {}
+    },
+    {
+      "uid": "KG-c1e4d497402fc482994b6d5438fdcd1b93e9dadfb7d33a567c99529f8f1c1b3c",
+      "type": "HAS_VULNERABILITY",
+      "from_uid": "KG-ae2f52c305ec9be92b3d91db3eff5eb82bf4d4f511280c9930c2bc588448071d",
+      "to_uid": "KG-f0e4482520703a822d8ca073ad0ed6155ca928e5faee4dd5d4a993f35a901a72",
+      "source_record_uid": "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf",
+      "properties": {}
+    },
+    {
+      "uid": "KG-99018938f08bb42f67457a5a023c744dc113aeeb444398f095e6e673952cdd0d",
+      "type": "MAPPED_TO",
+      "from_uid": "KG-fc267fb3ff18144c258fffb66a99408481f4ce091634c8cff1db62fad4630af0",
+      "to_uid": "KG-10654250d30baccfcbbe1db36c5d1e82b21ea9583998ab0f0c4887eddf9ae11f",
+      "source_record_uid": "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf",
+      "properties": {}
+    },
+    {
+      "uid": "KG-a5414b44d6923280b178425b2c6a4f66dde0ca48fe372fd450f9cb62eb81abc5",
+      "type": "REFERS_TO_IP",
+      "from_uid": "KG-c2689e6000d1936ea65c7622dc695e67a92e9cc23336dd9be991a5de3d22f795",
+      "to_uid": "KG-823c10455f834e7290c2dc48093c74419cd59c407b245264620db97e48121c30",
+      "source_record_uid": "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf",
+      "properties": {}
+    },
+    {
+      "uid": "KG-f9b32b511ad54b89c42872eed5ba21c92ebfcf451dd5c47e5c198fe1ded4b828",
+      "type": "INDICATES",
+      "from_uid": "KG-c2689e6000d1936ea65c7622dc695e67a92e9cc23336dd9be991a5de3d22f795",
+      "to_uid": "KG-a13dde56bd1a7fd614c3b7e28308b63a90612e101f45e8c600c79d999c80fd37",
+      "source_record_uid": "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf",
+      "properties": {}
+    },
+    {
+      "uid": "KG-7b00ae8baf19402e1cdf47d9720737e47daa3d4b43bd2beee756608b2a1afd32",
+      "type": "USES",
+      "from_uid": "KG-a13dde56bd1a7fd614c3b7e28308b63a90612e101f45e8c600c79d999c80fd37",
+      "to_uid": "KG-10654250d30baccfcbbe1db36c5d1e82b21ea9583998ab0f0c4887eddf9ae11f",
+      "source_record_uid": "KG-cfa272c04cb349a1790acdbaafa6f9e827d76fccbc995aea87e7cb4db9399fbf",
+      "properties": {}
+    }
+  ]
+}
