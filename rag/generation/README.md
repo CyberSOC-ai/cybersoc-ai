@@ -32,7 +32,7 @@ retriever call. Existing retriever transport timeouts still apply.
 
 Run synthetic integration tests with:
 `python -B -m unittest discover -s tests/vector -p test_generation.py -v`.
-These tests make no model-quality claim. Real model execution: not run.
+Anas also ran the Linux CPU model locally on revision `fe9c9ab`. See the handoff below.
 
 Runtime prerequisites absent from this checkout at implementation time:
 - `.local/models/qwen2.5-1.5b-instruct-q4_k_m.gguf` and the configured llama.cpp runtime;
@@ -57,4 +57,20 @@ regex in the decoding schema caused repetition in the b11827 A/B probe.
 The selection probe (python -m rag.generation.selection_probe --help) uses the
 existing LSASS and SSH retrieval responses, runs both passage orders, and saves
 raw model decisions and outcomes. This diagnostic does not count as a full
-incident run. Real-model validation of this revision is pending.
+incident run. Both passage orders selected the supporting LSASS source in Anas's run.
+
+## Reviewer and data handoff
+
+Oussama can review [PR #90](https://github.com/CyberSOC-ai/cybersoc-ai/pull/90) now using the preview. Task #20 consumes the reviewed generation interface. Ahmed can prepare a separately versioned full-data release in parallel as agreed by the team. Keep the preview and its receipts available so the original run can be reproduced.
+
+Anas's [Sprint 2 journal](../../docs/sprints/sprint-02/README.md#3-anas) records the outcome and limitations. Detailed evidence lives under the local bundle root `.local/preview-index-340-v1/`:
+
+| Local path relative to the bundle | Purpose |
+|---|---|
+| `runs/P01-selection-f40eaf64ad59/` | Full P01 run. Compare `raw-answer.txt`, `retrieval-response.json` and `result.json` to inspect the model selection, cited passage and proposed action. Consult `request.json`, `run-config.json`, `ready.json` and `measurements.json` for settings and provenance. |
+| `runs/selection-23bad1ed6de742e5baf4ba6a40f19d5d/` | Two-order LSASS/SSH diagnostic; each order has its own raw answer and outcome. |
+| `runtime/READY.json` | Paths and identities of Anas's restored index inside the container. Restore the preview on the reviewer's machine for a rerun. |
+
+The full P01 call passed structural validation; its incident-specific summary came from the alert and its selected spraying passage did not support those details. The two MITRE predictions differed from the pilot label. Review claim support separately from marker validity.
+
+Keep raw run files, models, Docker volumes and the handoff archive outside Git. A local path is a locator on Anas's PC; for independent inspection, Anas can provide a sanitized evidence extract privately to the reviewer. Follow the [experiment conventions](../../experiments/README.md) for access and provenance. Windows line-ending adjustments made during restoration are workstation setup and should not be committed with #19.
