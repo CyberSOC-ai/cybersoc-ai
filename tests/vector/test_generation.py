@@ -46,18 +46,13 @@ class GenerationTests(unittest.TestCase):
         result['evidence'][0]['content'] = 'changed'
         self.assertEqual(self.response, original)
 
-    def test_decoding_schema_requires_exact_retrieved_marker(self):
-        from jsonschema import Draft202012Validator
-
+    def test_model_receives_exact_markers_and_plain_summary_schema(self):
         self.run_pipeline()
         messages, schema, _ = self.generator.generate.call_args.args
-        self.assertEqual(json.loads(messages[1]['content'])['required_output'], schema)
-        validator = Draft202012Validator(schema)
-        for summary in ('No citation', '[[wrong]]', '[[ EVD-001]]',
-                        '[[[EVD-001]]]', '[[EVD-001]] trailing ['):
-            self.assertFalse(validator.is_valid(self.decision | {'summary': summary}))
-        for summary in ('Finding [[EVD-001]].', '[[EVD-001]] again [[EVD-001]]'):
-            self.assertTrue(validator.is_valid(self.decision | {'summary': summary}))
+        payload = json.loads(messages[1]['content'])
+        self.assertEqual(payload['allowed_summary_markers'], ['[[EVD-001]]'])
+        self.assertEqual(payload['required_output'], schema)
+        self.assertNotIn('pattern', schema['properties']['summary'])
 
     def test_empty_or_failed_retrieval_never_generates(self):
         for failed in (False, True):

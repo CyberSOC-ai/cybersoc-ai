@@ -298,11 +298,11 @@ Issue #19; local branch `feature/19-vector-rag-generation`. Peer review and real
 execution evidence remain outstanding; this entry does not claim formal Done.
 
 2026-11-06 follow-up: user supplied a real P01 run with missing summary citation,
-rejected as InvalidOutput at citations. Added per-request summary decoding
-constraints using only retrieved IDs; v1 contracts and final validator unchanged.
-Vector and baseline suites, Ruff and repository integrity passed locally after
-this change. Real constrained-decoding compatibility and answer support remain
-unverified; retain the failed run. See `rag/generation/README.md`.
+rejected as InvalidOutput at citations. The subsequent summary-pattern attempt reached 512 tokens. In Anas's
+controlled local probe the plain schema ended normally, while the pattern
+produced repeated JSON until the limit. Removed the pattern from model decoding
+and supplied exact allowed markers in the prompt. The independent citation
+validator still runs. A new real P01 result and claim-support review are pending.
 
 # 4. Achraf
 ## Assigned tasks

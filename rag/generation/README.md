@@ -48,11 +48,9 @@ and the formal comparison experiment (#21) remain separate tasks.
 
 The first user-reported real P01 run (RUN-20261106T144718Z-8661d1b8)
 produced JSON with no summary citation and was rejected at the citations stage.
-This is a reported local failure, not independently rerun here. ContextGenerator
-now constrains summary decoding to contain one or more exact retrieved markers,
-with no other square brackets. The per-request model decision schema and prompt
-payload share this constraint; interchange schemas are unchanged. Final strict
-validation still rejects generators that ignore the constraint. No repair or
-retry is added. This addresses syntax only: neither reference support nor improved
-SOC accuracy is established. Real runtime grammar compatibility remains to be
-verified in a new development run; retain the earlier failed attempt.
+A subsequent constrained-decoding run reached its 512-token cap. A local A/B
+probe on b11827 yielded EOS for the plain schema and repeated JSON objects to the
+limit with the summary pattern. The current implementation uses the plain
+decision schema and supplies literal allowed markers derived from retrieved IDs.
+The model must produce its own cited summary; strict validation rejects omissions.
+Real P01 success with this revision awaits verification.
