@@ -157,39 +157,66 @@ S3-T01, S3-T05. S3-T01 transferred from Ahmed on 2026-11-04; Ahmed reviews.
 
 ## Work completed
 
-> To be completed from validated sprint evidence.
+S3-T01 implementation prepared on 2026-11-06: eight business node types,
+allowlisted relations, SourceRecord provenance, batch schema, offline validator,
+synthetic and lab mentions examples. User local tests passed; host integrity
+rerun, CI and review remain pending.
+S3-T05 has not been implemented by this change.
 
 ## Technical approach
 
-> To be completed from validated sprint evidence.
+Typed Neo4j property graph with scoped deterministic identities and versioned
+source assertions. Closed JSON Schema validates structure; Python validates
+references, labels, identifiers, dates and selected semantic rules. No inferred
+ownership, vulnerability or ATT&CK mapping from mere co-occurrence.
 
 ## Files / components modified
 
-> To be completed from validated sprint evidence.
+- [Graph ontology and handoff](../../../knowledge-graph/README.md)
+- [Offline validator](../../../rag/graph/validate.py)
+- [Schema tests](../../../tests/knowledge_graph/test_schema.py)
+- [Semantic tests](../../../tests/knowledge_graph/test_semantics.py)
+- [ADR-003](../../adr/ADR-003.md)
+- CI includes the offline graph suite.
 
 ## Tests / validation
 
-> To be completed from validated sprint evidence.
+User-supplied transcript: Docker build and Ruff passed; 22 graph tests, 20
+contract tests and 44 ingestion tests passed. Both example CLI validations passed.
+Integrity failed before file checks because Git is absent from the dev image; use
+the corrected host command in the [verification guide](../../../knowledge-graph/validation/VALIDATION.md).
+The checked diff had no whitespace errors. No assistant test rerun, CI pass or
+Neo4j execution is claimed.
 
 ## Results / metrics
 
-> To be completed from validated sprint evidence.
+86 user-executed tests passed: graph 22 (0.394s), contracts 20 (0.471s),
+ingestion 44 (3.517s). Minimal example: 9 nodes / 9 relations; lab example:
+7 nodes / 5 relations. Evidence is the user transcript linked in the guide;
+results refer to the tested working tree, with no immutable commit provided.
 
 ## Problems encountered
 
-> To be completed from validated sprint evidence.
+Current ATT&CK ingestion omits malware objects; some relation endpoints cannot
+resolve. Incident entity roles are absent. Source-local scopes avoid unsupported
+merges. Production ETL must apply existing split policies before graph creation.
 
 ## Decisions made
 
-> To be completed from validated sprint evidence.
+Proposed ontology v1, documented canonical identity keys, per-record assertions,
+self-contained batches, atomic indicators and deferred extra entity types.
+Approval is pending; ADR-003 remains Proposed.
 
 ## Related Issues / Pull Requests
 
-> To be completed from validated sprint evidence.
+[S3-T01 #24](https://github.com/CyberSOC-ai/cybersoc-ai/issues/24).
+Downstream: [S3-T02 #25](https://github.com/CyberSOC-ai/cybersoc-ai/issues/25).
+PR not created. Issue remains open pending verification and delivery requirements.
 
 ## Learning outcome
 
-> To be completed from validated sprint evidence.
+Prepared material covers node/relationship semantics, stable identities, provenance
+and ETL handoff. Achraf/Ahmed walkthrough and demonstrated verification are pending.
 
 
 # 5. Oussama
