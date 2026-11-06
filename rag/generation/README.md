@@ -44,13 +44,17 @@ Follow-up for Oussama: a structured claim-to-evidence field requires a reviewed
 contract change. The current v1 schema remains unchanged. API integration (#20)
 and the formal comparison experiment (#21) remain separate tasks.
 
-## Development follow-up: decoding constraint
+## Source selection
 
-The first user-reported real P01 run (RUN-20261106T144718Z-8661d1b8)
-produced JSON with no summary citation and was rejected at the citations stage.
-A subsequent constrained-decoding run reached its 512-token cap. A local A/B
-probe on b11827 yielded EOS for the plain schema and repeated JSON objects to the
-limit with the summary pattern. The current implementation uses the plain
-decision schema and supplies literal allowed markers derived from retrieved IDs.
-The model must produce its own cited summary; strict validation rejects omissions.
-Real P01 success with this revision awaits verification.
+The internal model decision uses summary.claim and summary.evidence_id. The
+latter is a required enum generated from this retrieval. Code strictly parses and
+validates the entire decision before formatting the claim and selected ID as a
+public summary. No default selection, guessing or automatic repair is allowed.
+A valid selection identifies a passage; assess support separately.
+
+The P01 and LSASS prompt-only attempts omitted required inline markers. A summary
+regex in the decoding schema caused repetition in the b11827 A/B probe.
+The selection probe (python -m rag.generation.selection_probe --help) uses the
+existing LSASS and SSH retrieval responses, runs both passage orders, and saves
+raw model decisions and outcomes. This diagnostic does not count as a full
+incident run. Real-model validation of this revision is pending.

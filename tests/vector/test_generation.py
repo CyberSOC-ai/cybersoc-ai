@@ -22,7 +22,7 @@ class GenerationTests(unittest.TestCase):
         self.response = read('backend/contracts/v1/examples/retrieval-response.json')
         self.request = read('backend/contracts/v1/examples/retrieval-request.json')
         self.request.update(request_id=self.response['request_id'], trace_id=self.response['trace_id'])
-        self.decision = dict(summary='Synthetic finding [[EVD-001]].',
+        self.decision = dict(summary={'claim': 'Synthetic finding.', 'evidence_id': 'EVD-001'},
             triage_verdict='undetermined', risk_level='low', mitre_techniques=[], recommended_actions=[])
         self.retriever, self.generator = Mock(), Mock()
         self.retriever.retrieve.return_value = self.response
@@ -46,13 +46,24 @@ class GenerationTests(unittest.TestCase):
         result['evidence'][0]['content'] = 'changed'
         self.assertEqual(self.response, original)
 
-    def test_model_receives_exact_markers_and_plain_summary_schema(self):
-        self.run_pipeline()
-        messages, schema, _ = self.generator.generate.call_args.args
-        payload = json.loads(messages[1]['content'])
-        self.assertEqual(payload['allowed_summary_markers'], ['[[EVD-001]]'])
-        self.assertEqual(payload['required_output'], schema)
-        self.assertNotIn('pattern', schema['properties']['summary'])
+    def test_second_source_is_selected_and_rendered(self):
+        second = dict(self.response['evidence'][0], evidence_id='EVD-002', content='Different passage')
+        self.response['evidence'].append(second)
+        self.request['top_k'] = 2
+        self.decision['summary']['evidence_id'] = 'EVD-002'
+        self.generator.generate.return_value = (json.dumps(self.decision), {})
+        result = self.run_pipeline()
+        self.assertEqual(result['summary'], 'Synthetic finding. [[EVD-002]]')
+        self.assertEqual(result['evidence'], self.response['evidence'])
+
+    def test_rejects_invalid_selection_before_rendering(self):
+        for summary in ({'claim': 'text'}, {'claim': 'text', 'evidence_id': 'invented'},
+                        {'claim': '  ', 'evidence_id': 'EVD-001'},
+                        {'claim': 'text [[fake]]', 'evidence_id': 'EVD-001'}):
+            self.generator.generate.return_value = (json.dumps(self.decision | {'summary': summary}), {})
+            with self.subTest(summary=summary), self.assertRaises(InvalidOutput) as error:
+                self.run_pipeline()
+            self.assertEqual(error.exception.stage, 'source_selection')
 
     def test_empty_or_failed_retrieval_never_generates(self):
         for failed in (False, True):
