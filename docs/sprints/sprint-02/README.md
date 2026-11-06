@@ -264,47 +264,19 @@ relevance, independent test eligibility or complete source coverage.
 
 
 # 3. Anas
-## Assigned tasks
+## S2-T04 — Vector-RAG generation ([#19](https://github.com/CyberSOC-ai/cybersoc-ai/issues/19))
 
-S2-T04 — [issue #19](https://github.com/CyberSOC-ai/cybersoc-ai/issues/19).
+The pipeline reuses the existing retriever and model client. The model selects one retrieved evidence ID for its claim. Code validates the selection, renders it inline and copies the retriever's evidence into the v1 result. Empty retrieval and invalid selections fail explicitly. Oussama is the assigned reviewer.
 
-## Work completed
+### Development evidence reported by Anas, 2026-11-06
 
-2026-11-05: implemented local VectorPipeline in `rag/generation/`, reusing the
-existing retriever and BaselineRunner validation/inference interface. Strict
-`[[evidence_id]]` markers are required; unknown, missing or malformed references
-fail explicitly. Evidence is copied only from validated retrieval output.
-Empty retrieval stops generation. No fallback or output repair is performed.
+On revision `fe9c9ab`, the two-order LSASS/SSH probe selected the LSASS passage in both orders and correctly attributed the single-sign-on explanation. Earlier P01 attempts omitted the inline citation or reached the 512-token limit with a decoding pattern. Those failures were retained.
 
-## Technical approach
+Full run `P01-selection-f40eaf64ad59` used Qwen 1.5B Q4_K_M, llama.cpp CPU b11827, exact MITRE-only retrieval and K=2 on the 406-passage preview. The result passed structural and citation-ID validation. The incident supports the summary of eight failed passwords in 57 seconds. The selected passage about throttled password spraying does not substantiate that host, account, count or timing. No P01 claim-support pass is claimed.
 
-See `rag/generation/README.md`. Retrieved content remains untrusted JSON data.
-Existing contracts, runner, retriever, API integration and comparison experiment
-are unchanged. Citation checks establish reference validity only, not claim
-support. Follow-up for Oussama: structured claim-to-evidence links require a
-reviewed contract change; no such change is included here.
+Verdict and risk match the pending-review pilot label (true positive, medium). Returned T1078 and T1098 differ from expected T1110.001. The preview had zero dedicated T1110.001 passages among 138 MITRE passages. The proposed approval-required block on linux-01 for 192.0.2.10, TCP/22, 300 seconds matches the required action and permitted duration. The rollback text describes SSH configuration rather than removing the proposed block. No execution was reported.
 
-## Tests / validation
-
-All 254 tests across contracts, evaluation, backend, normalizer, ingestion, vector
-and baseline passed locally, including six new synthetic generation integration
-tests. Ruff passed. Real model: not run.
-Model/runtime files, embedding/index artifacts and an available local Qdrant
-service are missing. No generated-answer quality metrics are claimed.
-
-## Related Issues / Pull Requests
-
-Issue #19; local branch `feature/19-vector-rag-generation`. Peer review and real
-execution evidence remain outstanding; this entry does not claim formal Done.
-
-2026-11-06 follow-up: user supplied a real P01 run with missing summary citation,
-rejected as InvalidOutput at citations. The subsequent summary-pattern attempt reached 512 tokens. In Anas's
-controlled local probe the plain schema ended normally, while the pattern
-produced repeated JSON until the limit. Removed the pattern from model decoding
-and supplied exact allowed markers in the prompt. The independent citation
-validator still runs. A new real P01 result and claim-support review are pending.
-
-Anas approved internal claim and evidence-ID selection after the prompt-only LSASS probe also omitted its marker. The pipeline validates the selected ID before rendering it in the public summary. Two-order model probe and full incident validation remain pending.
+At the source-selection revision, 70 vector and 27 baseline tests passed locally, along with Ruff and repository integrity. Raw real-run artifacts remain on Anas's PC. These are exploratory development observations. General accuracy, hosted CI and peer approval require separate evidence. Follow-up for Oussama: exposing structured claim-to-source links publicly would require contract review.
 
 # 4. Achraf
 ## Assigned tasks
