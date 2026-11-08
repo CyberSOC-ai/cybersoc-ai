@@ -5,9 +5,10 @@ import re
 import time
 from uuid import uuid4
 
+import httpx
 from jsonschema import Draft202012Validator, ValidationError
 
-from ai.baseline.runner import BaselineRunner, InvalidOutput, RunnerTimeout, strict_json
+from ai.baseline.runner import BaselineRunner, InvalidOutput, strict_json
 from backend.validation import validate
 
 ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}")
@@ -92,14 +93,19 @@ class VectorPipeline:
         limit = started + self.timeout_seconds
         deadline = min(deadline, limit) if deadline is not None else limit
         if time.monotonic() >= deadline:
-            raise RunnerTimeout("Pipeline deadline exceeded")
+            raise PipelineError("timeout", "retrieval")
         incident, policy, request = deepcopy((incident, policy, request))
         validate("incident", incident)
         validate("retrieval-request", request)
         BaselineRunner._check_policy(policy)
         if request["mode"] != "vector":
             raise PipelineError("validation_error", "request_mode")
-        response = deepcopy(self.retriever.retrieve(deepcopy(request)))
+        try:
+            response = deepcopy(self.retriever.retrieve(deepcopy(request), deadline=deadline))
+        except httpx.TimeoutException as exc:
+            raise PipelineError("timeout", "retrieval") from exc
+        if time.monotonic() >= deadline:
+            raise PipelineError("timeout", "retrieval")
         try:
             validate("retrieval-response", response)
             if any(response[k] != request[k] for k in ("request_id", "trace_id")):
@@ -117,7 +123,7 @@ class VectorPipeline:
         if not evidence:
             raise PipelineError("invalid_output", "empty_retrieval")
         if time.monotonic() >= deadline:
-            raise RunnerTimeout("Pipeline deadline exceeded")
+            raise PipelineError("timeout", "retrieval")
         # Reuse baseline decision parsing, action policy and result validation.
         # Its internal no_rag envelope is never returned as a pipeline outcome.
         runner = BaselineRunner(ContextGenerator(self.generator, evidence), self.root,

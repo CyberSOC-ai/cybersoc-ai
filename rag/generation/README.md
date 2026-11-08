@@ -27,8 +27,9 @@ with invalid_output. Invalid generation and citations raise existing InvalidOutp
 No repair, retry, truncation or No-RAG fallback is performed. Retrieved content is
 JSON data in the user message and never part of the trusted system instructions.
 Prompt separation does not establish resistance to all prompt injection attacks.
-The shared deadline is checked around retrieval; it does not interrupt a running
-retriever call. Existing retriever transport timeouts still apply.
+The investigation's shared monotonic deadline is passed to retrieval and its
+Qdrant reads; see the timeout follow-up below. Existing no-deadline retrieval
+callers retain their original behavior.
 
 Run synthetic integration tests with:
 `python -B -m unittest discover -s tests/vector -p test_generation.py -v`.
@@ -74,3 +75,63 @@ Anas's [Sprint 2 journal](../../docs/sprints/sprint-02/README.md#3-anas) records
 The full P01 call passed structural validation; its incident-specific summary came from the alert and its selected spraying passage did not support those details. The two MITRE predictions differed from the pilot label. Review claim support separately from marker validity.
 
 Keep raw run files, models, Docker volumes and the handoff archive outside Git. A local path is a locator on Anas's PC; for independent inspection, Anas can provide a sanitized evidence extract privately to the reviewer. Follow the [experiment conventions](../../experiments/README.md) for access and provenance. Windows line-ending adjustments made during restoration are workstation setup and should not be committed with #19.
+
+
+## Retrieval deadline follow-up
+
+Previously the pipeline checked its deadline only before and after retrieval.
+Each Qdrant call independently received the client's 60-second timeout, so a
+sequence of state checks and collection searches could exceed the investigation
+budget before generation even began.
+
+`VectorPipeline.investigate(..., deadline=...)` now passes the earlier of the
+supplied monotonic deadline and its own configured limit to
+`Retriever.retrieve(request, deadline=...)`. That optional keyword does not alter
+JSON contracts; existing `retrieve(request)` callers still work. Custom injected
+retrievers used by VectorPipeline must accept the deadline keyword rather than
+silently ignoring it.
+
+Retrieval checks the remaining time before/after local manifest reads and query
+encoding, both state-verification passes and the collection searches. Qdrant
+version, collection-info, count and query calls all use the same absolute deadline.
+Immediately before each HTTP request, the REST adapter calculates
+`min(60, deadline - time.monotonic())` and passes it through HTTPX's supported
+per-request timeout setting for connect/read/write/pool phases. It never changes
+the shared client's defaults. Expiry prevents further operations and partial or
+late evidence is discarded. HTTPX timeouts and retrieval deadline expiry produce
+the existing `timeout` retrieval error; the pipeline reports
+`PipelineError(code='timeout', stage='retrieval')` and does not generate.
+
+This is cooperative deadline enforcement, not hard cancellation. A local file
+read or CPU embedding already in progress cannot be interrupted; overrun is
+detected when it returns. [HTTPX timeouts](https://www.python-httpx.org/advanced/timeouts/) bound transport phases/inactivity, not an
+atomic total wall-clock duration for the entire exchange: scheduling, multiple
+phases or a continuously progressing response can exceed the remaining budget.
+A request already sent does not cancel server-side Qdrant work. Post-operation
+checks reject late responses and no subsequent operation receives a fresh full
+budget. There are no added background threads, automatic retries, model downloads
+or index builds. Startup artifact/model verification is outside an individual
+investigation's deadline.
+
+Regression tests in `tests/vector/test_deadlines.py` use a fake monotonic clock,
+HTTPX MockTransport and synthetic index fixtures; no sleeps, live Qdrant or models
+are needed. They cover successful shared-budget retrieval, expired deadlines,
+slow operations, transport errors, multiple calls, sanitized pipeline error mapping
+and unchanged no-deadline behavior.
+
+## UNRESOLVED — citation grounding
+
+The timeout fix does **not** change the prompt, citation validation, model selection
+or grounding behavior. Citation IDs are validated for membership in the retrieved
+set. The pipeline does **not** establish that the selected passages semantically
+support the generated claims. The previously reported full-incident P01 run
+contained unsupported claim-to-passage attribution even though its citation ID
+and result structure were valid. No grounding fix or new real-model grounding
+validation was performed in this change.
+
+Further investigation and full-incident grounding evaluation are required;
+[Issue #21](https://github.com/CyberSOC-ai/cybersoc-ai/issues/21) is a potential
+follow-up, not an authorized transfer or waiver of Issue #19's acceptance criteria.
+Treat this as an unresolved known limitation. Neither green tests nor a successful
+source-selection diagnostic proves that the evidence-grounded-generation
+acceptance criterion is satisfied.
