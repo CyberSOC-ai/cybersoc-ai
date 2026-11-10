@@ -1,0 +1,62 @@
+# Exact reviewed false-positive occurrences from PR #90, 2026-11-10.
+# Gitleaks 8.24.3: commit:file:rule:start-line (not global fingerprints).
+# 21 verified file SHA-256 digests and 5 recorded synthetic proposal IDs.
+# Evidence bytes, default rules and mandatory CI enforcement are unchanged.
+# Each immutable occurrence was checked against its source file or saved result.
+# Scope: only commit 1d044853134073fcff6895c2df257edb0ecc1deb.
+# This does not suppress new commits, other rules, locations or directory scans.
+# Three evidence packets retain provenance and assessments under rag/generation/evidence/.
+# The separate pre-existing datasets/MODELS.md history finding is not exempted.
+
+# File SHA-256; tests/backend/test_api.py.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-boundary-20261110-01/evidence.json:generic-api-key:1039
+# File SHA-256; tests/baseline/test_api_integration.py.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-boundary-20261110-01/evidence.json:generic-api-key:1040
+# File SHA-256; llama-tokenize.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-boundary-20261110-01/evidence.json:generic-api-key:1128
+# Synthetic proposal ID; recorded ACT-4aaa112ca768466ab3c6dd040f686d2a in P01-live-catalogue-20261109-01/result.json.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-boundary-20261110-01/evidence.json:generic-api-key:1449
+# Synthetic proposal ID; recorded ACT-f02a3af6ce814584ae17af4a9fc556e0 in P01-boundary-20261110-01/result.json.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-boundary-20261110-01/evidence.json:generic-api-key:350
+# File SHA-256; special_tokens_map.json.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-boundary-20261110-01/evidence.json:generic-api-key:675
+# File SHA-256; tokenizer_config.json.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-boundary-20261110-01/evidence.json:generic-api-key:677
+# File SHA-256; ai/baseline/API_INTEGRATION.md.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-boundary-20261110-01/evidence.json:generic-api-key:802
+# File SHA-256; ai/baseline/api_adapter.py.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-boundary-20261110-01/evidence.json:generic-api-key:807
+# File SHA-256; tests/backend/test_api.py.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-direction-20261110-01/evidence.json:generic-api-key:1043
+# File SHA-256; tests/baseline/test_api_integration.py.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-direction-20261110-01/evidence.json:generic-api-key:1044
+# File SHA-256; llama-tokenize.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-direction-20261110-01/evidence.json:generic-api-key:1132
+# Synthetic proposal ID; recorded ACT-f02a3af6ce814584ae17af4a9fc556e0 in P01-boundary-20261110-01/result.json.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-direction-20261110-01/evidence.json:generic-api-key:1473
+# Synthetic proposal ID; recorded ACT-686b1b85fd854fddac2d0d8b9cb83e6d in P01-direction-20261110-01/result.json.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-direction-20261110-01/evidence.json:generic-api-key:352
+# File SHA-256; special_tokens_map.json.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-direction-20261110-01/evidence.json:generic-api-key:677
+# File SHA-256; tokenizer_config.json.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-direction-20261110-01/evidence.json:generic-api-key:679
+# File SHA-256; ai/baseline/API_INTEGRATION.md.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-direction-20261110-01/evidence.json:generic-api-key:804
+# File SHA-256; ai/baseline/api_adapter.py.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-direction-20261110-01/evidence.json:generic-api-key:809
+# File SHA-256; tests/backend/test_api.py.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-live-catalogue-20261109-01/evidence.json:generic-api-key:1077
+# File SHA-256; tests/baseline/test_api_integration.py.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-live-catalogue-20261109-01/evidence.json:generic-api-key:1078
+# File SHA-256; llama-tokenize.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-live-catalogue-20261109-01/evidence.json:generic-api-key:1165
+# Synthetic proposal ID; recorded ACT-4aaa112ca768466ab3c6dd040f686d2a in P01-live-catalogue-20261109-01/result.json.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-live-catalogue-20261109-01/evidence.json:generic-api-key:391
+# File SHA-256; special_tokens_map.json.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-live-catalogue-20261109-01/evidence.json:generic-api-key:716
+# File SHA-256; tokenizer_config.json.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-live-catalogue-20261109-01/evidence.json:generic-api-key:718
+# File SHA-256; ai/baseline/API_INTEGRATION.md.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-live-catalogue-20261109-01/evidence.json:generic-api-key:843
+# File SHA-256; ai/baseline/api_adapter.py.
+1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-live-catalogue-20261109-01/evidence.json:generic-api-key:848

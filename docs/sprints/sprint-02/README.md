@@ -264,46 +264,165 @@ relevance, independent test eligibility or complete source coverage.
 
 
 # 3. Anas
-## Assigned tasks
+## S2-T04 — Vector-RAG generation ([#19](https://github.com/CyberSOC-ai/cybersoc-ai/issues/19))
 
-S2-T04
+Delivery review: [PR #90](https://github.com/CyberSOC-ai/cybersoc-ai/pull/90),
+assigned reviewer Oussama (@Ossel14). Current implementation and three complete
+live records address the focused attribution investigation; acceptance and final
+published-revision CI remain pending. Unsupported T1078, wrong destination-as-source
+blocking and inadequate action reasoning remain explicit failures. The direction
+definitions produced no observed decision correction. Historical plans below are
+superseded by the executed records and authorize no additional model attempt.
+Final historical packaging scans returned exit 1: boundary 17 tree findings,
+direction 26 tree findings, plus the separately retained history finding. Saved
+adjudications identify non-credentials; no scanner pass or exclusion is claimed.
 
-## Work completed
 
-> To be completed from validated sprint evidence.
+The pipeline reuses the existing retriever and model client. The internal decision selects one pipeline-owned quotation catalogue ID. Code copies the supplied incident report with an unverified-input label, resolves the exact source span and citation, and retains the model verdict, risk, MITRE and action fields through existing #11 validation. Empty retrieval and invalid selections fail explicitly. Oussama is the assigned reviewer; semantic support and action correctness require separate assessment.
 
-## Technical approach
+### Catalogue-owned attribution, 2026-11-09
 
-> To be completed from validated sprint evidence.
+Current generation selects a deterministic catalogue ID; code owns the exact
+160-character-or-shorter source span, evidence pairing and supplied incident
+report (explicitly labelled unverified input). No P01-specific catalogue rules
+or report paraphrasing are used. Public summary size, including escaping and
+attribution, is checked before inference without truncation. Model verdict/risk,
+MITRE and proposed action fields remain unchanged and visible through #11.
+Source/destination validation remains a separate shared-contract/validator gap;
+no directional guard or binding inference was added. The initially planned live
+investigation is now recorded in the execution entry below. Selection integrity
+alone does not establish grounding or complete #19. Prior trials are preserved.
+Local fake validation: 98 vector regressions (including 21 generation tests),
+20 contract tests and Ruff passed. No model was loaded or run.
 
-## Files / components modified
+### Single approved live P01 execution, 2026-11-09
 
-> To be completed from validated sprint evidence.
+Internal direction-definition follow-up (2026-11-10): clarified the vector-only
+schema descriptions for target and source_ip, including event-relative origin
+versus destination and abstention if the incident does not establish direction.
+Verified delivery path through required_output/user-message, apply-template and
+completion.prompt in the existing adapter; the previous actual template retained
+that whole user message. A fake HTTP regression checks generated request delivery
+through the real pipeline/adapter, not model interpretation or semantic correctness.
+Public schemas, shared validators and the completed boundary correction are
+unchanged. No real-model call occurred at definition implementation time. The
+later approved single-run result below retains unsupported mapping, wrong-source
+proposal and action-reasoning limitations.
 
-## Tests / validation
+Definition-only live comparison (2026-11-10): verified before inference that actual
+incident/policy/request, live retrieval, catalogue/exclusions, system prompt and
+settings matched the boundary run. Removing only the two descriptions made schema,
+user message and formatted prompt identical. Actual input2,462 tokens (+84) fit
+cap3,072. One retrieval/completion produced a complete result in141.804s including
+roughly71s inspection,175 output tokens/EOS/not truncated. No abstention: source
+remained destination10.77.0.20. Quotation remained the relevant SSH definition;
+unsupported T1078 and all action text remained byte-identical. No observed decision
+correction; no general causal or accuracy claim. No repairs or retries.
+[Source-first assessment and reproduction](../../../rag/generation/evidence/P01-direction-20261110-01/README.md)
+and [complete packet](../../../rag/generation/evidence/P01-direction-20261110-01/evidence.json)
+preserve comparisons and every field. The checked definition snapshot's154 scoped
+tests/Ruff/integrity/whitespace passed; final docs/artifact checks are separate.
+All prior failures remain. No further implementation, model attempt, commit,
+push or merge followed. Reviewer acceptance and #19 remain pending.
 
-> To be completed from validated sprint evidence.
+Boundary follow-up (2026-11-10): approved a single-call candidate-only correction.
+`sentence-boundaries-v1` omits uncertain leading units, unfinished tails, known
+abbreviation ambiguity, unbalanced protected syntax and whole units over160
+characters. It records exact offsets/exclusions and preserves full evidence;
+it does not prove relevance or fix mappings/action direction. Required tests and
+a live catalogue/token inspection precede the sole separately recorded completion.
+No preferred quotation or answer is inserted. The frozen checklist and complete
+artifacts are under `.local/P01-boundary-20261110-01/`; actual outcome follows in
+the boundary review record. Earlier failures remain unchanged.
 
-## Results / metrics
+Actual boundary result: catalogue6 eligible sentences/5 exclusions inspected
+before completion; old fragment ineligible and complete SSH sentences available.
+Real token count2378, unchanged input cap3072/output512/context4096. One live
+retrieval and one completion finished the pipeline in89.281s, including the
+pre-inference inspection pause;175 output tokens, EOS/not truncated. Selected
+exact88-character SSH definition is relevant general knowledge. Boundary and
+quotation outcomes passed for this case; decision quality failed: T1078 remains
+unsupported and destination10.77.0.20 remains the proposed source IP. Every field
+was retained unchanged. true_positive/medium does not establish successful access.
 
-> To be completed from validated sprint evidence.
+Clean-export checks:292 tests passed, including106 vector/29 generation and all27
+baseline tests; actual integrity/Ruff/whitespace passed. The same nine adjudicated
+non-credential scanner findings retain failure exits, without suppressions.
+[Every-field assessment and reproduction](../../../rag/generation/evidence/P01-boundary-20261110-01/README.md)
+and [complete packet](../../../rag/generation/evidence/P01-boundary-20261110-01/evidence.json)
+preserve before/after evidence. Semantic relevance generally, correct mappings,
+role-aware action validation, final CI and assigned review remain unresolved.
+No further experiment, answer repair, commit, push or merge occurred.
 
-## Problems encountered
+Completed the current VectorPipeline with real #17 retrieval and pinned Phi
+Q4_K_M / Linux b11827: one retrieval, one completion, unchanged full P01 query,
+MITRE-only K=2, exact search, 300-second diagnostic budget, 3072/512 token caps,
+4096 context, seed 42, temperature 0, six CPU threads and one slot. Verified the
+existing 340-record/406-vector preview and full live point readback; no rebuild.
+Suitable evidence was defined before inference as support for relevant general
+reference knowledge, not independent verification of the incident. The retrieved
+SSH passage qualified; no query/filter/K adjustment was made.
 
-> To be completed from validated sprint evidence.
+Pipeline completion passed in 109.531 seconds, with 3042 input and 236 output
+tokens, EOS, no truncation. Quotation integrity passed but relevance failed: the
+model selected an incomplete ESXi/citation fragment. Report copying/attribution
+worked, while T1078/T1098 and destination-as-source blocking remained unsupported
+or wrong; undetermined abstains on the attack attempt and medium risk is defensible.
+No answer repair or shared-validator change followed. No response was executed.
 
-## Decisions made
+The [review record](../../../rag/generation/evidence/P01-live-catalogue-20261109-01/README.md)
+and [complete synthetic evidence packet](../../../rag/generation/evidence/P01-live-catalogue-20261109-01/evidence.json)
+preserve inputs, actual passages/IDs, raw and structured outputs, recorder source,
+versions and every-field assessment. Full snapshot/logs remain at
+`.local/P01-live-catalogue-20261109-01/`. Previous P01 failures remain unchanged,
+including the 223.069-second Phi completion rejected for quotation integrity and
+its invented hosts/reversed IP. Different environments/retrieval modes prevent a
+controlled performance comparison. No retry, model change, commit, push or reviewer
+message occurred. Judgment/action quality failed; reviewer acceptance and #19 Done
+remain pending. Applicable fresh-check outcomes are recorded with the evidence.
 
-> To be completed from validated sprint evidence.
+Fresh checks: 98/98 vector tests, 20/20 contract tests and Ruff passed. Baseline:
+24 passed, three CLI errors from the unchanged pinned policy digest/CRLF mismatch.
+The dev-image integrity command and harness failed because Git is absent; logs
+are retained. Host CRLF-aware whitespace passed; supplemental text/link checking
+uses the actual host Git file list. No full-suite or dirty-head hosted-CI pass.
 
-## Related Issues / Pull Requests
+### Quotation integrity implementation, 2026-11-09
 
-> To be completed from validated sprint evidence.
+Changed only the internal decision and summary rendering; the public schema and
+pipeline-owned evidence are unchanged. Invalid excerpts fail explicitly, and the
+shared deadline remains in use. Offline fake-component validation passed: 11
+generation tests and 15 deadline regressions; Ruff passed on the changed Python
+files. No real model ran. These checks do not prove relevance, claim support or
+correct triage, and do not complete #19. The single fixed-evidence P01 generation
+replay is documented in rag/generation/README.md and awaits approval. It will
+review every claim, including observations, mappings, verdict/risk and actions;
+it will not measure live retrieval or the complete live pipeline.
 
-## Learning outcome
+### Bounded quotation follow-up, 2026-11-09
 
-> To be completed from validated sprint evidence.
+Internal quotations are capped at 160 characters without truncation or repair.
+Ordinary Markdown brackets are allowed only in exact source quotations;
+double-bracket marker injection remains rejected. Final summary validation uses
+the already validated excerpt/selected ID, with no quotation-boundary parser.
+Public contracts and pipeline-owned evidence are unchanged. Phi completion-02
+reached an exact source prefix but timed out before analysis; no Phi reasoning
+failure is inferred. One new 512-output-token/300-second CPU feasibility trial is
+prepared only. Both quotation rules and deadline change, so it is not a clean
+model-only comparison. All earlier runs remain preserved; #19 remains unresolved.
+Validation: all 97 vector regressions (including 20 generation cases) and Ruff
+passed. Baseline regressions: 24 passed, three CLI cases blocked by the untouched
+CRLF policy file's pinned raw-byte digest mismatch. No normalization was made.
 
+### Development evidence reported by Anas, 2026-11-06
+
+On revision `fe9c9ab`, the two-order LSASS/SSH probe selected the LSASS passage in both orders and correctly attributed the single-sign-on explanation. Earlier P01 attempts omitted the inline citation or reached the 512-token limit with a decoding pattern. Those failures were retained.
+
+Full run `P01-selection-f40eaf64ad59` used Qwen 1.5B Q4_K_M, llama.cpp CPU b11827, exact MITRE-only retrieval and K=2 on the 406-passage preview. The result passed structural and citation-ID validation. The incident supports the summary of eight failed passwords in 57 seconds. The selected passage about throttled password spraying does not substantiate that host, account, count or timing. No P01 claim-support pass is claimed.
+
+Verdict and risk match the pending-review pilot label (true positive, medium). Returned T1078 and T1098 differ from expected T1110.001. The preview had zero dedicated T1110.001 passages among 138 MITRE passages. The proposed approval-required block on linux-01 for 192.0.2.10, TCP/22, 300 seconds matches the required action and permitted duration. The rollback text describes SSH configuration rather than removing the proposed block. No execution was reported.
+
+At the source-selection revision, 70 vector and 27 baseline tests passed locally, along with Ruff and repository integrity. Raw real-run artifacts remain on Anas's PC. These are exploratory development observations. General accuracy, hosted CI and peer approval require separate evidence. Follow-up for Oussama: exposing structured claim-to-source links publicly would require contract review.
 
 # 4. Achraf
 ## Assigned tasks

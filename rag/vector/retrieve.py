@@ -13,7 +13,7 @@ from rag.ingestion.core import IngestionError, canonical, digest, parse_json, re
 from .embedding import BGEEncoder, validate_vectors
 from .embed import read_manifest
 from .index import COLLECTIONS, SELECTION, batches, check_collection, embedding_manifest
-from .store import Qdrant
+from .store import Qdrant, remaining_time
 
 
 class RetrievalError(IngestionError):
@@ -140,36 +140,51 @@ class Retriever:
     def close(self):
         self.client.close()
 
-    def check_state(self):
+    def check_state(self, *, deadline=None):
+        budget = {"deadline": deadline} if deadline is not None else {}
+        remaining_time(deadline)
         r = self.receipt
-        if (read_manifest(self.chunks, r["identity"]["chunk_manifest_sha256"]) != self.cm or
-                read_bytes(SELECTION, 65536) != self.selection_bytes):
+        current_manifest = read_manifest(self.chunks, r["identity"]["chunk_manifest_sha256"])
+        remaining_time(deadline)
+        current_selection = read_bytes(SELECTION, 65536)
+        remaining_time(deadline)
+        if current_manifest != self.cm or current_selection != self.selection_bytes:
             raise IngestionError("Index eligibility or settings changed; rebuild required")
-        self.client.server()
+        self.client.server(**budget)
+        remaining_time(deadline)
         metadata = {"index_build_id": r["build_id"], "state": "ready", "corpus_use": r["corpus_use"],
                     "embedding_manifest_sha256": r["identity"]["embedding_manifest_sha256"]}
         for key, name in r["collections"].items():
-            check_collection(self.client.info(name), self.store["create_collection_request"],
+            remaining_time(deadline)
+            check_collection(self.client.info(name, **budget), self.store["create_collection_request"],
                              self.store["planned_payload_indexes"], metadata)
-            if self.client.count(name) != r["points_by_collection"][key]:
+            remaining_time(deadline)
+            if self.client.count(name, **budget) != r["points_by_collection"][key]:
                 raise IngestionError("Live index point count changed")
+            remaining_time(deadline)
 
-    def retrieve(self, request):
+    def retrieve(self, request, *, deadline=None):
         validate("retrieval-request", request)  # Invalid envelopes are caller errors.
         if request["mode"] != "vector":
             return response(request, error=RetrievalError("validation_error", "This retriever supports vector mode only"))
         try:
-            self.check_state()
+            budget = {"deadline": deadline} if deadline is not None else {}
+            remaining_time(deadline)
+            self.check_state(**budget)
+            remaining_time(deadline)
             try:
                 query = self.encoder.query(request["query"])
+                remaining_time(deadline)
                 validate_vectors([query], 1)
             except IngestionError as exc:
                 return response(request, error=RetrievalError("validation_error", str(exc)))
             filters, hits = request["filters"], []
             for key, name in self.receipt["collections"].items():
+                remaining_time(deadline)
                 result = self.client.request("POST", self.client.path(name) + "/points/query", {
                     "query": query, "filter": query_filter(filters, key, self.frozen),
-                    "limit": request["top_k"], "with_payload": True, "with_vector": True, "params": self.params})
+                    "limit": request["top_k"], "with_payload": True, "with_vector": True, "params": self.params}, **budget)
+                remaining_time(deadline)
                 candidates = result["points"]
                 if not isinstance(candidates, list) or len(candidates) > request["top_k"]:
                     raise RetrievalError("invalid_output", "Unexpected number of retrieved candidates")
@@ -183,7 +198,8 @@ class Retriever:
             hits.sort(key=lambda value: (-value["score"], value["evidence_id"]))
             if len({h["evidence_id"] for h in hits}) != len(hits):
                 raise RetrievalError("invalid_output", "Duplicate evidence identity across collections")
-            self.check_state()
+            self.check_state(**budget)
+            remaining_time(deadline)
             return response(request, evidence=hits[:request["top_k"]])
         except RetrievalError as exc:
             return response(request, error=exc)

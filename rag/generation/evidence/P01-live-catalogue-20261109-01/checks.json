@@ -1,0 +1,42 @@
+{
+  "vector": {
+    "tests": 98,
+    "passed": 98,
+    "errors": 0,
+    "source": "vector-checks.log"
+  },
+  "contracts": {
+    "tests": 20,
+    "passed": 20,
+    "errors": 0,
+    "source": "contracts-checks.log"
+  },
+  "baseline": {
+    "tests": 27,
+    "passed": 24,
+    "errors": 3,
+    "source": "baseline-checks.log",
+    "cause": "Pinned runner-policy raw-byte digest mismatch in 3 CLI tests; unchanged CRLF policy file."
+  },
+  "ruff": {
+    "passed": true,
+    "source": "ruff-checks.log"
+  },
+  "original_harness": {
+    "completed": false,
+    "cause": "Development image lacks git: repository-integrity command failed and final whitespace launch raised FileNotFoundError.",
+    "source": "repository-integrity-checks.log"
+  },
+  "host_whitespace": {
+    "exit_code": 0,
+    "command": "git -c core.whitespace=cr-at-eol diff --check",
+    "source": "whitespace-checks.log"
+  },
+  "supplemental_integrity": {
+    "files": 276,
+    "errors": [],
+    "method": "Same merge-marker and Markdown local-link checks as infrastructure/ci/check_repository.py, using actual host git tracked + untracked file list; includes new evidence. Also checks new artifact whitespace.",
+    "file_list": "integrity-file-list.json"
+  },
+  "scope": "Applicable offline checks only; not the entire repository suite or hosted CI."
+}
