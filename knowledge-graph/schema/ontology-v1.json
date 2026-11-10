@@ -1,0 +1,505 @@
+{
+  "ontology_version": "1.0.0",
+  "identity_algorithm": "SHA-256 of UTF-8 compact JSON array, ensure_ascii=False; prefix KG-",
+  "node_types": {
+    "User": {
+      "identity_fields": [
+        "scope",
+        "username"
+      ],
+      "required_properties": [
+        "username",
+        "scope"
+      ],
+      "property_schema": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        },
+        "required": [
+          "username",
+          "scope"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "Host": {
+      "identity_fields": [
+        "scope",
+        "name"
+      ],
+      "required_properties": [
+        "name",
+        "scope"
+      ],
+      "property_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        },
+        "required": [
+          "name",
+          "scope"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "IPAddress": {
+      "identity_fields": [
+        "scope",
+        "address"
+      ],
+      "required_properties": [
+        "address",
+        "scope",
+        "version"
+      ],
+      "property_schema": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "ipv4"
+              },
+              {
+                "type": "string",
+                "format": "ipv6"
+              }
+            ]
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "version": {
+            "enum": [
+              4,
+              6
+            ]
+          }
+        },
+        "required": [
+          "address",
+          "scope",
+          "version"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "Alert": {
+      "identity_fields": [
+        "incident_id"
+      ],
+      "required_properties": [
+        "incident_id",
+        "timestamp",
+        "source",
+        "source_event_id",
+        "severity",
+        "ingestion_kind"
+      ],
+      "property_schema": {
+        "type": "object",
+        "properties": {
+          "incident_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+          },
+          "timestamp": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "format": "date-time",
+            "pattern": "Z$"
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "source_event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "severity": {
+            "enum": [
+              "informational",
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ]
+          },
+          "ingestion_kind": {
+            "enum": [
+              "live",
+              "replay",
+              "synthetic"
+            ]
+          }
+        },
+        "required": [
+          "incident_id",
+          "timestamp",
+          "source",
+          "source_event_id",
+          "severity",
+          "ingestion_kind"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "Vulnerability": {
+      "identity_fields": [
+        "cve_id"
+      ],
+      "required_properties": [
+        "cve_id"
+      ],
+      "property_schema": {
+        "type": "object",
+        "properties": {
+          "cve_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^CVE-\\d{4}-\\d{4,}$"
+          }
+        },
+        "required": [
+          "cve_id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "Malware": {
+      "identity_fields": [
+        "provider",
+        "provider_id"
+      ],
+      "required_properties": [
+        "name",
+        "provider",
+        "provider_id"
+      ],
+      "property_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "provider": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "provider_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "name",
+          "provider",
+          "provider_id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "AttackTechnique": {
+      "identity_fields": [
+        "attack_domain",
+        "technique_id"
+      ],
+      "required_properties": [
+        "technique_id",
+        "name",
+        "attack_domain"
+      ],
+      "property_schema": {
+        "type": "object",
+        "properties": {
+          "technique_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^T\\d{4}(?:\\.\\d{3})?$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "attack_domain": {
+            "enum": [
+              "enterprise",
+              "mobile",
+              "ics"
+            ]
+          }
+        },
+        "required": [
+          "technique_id",
+          "name",
+          "attack_domain"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "ThreatIndicator": {
+      "identity_fields": [
+        "provider",
+        "provider_id"
+      ],
+      "required_properties": [
+        "provider",
+        "provider_id",
+        "indicator_type",
+        "value"
+      ],
+      "property_schema": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "provider_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "indicator_type": {
+            "enum": [
+              "ipv4",
+              "ipv6",
+              "domain",
+              "md5",
+              "sha1",
+              "sha256"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "valid_from": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "format": "date-time",
+            "pattern": "Z$"
+          },
+          "valid_until": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "format": "date-time",
+            "pattern": "Z$"
+          }
+        },
+        "required": [
+          "provider",
+          "provider_id",
+          "indicator_type",
+          "value"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "SourceRecord": {
+      "identity_fields": [
+        "source",
+        "record_id",
+        "source_record_id",
+        "snapshot_ref",
+        "content_sha256"
+      ],
+      "required_properties": [
+        "record_id",
+        "source",
+        "source_record_id",
+        "snapshot_ref",
+        "content_sha256"
+      ],
+      "property_schema": {
+        "type": "object",
+        "properties": {
+          "record_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "source": {
+            "enum": [
+              "mitre_attack",
+              "cve",
+              "cwe",
+              "soc_log",
+              "kev",
+              "detection_rule",
+              "playbook",
+              "threat_intel",
+              "synthetic"
+            ]
+          },
+          "source_record_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "snapshot_ref": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "content_sha256": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "record_id",
+          "source",
+          "source_record_id",
+          "snapshot_ref",
+          "content_sha256"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "relationship_types": {
+    "MENTIONS_HOST": {
+      "from": [
+        "Alert"
+      ],
+      "to": [
+        "Host"
+      ],
+      "cardinality": "many-to-many",
+      "creation_rule": "Normalized incident entities contain this host."
+    },
+    "MENTIONS_USER": {
+      "from": [
+        "Alert"
+      ],
+      "to": [
+        "User"
+      ],
+      "cardinality": "many-to-many",
+      "creation_rule": "Normalized incident entities contain this user."
+    },
+    "MENTIONS_IP": {
+      "from": [
+        "Alert"
+      ],
+      "to": [
+        "IPAddress"
+      ],
+      "cardinality": "many-to-many",
+      "creation_rule": "Normalized incident entities contain this IP."
+    },
+    "HAS_IP": {
+      "from": [
+        "Host"
+      ],
+      "to": [
+        "IPAddress"
+      ],
+      "cardinality": "many-to-many",
+      "creation_rule": "Explicit inventory or structured observation; never co-occurrence."
+    },
+    "HAS_VULNERABILITY": {
+      "from": [
+        "Host"
+      ],
+      "to": [
+        "Vulnerability"
+      ],
+      "cardinality": "many-to-many",
+      "creation_rule": "Verified scan/inventory association; not CVE presence in corpus."
+    },
+    "MAPPED_TO": {
+      "from": [
+        "Alert"
+      ],
+      "to": [
+        "AttackTechnique"
+      ],
+      "cardinality": "many-to-many",
+      "creation_rule": "Explicit source mapping; never inferred from alert text alone."
+    },
+    "REFERS_TO_IP": {
+      "from": [
+        "ThreatIndicator"
+      ],
+      "to": [
+        "IPAddress"
+      ],
+      "cardinality": "many-to-many",
+      "creation_rule": "Indicator IP version and normalized value equal target IP."
+    },
+    "INDICATES": {
+      "from": [
+        "ThreatIndicator"
+      ],
+      "to": [
+        "Malware"
+      ],
+      "cardinality": "many-to-many",
+      "creation_rule": "Explicit provider assertion linking the indicator to malware."
+    },
+    "USES": {
+      "from": [
+        "Malware"
+      ],
+      "to": [
+        "AttackTechnique"
+      ],
+      "cardinality": "many-to-many",
+      "creation_rule": "Explicit upstream relation; both endpoints must resolve."
+    },
+    "SUBTECHNIQUE_OF": {
+      "from": [
+        "AttackTechnique"
+      ],
+      "to": [
+        "AttackTechnique"
+      ],
+      "cardinality": "many-to-many",
+      "creation_rule": "Explicit ATT&CK hierarchy within one domain."
+    }
+  }
+}

@@ -1,0 +1,685 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cybersoc.invalid/knowledge-graph/v1/graph-batch.schema.json",
+  "title": "Self-contained Knowledge Graph batch v1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "ontology_version": {
+      "const": "1.0.0"
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100000,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024,
+                "pattern": "^KG-[a-f0-9]{64}$"
+              },
+              "label": {
+                "const": "User"
+              },
+              "properties": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024
+                  },
+                  "scope": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024
+                  }
+                },
+                "required": [
+                  "username",
+                  "scope"
+                ],
+                "additionalProperties": false
+              },
+              "source_record_uids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1024,
+                  "pattern": "^KG-[a-f0-9]{64}$"
+                }
+              }
+            },
+            "required": [
+              "uid",
+              "label",
+              "properties",
+              "source_record_uids"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024,
+                "pattern": "^KG-[a-f0-9]{64}$"
+              },
+              "label": {
+                "const": "Host"
+              },
+              "properties": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024
+                  },
+                  "scope": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024
+                  }
+                },
+                "required": [
+                  "name",
+                  "scope"
+                ],
+                "additionalProperties": false
+              },
+              "source_record_uids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1024,
+                  "pattern": "^KG-[a-f0-9]{64}$"
+                }
+              }
+            },
+            "required": [
+              "uid",
+              "label",
+              "properties",
+              "source_record_uids"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024,
+                "pattern": "^KG-[a-f0-9]{64}$"
+              },
+              "label": {
+                "const": "IPAddress"
+              },
+              "properties": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "ipv4"
+                      },
+                      {
+                        "type": "string",
+                        "format": "ipv6"
+                      }
+                    ]
+                  },
+                  "scope": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024
+                  },
+                  "version": {
+                    "enum": [
+                      4,
+                      6
+                    ]
+                  }
+                },
+                "required": [
+                  "address",
+                  "scope",
+                  "version"
+                ],
+                "additionalProperties": false
+              },
+              "source_record_uids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1024,
+                  "pattern": "^KG-[a-f0-9]{64}$"
+                }
+              }
+            },
+            "required": [
+              "uid",
+              "label",
+              "properties",
+              "source_record_uids"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024,
+                "pattern": "^KG-[a-f0-9]{64}$"
+              },
+              "label": {
+                "const": "Alert"
+              },
+              "properties": {
+                "type": "object",
+                "properties": {
+                  "incident_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "format": "date-time",
+                    "pattern": "Z$"
+                  },
+                  "source": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "source_event_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "severity": {
+                    "enum": [
+                      "informational",
+                      "low",
+                      "medium",
+                      "high",
+                      "critical"
+                    ]
+                  },
+                  "ingestion_kind": {
+                    "enum": [
+                      "live",
+                      "replay",
+                      "synthetic"
+                    ]
+                  }
+                },
+                "required": [
+                  "incident_id",
+                  "timestamp",
+                  "source",
+                  "source_event_id",
+                  "severity",
+                  "ingestion_kind"
+                ],
+                "additionalProperties": false
+              },
+              "source_record_uids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1024,
+                  "pattern": "^KG-[a-f0-9]{64}$"
+                }
+              }
+            },
+            "required": [
+              "uid",
+              "label",
+              "properties",
+              "source_record_uids"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024,
+                "pattern": "^KG-[a-f0-9]{64}$"
+              },
+              "label": {
+                "const": "Vulnerability"
+              },
+              "properties": {
+                "type": "object",
+                "properties": {
+                  "cve_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "pattern": "^CVE-\\d{4}-\\d{4,}$"
+                  }
+                },
+                "required": [
+                  "cve_id"
+                ],
+                "additionalProperties": false
+              },
+              "source_record_uids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1024,
+                  "pattern": "^KG-[a-f0-9]{64}$"
+                }
+              }
+            },
+            "required": [
+              "uid",
+              "label",
+              "properties",
+              "source_record_uids"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024,
+                "pattern": "^KG-[a-f0-9]{64}$"
+              },
+              "label": {
+                "const": "Malware"
+              },
+              "properties": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024
+                  },
+                  "provider": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "provider_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  }
+                },
+                "required": [
+                  "name",
+                  "provider",
+                  "provider_id"
+                ],
+                "additionalProperties": false
+              },
+              "source_record_uids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1024,
+                  "pattern": "^KG-[a-f0-9]{64}$"
+                }
+              }
+            },
+            "required": [
+              "uid",
+              "label",
+              "properties",
+              "source_record_uids"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024,
+                "pattern": "^KG-[a-f0-9]{64}$"
+              },
+              "label": {
+                "const": "AttackTechnique"
+              },
+              "properties": {
+                "type": "object",
+                "properties": {
+                  "technique_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "pattern": "^T\\d{4}(?:\\.\\d{3})?$"
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024
+                  },
+                  "attack_domain": {
+                    "enum": [
+                      "enterprise",
+                      "mobile",
+                      "ics"
+                    ]
+                  }
+                },
+                "required": [
+                  "technique_id",
+                  "name",
+                  "attack_domain"
+                ],
+                "additionalProperties": false
+              },
+              "source_record_uids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1024,
+                  "pattern": "^KG-[a-f0-9]{64}$"
+                }
+              }
+            },
+            "required": [
+              "uid",
+              "label",
+              "properties",
+              "source_record_uids"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024,
+                "pattern": "^KG-[a-f0-9]{64}$"
+              },
+              "label": {
+                "const": "ThreatIndicator"
+              },
+              "properties": {
+                "type": "object",
+                "properties": {
+                  "provider": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "provider_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "indicator_type": {
+                    "enum": [
+                      "ipv4",
+                      "ipv6",
+                      "domain",
+                      "md5",
+                      "sha1",
+                      "sha256"
+                    ]
+                  },
+                  "value": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024
+                  },
+                  "valid_from": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "format": "date-time",
+                    "pattern": "Z$"
+                  },
+                  "valid_until": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "format": "date-time",
+                    "pattern": "Z$"
+                  }
+                },
+                "required": [
+                  "provider",
+                  "provider_id",
+                  "indicator_type",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              "source_record_uids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1024,
+                  "pattern": "^KG-[a-f0-9]{64}$"
+                }
+              }
+            },
+            "required": [
+              "uid",
+              "label",
+              "properties",
+              "source_record_uids"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "uid": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024,
+                "pattern": "^KG-[a-f0-9]{64}$"
+              },
+              "label": {
+                "const": "SourceRecord"
+              },
+              "properties": {
+                "type": "object",
+                "properties": {
+                  "record_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "source": {
+                    "enum": [
+                      "mitre_attack",
+                      "cve",
+                      "cwe",
+                      "soc_log",
+                      "kev",
+                      "detection_rule",
+                      "playbook",
+                      "threat_intel",
+                      "synthetic"
+                    ]
+                  },
+                  "source_record_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "snapshot_ref": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024
+                  },
+                  "content_sha256": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "pattern": "^[a-f0-9]{64}$"
+                  }
+                },
+                "required": [
+                  "record_id",
+                  "source",
+                  "source_record_id",
+                  "snapshot_ref",
+                  "content_sha256"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "uid",
+              "label",
+              "properties"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "maxItems": 200000,
+      "items": {
+        "type": "object",
+        "properties": {
+          "uid": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^KG-[a-f0-9]{64}$"
+          },
+          "type": {
+            "enum": [
+              "MENTIONS_HOST",
+              "MENTIONS_USER",
+              "MENTIONS_IP",
+              "HAS_IP",
+              "HAS_VULNERABILITY",
+              "MAPPED_TO",
+              "REFERS_TO_IP",
+              "INDICATES",
+              "USES",
+              "SUBTECHNIQUE_OF"
+            ]
+          },
+          "from_uid": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^KG-[a-f0-9]{64}$"
+          },
+          "to_uid": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^KG-[a-f0-9]{64}$"
+          },
+          "source_record_uid": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^KG-[a-f0-9]{64}$"
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "observed_at": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024,
+                "format": "date-time",
+                "pattern": "Z$"
+              },
+              "valid_from": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024,
+                "format": "date-time",
+                "pattern": "Z$"
+              },
+              "valid_until": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024,
+                "format": "date-time",
+                "pattern": "Z$"
+              }
+            },
+            "required": [],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "uid",
+          "type",
+          "from_uid",
+          "to_uid",
+          "source_record_uid",
+          "properties"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "ontology_version",
+    "nodes",
+    "relationships"
+  ],
+  "additionalProperties": false
+}

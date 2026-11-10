@@ -1,0 +1,1 @@
+Synthetic ontology fixture; all associations are invented for schema testing, not threat intelligence.

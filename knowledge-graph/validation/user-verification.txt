@@ -1,0 +1,190 @@
+PS C:\Users\AdMin> Set-Location 'C:\Users\AdMin\Documents\GitHub\cybersoc-ai'
+PS C:\Users\AdMin\Documents\GitHub\cybersoc-ai> docker compose build dev
+[+] Building 74.6s (13/13) FINISHED
+ => [internal] load local bake definitions                                                                         0.0s
+ => => reading from stdin 573B                                                                                     0.0s
+ => [internal] load build definition from Dockerfile.dev                                                          14.8s
+ => => transferring dockerfile: 347B                                                                               0.0s
+ => [internal] load metadata for docker.io/library/python:3.12-slim-bookworm                                       1.9s
+ => [auth] library/python:pull token for registry-1.docker.io                                                      0.0s
+ => [internal] load .dockerignore                                                                                  0.0s
+ => => transferring context: 223B                                                                                  0.0s
+ => [internal] load build context                                                                                  0.0s
+ => => transferring context: 38B                                                                                   0.0s
+ => [1/5] FROM docker.io/library/python:3.12-slim-bookworm@sha256:935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832e  5.0s
+ => => resolve docker.io/library/python:3.12-slim-bookworm@sha256:935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832e  0.0s
+ => => sha256:88d15687540999237909e04714b1393c610db9dc2e13d82acd6356fa9bf8f092 249B / 249B                         0.2s
+ => => sha256:8691b22c22a3e005c632ab6bc07b085b98dae9cc02d1d84de175849f997439c7 13.68MB / 13.68MB                   1.9s
+ => => sha256:a47be7bff94f52aefb243d8b245b01c74976150bb88de60875c5eb7ac964f91e 3.34MB / 3.34MB                     3.3s
+ => => sha256:dd051e1b8c92ff101fa3071ab97ea4924885942f15644e01c3dc095764e863e3 28.25MB / 28.25MB                   3.2s
+ => => extracting sha256:dd051e1b8c92ff101fa3071ab97ea4924885942f15644e01c3dc095764e863e3                          0.8s
+ => => extracting sha256:a47be7bff94f52aefb243d8b245b01c74976150bb88de60875c5eb7ac964f91e                          0.2s
+ => => extracting sha256:8691b22c22a3e005c632ab6bc07b085b98dae9cc02d1d84de175849f997439c7                          0.4s
+ => => extracting sha256:88d15687540999237909e04714b1393c610db9dc2e13d82acd6356fa9bf8f092                          0.0s
+ => [2/5] COPY requirements.txt /tmp/requirements.txt                                                              4.0s
+ => [3/5] RUN python -m pip install --no-cache-dir -r /tmp/requirements.txt                                       19.3s
+ => [4/5] WORKDIR /workspace                                                                                       0.4s
+ => [5/5] RUN useradd --create-home --uid 1000 dev     && install -d -m 700 -o dev -g dev /runtime                 0.5s
+ => exporting to image                                                                                             7.0s
+ => => exporting layers                                                                                            4.3s
+ => => exporting manifest sha256:90826a3e3a042c13b3a0dc87f8bff7c5a5eced4d0095ab6fe25e65703e6b1142                  0.0s
+ => => exporting config sha256:00a8b32eeef45d051a1f7f8bc35c1440a27475904f13e98dac3c4f9a116b85d9                    0.0s
+ => => exporting attestation manifest sha256:0d1d6e55957491d75b84397d35b4e8a3fe73d6f194ac6bb9770d981f106afe58      0.0s
+ => => exporting manifest list sha256:594973a2f7fab288c87c4fa42cff5365f930090f1fed4aa2699898eac5ed4d5e             0.0s
+ => => naming to docker.io/library/cybersoc-ai-dev:latest                                                          0.0s
+ => => unpacking to docker.io/library/cybersoc-ai-dev:latest                                                       2.5s
+ => resolving provenance for metadata file                                                                         0.0s
+[+] build 1/1
+ ✔ Image cybersoc-ai-dev Built                                                                                     74.8s
+PS C:\Users\AdMin\Documents\GitHub\cybersoc-ai> docker compose run --rm -T dev ruff check --no-cache .
+[+] run 1/1
+ ✔ Network cybersoc-ai_default Created                                                                              0.0s
+Container cybersoc-ai-dev-run-1752df93420d Creating
+Container cybersoc-ai-dev-run-1752df93420d Created
+All checks passed!
+PS C:\Users\AdMin\Documents\GitHub\cybersoc-ai> docker compose run --rm -T dev python -B -m unittest discover -s tests/knowledge_graph -v
+Container cybersoc-ai-dev-run-b25aae00e249 Creating
+Container cybersoc-ai-dev-run-b25aae00e249 Created
+test_all_required_properties_are_enforced (test_schema.SchemaTests.test_all_required_properties_are_enforced) ... ok
+test_examples_satisfy_schema (test_schema.SchemaTests.test_examples_satisfy_schema) ... ok
+test_invalid_ip_technique_cve_and_timestamp (test_schema.SchemaTests.test_invalid_ip_technique_cve_and_timestamp) ... ok
+test_ontology_and_schema_agree (test_schema.SchemaTests.test_ontology_and_schema_agree) ... ok
+test_schema_is_well_formed (test_schema.SchemaTests.test_schema_is_well_formed) ... ok
+test_unknown_fields_versions_labels_and_relationships (test_schema.SchemaTests.test_unknown_fields_versions_labels_and_relationships) ... ok
+test_duplicate_nodes_and_relationships_rejected (test_semantics.SemanticTests.test_duplicate_nodes_and_relationships_rejected) ... ok
+test_examples_are_consistent (test_semantics.SemanticTests.test_examples_are_consistent) ... ok
+test_forged_identifiers_rejected (test_semantics.SemanticTests.test_forged_identifiers_rejected) ... ok
+test_identity_is_stable_order_independent_and_scoped (test_semantics.SemanticTests.test_identity_is_stable_order_independent_and_scoped) ... ok
+test_indicator_values_and_intervals (test_semantics.SemanticTests.test_indicator_values_and_intervals) ... ok
+test_ip_indicator_must_match_target (test_semantics.SemanticTests.test_ip_indicator_must_match_target) ... ok
+test_ip_version_and_canonical_form (test_semantics.SemanticTests.test_ip_version_and_canonical_form) ... ok
+test_lab_example_has_only_observed_mentions (test_semantics.SemanticTests.test_lab_example_has_only_observed_mentions) ... ok
+test_missing_and_wrong_provenance_rejected (test_semantics.SemanticTests.test_missing_and_wrong_provenance_rejected) ... ok
+test_missing_endpoint_rejected (test_semantics.SemanticTests.test_missing_endpoint_rejected) ... ok
+test_multiple_sources_preserve_separate_assertions (test_semantics.SemanticTests.test_multiple_sources_preserve_separate_assertions) ... ok
+test_source_bytes_match_fixture_hashes (test_semantics.SemanticTests.test_source_bytes_match_fixture_hashes) ... ok
+test_source_versions_have_distinct_identities (test_semantics.SemanticTests.test_source_versions_have_distinct_identities) ... ok
+test_subtechnique_parent_and_domain (test_semantics.SemanticTests.test_subtechnique_parent_and_domain) ... ok
+test_synthetic_fixture_covers_all_business_labels (test_semantics.SemanticTests.test_synthetic_fixture_covers_all_business_labels) ... ok
+test_wrong_endpoint_type_rejected (test_semantics.SemanticTests.test_wrong_endpoint_type_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.394s
+
+OK
+PS C:\Users\AdMin\Documents\GitHub\cybersoc-ai>
+PS C:\Users\AdMin\Documents\GitHub\cybersoc-ai> docker compose run --rm -T dev python -B -m rag.graph.validate knowledge-graph/examples/minimal-graph.json
+Container cybersoc-ai-dev-run-a0c3b7162f05 Creating
+Container cybersoc-ai-dev-run-a0c3b7162f05 Created
+Graph batch valid: 9 nodes, 9 relationships
+PS C:\Users\AdMin\Documents\GitHub\cybersoc-ai> docker compose run --rm -T dev python -B -m rag.graph.validate knowledge-graph/examples/lab-mentions.json
+Container cybersoc-ai-dev-run-f8c77e0f0625 Creating
+Container cybersoc-ai-dev-run-f8c77e0f0625 Created
+Graph batch valid: 7 nodes, 5 relationships
+PS C:\Users\AdMin\Documents\GitHub\cybersoc-ai> docker compose run --rm -T dev python -B -m unittest discover -s tests/contracts -v
+Container cybersoc-ai-dev-run-d5fb62fe604b Creating
+Container cybersoc-ai-dev-run-d5fb62fe604b Created
+test_action_state_record_requirements (test_contracts.ContractsTest.test_action_state_record_requirements) ... ok
+test_actions_cannot_waive_approval_or_inject_commands (test_contracts.ContractsTest.test_actions_cannot_waive_approval_or_inject_commands) ... ok
+test_bounded_typed_retrieval (test_contracts.ContractsTest.test_bounded_typed_retrieval) ... ok
+test_empty_retrieval_is_success_not_failure (test_contracts.ContractsTest.test_empty_retrieval_is_success_not_failure) ... ok
+test_fixture_cross_references (test_contracts.ContractsTest.test_fixture_cross_references) ... ok
+test_incident_identity_time_and_entities (test_contracts.ContractsTest.test_incident_identity_time_and_entities) ... ok
+test_investigation_outcomes (test_contracts.ContractsTest.test_investigation_outcomes) ... ok
+test_provenance_and_score_semantics (test_contracts.ContractsTest.test_provenance_and_score_semantics) ... ok
+test_required_fields_and_closed_objects (test_contracts.ContractsTest.test_required_fields_and_closed_objects) ... ok
+test_retrieval_sources_match_evidence_sources (test_contracts.ContractsTest.test_retrieval_sources_match_evidence_sources) ... ok
+test_schema_definitions (test_contracts.ContractsTest.test_schema_definitions) ... ok
+test_strict_digest_and_commit_boundaries (test_contracts.ContractsTest.test_strict_digest_and_commit_boundaries) ... ok
+test_strict_hash_boundaries (test_contracts.ContractsTest.test_strict_hash_boundaries) ... ok
+test_strict_identifier_boundaries (test_contracts.ContractsTest.test_strict_identifier_boundaries) ... ok
+test_strict_mitre_technique_boundaries (test_contracts.ContractsTest.test_strict_mitre_technique_boundaries) ... ok
+test_strict_utc_suffix (test_contracts.ContractsTest.test_strict_utc_suffix) ... ok
+test_trace_baseline_and_agent_forms (test_contracts.ContractsTest.test_trace_baseline_and_agent_forms) ... ok
+test_valid_examples (test_contracts.ContractsTest.test_valid_examples) ... ok
+test_synthetic_manifest_resolves_a_compatible_trace (test_experiment_examples.ExperimentExamplesTest.test_synthetic_manifest_resolves_a_compatible_trace) ... ok
+test_templates_parse_without_claiming_executed_results (test_experiment_examples.ExperimentExamplesTest.test_templates_parse_without_claiming_executed_results) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.471s
+
+OK
+PS C:\Users\AdMin\Documents\GitHub\cybersoc-ai> docker compose run --rm -T dev python -B -m unittest discover -s tests/ingestion -v
+Container cybersoc-ai-dev-run-e73ae0bd767a Creating
+Container cybersoc-ai-dev-run-e73ae0bd767a Created
+test_cwe_archive_and_notice_are_preserved_without_path_extraction (test_acquisition.AcquisitionTests.test_cwe_archive_and_notice_are_preserved_without_path_extraction) ... ok
+test_failed_notice_request_publishes_no_partial_snapshot (test_acquisition.AcquisitionTests.test_failed_notice_request_publishes_no_partial_snapshot) ... ok
+test_invalid_source_versions_never_request_network (test_acquisition.AcquisitionTests.test_invalid_source_versions_never_request_network) ... ok
+test_lab_preparation_pins_fixtures_and_publishes_only_valid_snapshots (test_acquisition.AcquisitionTests.test_lab_preparation_pins_fixtures_and_publishes_only_valid_snapshots) ... ok
+test_nvd_snapshot_pins_response_bytes_and_new_notice_url (test_acquisition.AcquisitionTests.test_nvd_snapshot_pins_response_bytes_and_new_notice_url) ... ok
+test_redirects_and_oversized_responses_are_rejected (test_acquisition.AcquisitionTests.test_redirects_and_oversized_responses_are_rejected) ... ok
+test_streaming_deadline_is_enforced (test_acquisition.AcquisitionTests.test_streaming_deadline_is_enforced) ... ok
+test_attck_relationships_are_exported_separately_from_vector_documents (test_expanded.ExpandedTests.test_attck_relationships_are_exported_separately_from_vector_documents) ... ok
+test_bulk_acquisition_validates_meta_and_preserves_archive (test_expanded.ExpandedTests.test_bulk_acquisition_validates_meta_and_preserves_archive) ... ok
+test_bulk_meta_mismatch_publishes_nothing (test_expanded.ExpandedTests.test_bulk_meta_mismatch_publishes_nothing) ... ok
+test_cached_sources_must_match_the_selected_revision (test_expanded.ExpandedTests.test_cached_sources_must_match_the_selected_revision) ... ok
+test_corpus_rejects_tampering_and_duplicate_provider (test_expanded.ExpandedTests.test_corpus_rejects_tampering_and_duplicate_provider) ... ok
+test_curated_provider_and_revision_are_not_arbitrary_download_urls (test_expanded.ExpandedTests.test_curated_provider_and_revision_are_not_arbitrary_download_urls) ... ok
+test_cve_and_kev_join_is_exact_and_not_duplicate_retrieval_documents (test_expanded.ExpandedTests.test_cve_and_kev_join_is_exact_and_not_duplicate_retrieval_documents) ... ok
+test_cve_program_preserves_cna_adp_and_excludes_rejected (test_expanded.ExpandedTests.test_cve_program_preserves_cna_adp_and_excludes_rejected) ... ok
+test_external_development_policy_hash_limits_and_heldout_groups (test_expanded.ExpandedTests.test_external_development_policy_hash_limits_and_heldout_groups) ... ok
+test_external_formats_and_nested_label_exclusion (test_expanded.ExpandedTests.test_external_formats_and_nested_label_exclusion) ... ok
+test_git_lfs_uses_pinned_media_and_checks_oid (test_expanded.ExpandedTests.test_git_lfs_uses_pinned_media_and_checks_oid) ... ok
+test_new_retrieval_evidence_sources_validate_in_existing_contract (test_expanded.ExpandedTests.test_new_retrieval_evidence_sources_validate_in_existing_contract) ... ok
+test_playbook_is_reference_text_and_preserves_document_identity (test_expanded.ExpandedTests.test_playbook_is_reference_text_and_preserves_document_identity) ... ok
+test_selected_file_digest_and_archive_paths_are_checked (test_expanded.ExpandedTests.test_selected_file_digest_and_archive_paths_are_checked) ... ok
+test_sigma_preserves_status_false_positives_and_never_executes (test_expanded.ExpandedTests.test_sigma_preserves_status_false_positives_and_never_executes) ... ok
+test_streamed_and_in_memory_nvd_records_match (test_expanded.ExpandedTests.test_streamed_and_in_memory_nvd_records_match) ... ok
+test_streaming_is_incremental_and_depth_bounded (test_expanded.ExpandedTests.test_streaming_is_incremental_and_depth_bounded) ... ok
+test_streaming_rejects_duplicate_keys_ids_trailing_json_and_wrong_envelope (test_expanded.ExpandedTests.test_streaming_rejects_duplicate_keys_ids_trailing_json_and_wrong_envelope) ... ok
+test_yaml_is_safe_and_rejects_duplicates_aliases_and_code_tags (test_expanded.ExpandedTests.test_yaml_is_safe_and_rejects_duplicates_aliases_and_code_tags) ... ok
+test_atomic_cli_notice_and_existing_output (test_ingestion.IngestionTests.test_atomic_cli_notice_and_existing_output) ... ok
+test_attack_exclusions_and_relationships (test_ingestion.IngestionTests.test_attack_exclusions_and_relationships) ... ok
+test_cve_preserves_missing_fields_and_supplied_enrichment (test_ingestion.IngestionTests.test_cve_preserves_missing_fields_and_supplied_enrichment) ... ok
+test_cwe_8_namespace_and_groupings (test_ingestion.IngestionTests.test_cwe_8_namespace_and_groupings) ... ok
+test_cwe_namespace_relationships_and_categories (test_ingestion.IngestionTests.test_cwe_namespace_relationships_and_categories) ... ok
+test_deterministic_sorted_records_and_identity_across_snapshots (test_ingestion.IngestionTests.test_deterministic_sorted_records_and_identity_across_snapshots) ... ok
+test_duplicate_ids_and_malformed_upstream_fail (test_ingestion.IngestionTests.test_duplicate_ids_and_malformed_upstream_fail) ... ok
+test_inactive_relationship_targets_are_excluded (test_ingestion.IngestionTests.test_inactive_relationship_targets_are_excluded) ... ok
+test_provenance_is_required_and_hashes_are_checked (test_ingestion.IngestionTests.test_provenance_is_required_and_hashes_are_checked) ... ok
+test_schemas_are_valid (test_ingestion.IngestionTests.test_schemas_are_valid) ... ok
+test_soc_cannot_relabel_a_present_heldout_duplicate (test_ingestion.IngestionTests.test_soc_cannot_relabel_a_present_heldout_duplicate) ... ok
+test_soc_group_related_case_unknown_split_and_hash_boundaries (test_ingestion.IngestionTests.test_soc_group_related_case_unknown_split_and_hash_boundaries) ... ok
+test_soc_requires_hashed_assignment_and_excludes_labels (test_ingestion.IngestionTests.test_soc_requires_hashed_assignment_and_excludes_labels) ... ok
+test_soc_sibling_run_and_duplicate_policy (test_ingestion.IngestionTests.test_soc_sibling_run_and_duplicate_policy) ... ok
+test_source_metadata_types_are_part_of_the_handoff_contract (test_ingestion.IngestionTests.test_source_metadata_types_are_part_of_the_handoff_contract) ... ok
+test_strict_json_and_byte_limit (test_ingestion.IngestionTests.test_strict_json_and_byte_limit) ... ok
+test_unfrozen_split_is_explicitly_development_only (test_ingestion.IngestionTests.test_unfrozen_split_is_explicitly_development_only) ... ok
+test_xml_entities_and_alternate_encodings_are_rejected (test_ingestion.IngestionTests.test_xml_entities_and_alternate_encodings_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 44 tests in 3.517s
+
+OK
+PS C:\Users\AdMin\Documents\GitHub\cybersoc-ai> docker compose run --rm -T dev python -B infrastructure/ci/check_repository.py
+Container cybersoc-ai-dev-run-38525492891d Creating
+Container cybersoc-ai-dev-run-38525492891d Created
+Traceback (most recent call last):
+  File "/workspace/infrastructure/ci/check_repository.py", line 48, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/workspace/infrastructure/ci/check_repository.py", line 12, in main
+    tracked = subprocess.check_output(
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/local/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'git'
+
+
+What's next:
+    Debug this Compose error with Gordon → docker ai "help me fix this compose error"
+PS C:\Users\AdMin\Documents\GitHub\cybersoc-ai> git diff --check
+PS C:\Users\AdMin\Documents\GitHub\cybersoc-ai>
