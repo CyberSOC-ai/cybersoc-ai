@@ -9,3 +9,6 @@ infrastructure/docker/Dockerfile.embeddings text eol=lf
 
 # Public retrieval replay assets are SHA-256 pinned across Linux/Windows clones.
 datasets/evaluation/retrieval-dev-v1/*.json text eol=lf
+
+# Preserve the Sprint 2 journal's existing CRLF bytes without treating CR as whitespace.
+docs/sprints/sprint-02/README.md whitespace=cr-at-eol

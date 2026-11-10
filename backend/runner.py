@@ -20,18 +20,36 @@ class RunnerBusy(Exception):
     pass
 
 
+class RunnerInvalidOutput(Exception):
+    pass
+
+
 @dataclass(frozen=True)
 class RunnerRequest:
     incident: dict
     investigation_id: str
     trace_id: str
     deadline_monotonic: float
+    mode: str = 'no_rag'
 
 
 class BaselineRunner(Protocol):
     versions: dict[str, str]
 
     def run(self, request: RunnerRequest) -> dict: ...
+
+
+class ModeRouter:
+    """Keep both inference modes inside one shared bounded pool."""
+
+    def __init__(self, baseline: BaselineRunner | None, vector: BaselineRunner | None):
+        self.baseline, self.vector = baseline, vector
+
+    def run(self, request: RunnerRequest) -> dict:
+        runner = {'no_rag': self.baseline, 'vector_rag': self.vector}.get(request.mode)
+        if runner is None:
+            raise RunnerUnavailable()
+        return runner.run(request)
 
 
 class RunnerPool:

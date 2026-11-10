@@ -469,43 +469,91 @@ S2-T06. S2-T03 transferred to Ahmed on 2026-11-04; Anas remains reviewer.
 # 5. Oussama
 ## Assigned tasks
 
-S2-T05, S2-T07
+S2-T05, S2-T07. This entry covers only S2-T05 / Issue #20.
 
 ## Work completed
 
-> To be completed from validated sprint evidence.
+2026-11-10 — Implemented Vector-RAG dispatch through the existing FastAPI
+investigation endpoint on `feature/20-rag-api-integration`. Empty-body and
+explicit `no_rag` calls retain the No-RAG behavior. Explicit `vector_rag` calls
+use the merged experimental VectorPipeline. Results and correlated traces are
+validated and stored in SQLite before a success response. This is local
+implementation evidence; PR review, hosted CI, merge and issue closure await
+separate authorization.
 
 ## Technical approach
 
-> To be completed from validated sprint evidence.
+A trusted `VectorAPIAdapter` receives a preinitialized pipeline, fixed disabled-
+execution policy, trace versions, K and filters. The backend creates the retrieval
+request, investigation/trace IDs and one monotonic deadline. Both modes share the
+same bounded worker pool. Strict v1 schemas and relational checks reject malformed
+results, duplicate vector evidence IDs and unknown citation IDs. The API never
+executes proposed actions. Missing dependencies, expired deadlines and invalid
+outputs receive sanitized, typed errors with failed result/trace persistence once
+a run starts. The HTTP `vector_rag` name maps to v1 `mode: vector` without changing
+public contracts. Query text is capped at the retrieval contract's 4,000-character
+limit; the full incident reaches generation.
 
 ## Files / components modified
 
-> To be completed from validated sprint evidence.
+`backend/app.py`, `backend/runner.py`, new `backend/vector_adapter.py`, new
+`tests/backend/test_vector_api.py`, `backend/README.md`,
+`backend/RUNNER_INTERFACE.md`, this named sprint section and the scoped
+`.gitattributes` CRLF whitespace rule. Repository, public
+schemas, Anas's RAG generation/retrieval and grounding behavior remain unchanged.
 
 ## Tests / validation
 
-> To be completed from validated sprint evidence.
+Controlled API tests cover both modes, legacy empty bodies, strict mode rejection,
+missing/unavailable or changed retrieval dependencies, empty evidence, invalid
+model output, deadline forwarding and expiry, shared concurrency, result/trace
+persistence and evidence integrity. Full offline suite: 302 tests (contracts 20,
+evaluation 59, backend 29, normalizer 16, ingestion 44, vector 107, baseline 27).
+Ruff, repository integrity (284 tracked text files), staged whitespace and
+Gitleaks 8.30.1 staged secret scanning passed with zero leaks. Tests used the
+existing Python 3.12 development image offline; no model download, real inference
+or index rebuild was performed. Hosted CI remains pending an authorized PR.
 
 ## Results / metrics
 
-> To be completed from validated sprint evidence.
+The tests demonstrate contract-valid Vector-RAG API wiring with controlled
+retrieval/generation, not semantic grounding or measured model quality. PR #90
+merged as experimental baseline at `f6d84db0d5c1c4913d79a6d965d7e99805c9c75f`;
+its required and post-merge CI passed. Issue #19 stays open. Unsupported T1078,
+incorrect source/destination IP and incomplete semantic grounding remain known
+limitations documented in `rag/generation/README.md` and the P01 evidence packets.
+No real Vector-RAG API request, live Wazuh ingest or external model deployment has
+been verified for Issue #20.
 
 ## Problems encountered
 
-> To be completed from validated sprint evidence.
+The default Compose API has no model runner, and its separate Qdrant container is
+not reachable through the API container's localhost. Trusted deployment must
+prepare the pinned index/encoder/model and a shared loopback environment before
+real-model validation. A timed-out Python worker is not forcibly cancelled; its
+pool slot stays occupied until it exits. The source/destination and grounding
+failures from #19 are intentionally not corrected by API integration.
 
 ## Decisions made
 
-> To be completed from validated sprint evidence.
+Keep one endpoint and a single mode-routed worker pool. Keep retrieval parameters
+trusted configuration rather than HTTP inputs. Preserve v1 result/trace `vector`
+mode and proposal-only actions. Do not treat a structurally valid result as proof
+of evidence-grounded claims.
 
 ## Related Issues / Pull Requests
 
-> To be completed from validated sprint evidence.
+[Issue #20](https://github.com/CyberSOC-ai/cybersoc-ai/issues/20), merged
+[PR #90](https://github.com/CyberSOC-ai/cybersoc-ai/pull/90), open
+[Issue #19](https://github.com/CyberSOC-ai/cybersoc-ai/issues/19).
+Publication PR for #20 is pending user approval.
 
 ## Learning outcome
 
-> To be completed from validated sprint evidence.
+The backend selects a mode, owns the deadline and IDs, and validates/persists the
+outcome. The VectorPipeline owns retrieval/generation and evidence provenance.
+This boundary lets #20 expose the experimental pipeline without presenting the
+known model-quality defects as resolved.
 
 # Shared Sprint Integration
 
