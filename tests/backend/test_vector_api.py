@@ -17,7 +17,7 @@ from backend.app import Settings, create_app
 from backend.repository import SQLiteRepository
 from backend.validation import SCHEMA_DIR, validate
 from backend.vector_adapter import VectorAPIAdapter
-from rag.generation.pipeline import PipelineError, VectorPipeline
+from rag.generation.pipeline import PipelineError, VectorPipeline, quotation_catalogue, render_summary
 
 ROOT = Path(__file__).resolve().parents[2]
 INCIDENT = json.loads((SCHEMA_DIR / 'examples/incident.json').read_text())
@@ -29,8 +29,10 @@ VERSIONS = {'model': 'controlled-test-only', 'prompt': 'vector-test', 'dataset':
 
 
 class Retrieval:
-    def __init__(self, *, status='ok', error_code='dependency_unavailable', block=None):
+    def __init__(self, *, status='ok', error_code='dependency_unavailable', block=None,
+                 evidence=None):
         self.status, self.error_code, self.block = status, error_code, block
+        self.evidence = deepcopy(evidence if evidence is not None else EVIDENCE)
         self.requests = []
 
     def retrieve(self, request, *, deadline=None):
@@ -41,7 +43,7 @@ class Retrieval:
             release.wait(2)
         response = {'schema_version': '1.0.0', 'request_id': request['request_id'],
                     'trace_id': request['trace_id'], 'status': self.status,
-                    'evidence': [] if self.status != 'ok' else [deepcopy(EVIDENCE)]}
+                    'evidence': [] if self.status != 'ok' else [deepcopy(self.evidence)]}
         if self.status == 'error':
             response['error'] = {'code': self.error_code, 'message': 'private detail',
                                  'retryable': True}
@@ -132,6 +134,91 @@ class VectorAPITest(unittest.TestCase):
         self.assertEqual(trace['mode'], 'vector')
         self.assertEqual(trace['versions'], VERSIONS)
         self.assertEqual(len(self.rows()), 4)
+
+    def test_rendered_incident_brackets_and_markdown_links_are_preserved(self):
+        linked = deepcopy(EVIDENCE)
+        linked['content'] = ('Boundary. Consult [SSH guide](https://example.invalid/ssh) '
+                             'for general authentication context.')
+        cases = (
+            ('plain', deepcopy(INCIDENT), deepcopy(EVIDENCE)),
+            ('incident-brackets', {**deepcopy(INCIDENT), 'incident_id': 'INC-brackets',
+                                   'source_event_id': 'EVT-brackets',
+                                   'description': INCIDENT['description'] +
+                                   ' Sensor [east-1] reported [7] alerts.'}, deepcopy(EVIDENCE)),
+            ('markdown-link', {**deepcopy(INCIDENT), 'incident_id': 'INC-link',
+                               'source_event_id': 'EVT-link'}, linked),
+        )
+        for label, incident, evidence in cases:
+            with self.subTest(label=label):
+                adapter, _, _ = self.adapter(Retrieval(evidence=evidence))
+                client = self.client(vector=adapter)
+                if incident['incident_id'] != INCIDENT['incident_id']:
+                    self.assertEqual(client.post('/incidents', json=incident).status_code, 201)
+                response = client.post(f"/incidents/{incident['incident_id']}/investigate",
+                                       json={'mode': 'vector_rag'})
+                self.assertEqual(response.status_code, 200)
+                result = response.json()
+                quote = quotation_catalogue([evidence])[0]
+                self.assertEqual(result['summary'], render_summary(
+                    incident['description'], quote['excerpt'], evidence['evidence_id']))
+                self.assertEqual(result['evidence'], [evidence])
+                saved, trace = self.rows()[-1]
+                self.assertEqual(saved, result)
+                validate('investigation-result', saved)
+                validate('trace', trace)
+                self.assertEqual(trace['status'], 'ok')
+                self.assertEqual(trace['trace_id'], result['trace_id'])
+
+    def test_unknown_and_malformed_vector_citation_markers_still_fail(self):
+        class Candidate:
+            versions = VERSIONS
+
+            def __init__(self, summary):
+                self.summary = summary
+
+            def run(self, request):
+                return {'schema_version': '1.0.0', 'incident_id': request.incident['incident_id'],
+                        'investigation_id': request.investigation_id,
+                        'trace_id': request.trace_id, 'mode': 'vector', 'status': 'ok',
+                        'summary': self.summary, 'triage_verdict': 'undetermined',
+                        'risk_level': 'low', 'evidence': [deepcopy(EVIDENCE)],
+                        'mitre_techniques': [], 'recommended_actions': []}
+
+        valid = f"Reference [sensor-1] [[{EVIDENCE['evidence_id']}]]"
+        invalid = (
+            'Reference [[UNKNOWN]]',
+            f"Reference [[{EVIDENCE['evidence_id']}]",
+            f"Reference [[{EVIDENCE['evidence_id']}]] trailing text",
+            f"Reference [[bad] [[{EVIDENCE['evidence_id']}]]",
+            f"Reference [[{EVIDENCE['evidence_id']}]] [[{EVIDENCE['evidence_id']}]]",
+        )
+        for summary, status in ((valid, 200), *((value, 502) for value in invalid)):
+            with self.subTest(summary=summary):
+                client = self.client(vector=Candidate(summary))
+                response = client.post('/incidents/INC-001/investigate',
+                                       json={'mode': 'vector_rag'})
+                self.assertEqual(response.status_code, status)
+                saved, trace = self.rows()[-1]
+                self.assertEqual(saved, response.json())
+                self.assertEqual(trace['trace_id'], saved['trace_id'])
+                if status == 502:
+                    self.assertEqual(saved['error']['code'], 'invalid_output')
+                    self.assertEqual(trace['status'], 'error')
+                else:
+                    self.assertEqual(trace['status'], 'ok')
+
+    def test_no_rag_summary_brackets_remain_accepted(self):
+        class BracketBaseline(Baseline):
+            def run(self, request):
+                result = super().run(request)
+                result['summary'] = 'Observed [sensor-1] and [SSH guide](https://example.invalid).'
+                return result
+
+        client = self.client(baseline=BracketBaseline())
+        response = client.post('/incidents/INC-001/investigate')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.rows()[-1][0], response.json())
+        self.assertEqual(self.rows()[-1][1]['mode'], 'no_rag')
 
     def test_invalid_modes_and_missing_index_are_sanitized(self):
         client = self.client(baseline=Baseline())

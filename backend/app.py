@@ -156,6 +156,20 @@ def utc_now():
     return datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
 
 
+def check_vector_citation(summary, evidence):
+    """Validate the pipeline's one terminal marker, not literal source brackets."""
+    from rag.generation.pipeline import MARKER
+
+    matches = list(MARKER.finditer(summary))
+    if len(matches) != 1:
+        raise ValueError('Invalid vector citation count')
+    match = matches[0]
+    prefix = summary[:match.start()]
+    if (match.end() != len(summary) or '[[' in prefix or ']]' in prefix
+            or match.group(1) not in {item['evidence_id'] for item in evidence}):
+        raise ValueError('Invalid vector citation')
+
+
 def check_candidate(candidate, invocation, limit):
     # Bound serialization and validate shape before using any candidate fields.
     if len(json.dumps(candidate, allow_nan=False, ensure_ascii=False).encode('utf-8')) > limit:
@@ -167,12 +181,11 @@ def check_candidate(candidate, invocation, limit):
             or candidate['mode'] != ('vector' if invocation.mode == 'vector_rag' else 'no_rag')):
         raise ValueError('Candidate identity mismatch')
     if invocation.mode == 'vector_rag' and candidate['status'] == 'ok':
-        from rag.generation.pipeline import check_citations
         evidence = candidate['evidence']
         if (not evidence or len({e['evidence_id'] for e in evidence}) != len(evidence)
                 or any(e['retrieval_method'] != 'vector' for e in evidence)):
             raise ValueError('Invalid vector evidence')
-        check_citations(candidate['summary'], evidence)
+        check_vector_citation(candidate['summary'], evidence)
     actions = candidate['recommended_actions']
     if len({a['action_id'] for a in actions}) != len(actions):
         raise ValueError('Repeated action identity')
