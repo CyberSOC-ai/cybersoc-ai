@@ -5,3 +5,4 @@
 !infrastructure/docker/
 !infrastructure/docker/Dockerfile.dev
 !infrastructure/docker/Dockerfile.embeddings
+!infrastructure/docker/Dockerfile.inference
