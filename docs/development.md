@@ -95,3 +95,7 @@ The check containers exit after each command and are removed by `--rm`. Run `doc
 ## Sprint 1 backend service
 
 The [backend guide](../backend/README.md) covers the API, persistent writable runtime volume and loopback-only published port. The `dev` service remains the check environment; `api` starts Uvicorn with one worker. New backend tests run in CI with `python -B -m unittest discover -s tests/backend -v`; the existing contract suite now contains 19 methods, and the merged evaluation pilot has its own suite. Rebuild after API dependencies change. No real runner is configured by default.
+
+## Local Qwen runtime
+
+See [Linux CPU runtime setup](qwen-runtime.md) for the pinned model, optional inference container and bounded compatibility check.

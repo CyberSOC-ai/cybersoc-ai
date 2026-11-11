@@ -29,3 +29,8 @@ build/
 *.onnx
 *.pcap
 *.pcapng
+CyberSOC_AI_CDC_v2_2_Final.md
+CyberSOC_AI_CDC_v2_2_Final.pdf
+
+# Downloaded inference software, model weights and local run artifacts
+/artifacts/local-inference/

@@ -1,0 +1,20 @@
+{
+  "artifact_repo": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+  "runtime_version": "b11827",
+  "max_input_tokens": 3072,
+  "quantization": "Q4_K_M",
+  "max_output_tokens": 512,
+  "upstream_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "timeout_seconds": 180,
+  "artifact_revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+  "context_tokens": 4096,
+  "runtime_executable": "artifacts/local-inference/runtime/llama.cpp-b11827-linux-x64/llama-b11827/llama-server",
+  "seed": 42,
+  "publisher_id": "Qwen/Qwen2.5-1.5B-Instruct",
+  "runtime_sha256": "92ff7abb8a59c94a98acdbca4f50aaf54d2cb08a05fad57b254587a101366aac",
+  "port": 8087,
+  "model_file": "artifacts/local-inference/models/qwen2.5-1.5b-instruct-q4_k_m/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+  "model_sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+  "threads": 4,
+  "upstream_revision_note": "Inspected upstream HEAD, not verified conversion origin; artifact revision identifies executed weights"
+}
