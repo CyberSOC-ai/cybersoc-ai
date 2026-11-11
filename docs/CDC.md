@@ -4,13 +4,15 @@
 
 | | |
 |---|---|
-| **Version / status** | 2.2 — Team execution baseline, aligned with the project brief (supersedes v2.1) |
-| **Date** | 10 October 2026 |
+| **Version / status** | 2.3 — Baseline-first execution reset; requirements preserved |
+| **Date** | 11 November 2026 |
 | **Team** | Ahmed · Soulaiman · Anas · Achraf · Oussama |
 | **Deadline** | 01 January 2027 |
-| **Working model** | Cross-functional, dependency-driven, iterative, DevSecOps + LLMOps |
+| **Working model** | Ahmed-first baseline handoff, then parallel capability ownership; DevSecOps + LLMOps |
 | **Source of truth** | This file, `docs/CDC.md`. It defines scope, architecture, execution order, collaboration rules, dependencies, quality gates and final deliverables. Updated only through reviewed Pull Requests. |
 | **Reference document** | Project brief *"Intelligent Cybersecurity SOC Assistant Using SLMs, Hybrid RAG, Agentic AI and LLMOps"* (traced in [Appendix A](#appendix-a--traceability-to-the-project-brief)) |
+
+> **Execution change in v2.3 (11 November 2026).** Ahmed delivers fresh shared data, common runtime, complete No-RAG and complete small reusable Vector RAG, including local/cloud persistence, versioning, lightweight LLMOps and independent teammate reproduction, before downstream implementation. Larger datasets and optimization follow. All downstream owners/reviewers are unassigned for Ahmed to choose. The [baseline-first roadmap](ROADMAP.md) and linked issues replace the old execution order and future assignments; technical scope and experimental requirements are unchanged. Historical contributions remain evidence, not current assignments.
 
 > **What changed in v2.2.** The v2.1 technical baseline and documentation workflow (one README per sprint, fixed member sections) are preserved. v2.2 closes the gaps found when the CDC was checked line by line against the six-page project brief: (1) the **Base vs Fine-tuned** experiment is now a required, time-boxed deliverable; (2) the **six-agent** multi-agent workflow is the target, three agents being only a reported fallback; (3) a written **evaluation methodology** (§9.8) defines faithfulness, response quality, SOC action correctness and security metrics; (4) **SOC logs** are now a retrieval source; (5) LLM security gains **quantitative metrics** (attack success rate before / after mitigation) and a jailbreak suite; (6) the **5-minute demo** now explains how the project was built and measured; (7) the overloaded inference task is split (S5-T02 / S5-T08); (8) new ADRs fix the model shortlist, the experiment-tracking tool and the supervisor-confirmed scope interpretations; (9) Appendix C was recomputed from the task tables and Appendix D (task registry) was added. See Appendix B, changes C13–C21.
 
@@ -36,16 +38,7 @@
 - [15. Priority & Domain Model](#15-priority--domain-model)
 - [16. Dependency Types](#16-dependency-types)
 - [17. Sprint Plan — Dependency-First Execution](#17-sprint-plan--dependency-first-execution)
-  - [Sprint 0 — Governance, Architecture, Contracts & Planning](#sprint-0--governance-architecture-contracts--planning)
-  - [Sprint 1 — Platform Baseline, SOC Lab MVP & No-RAG Baseline](#sprint-1--platform-baseline-soc-lab-mvp--no-rag-baseline)
-  - [Sprint 2 — Vector RAG & Threat-Intelligence Ingestion](#sprint-2--vector-rag--threat-intelligence-ingestion)
-  - [Sprint 3 — Knowledge Graph, Graph RAG & Hybrid RAG](#sprint-3--knowledge-graph-graph-rag--hybrid-rag)
-  - [Sprint 4 — Agentic Workflow (LangGraph), LLM Security, HITL & Response Sandbox](#sprint-4--agentic-workflow-langgraph-llm-security-hitl--response-sandbox)
-  - [Sprint 5 — Inference Optimization, LLMOps Maturity & Fine-Tuning](#sprint-5--inference-optimization-llmops-maturity--fine-tuning)
-  - [Sprint 6 — Frontend / Analyst Experience](#sprint-6--frontend--analyst-experience)
-  - [Sprint 7 — End-to-End Validation, Security Hardening & Final Benchmark](#sprint-7--end-to-end-validation-security-hardening--final-benchmark)
-  - [Sprint 8 — Documentation, Demo & Feature Freeze](#sprint-8--documentation-demo--feature-freeze)
-  - [Buffer — 29 Dec → 31 Dec 2026](#buffer--29-dec--31-dec-2026)
+  - [Current B0–R6 stage mapping](#17-sprint-plan--dependency-first-execution)
 - [18. Critical Path](#18-critical-path)
 - [19. Parallel-Safe Work Examples](#19-parallel-safe-work-examples)
 - [20. Risk Register](#20-risk-register)
@@ -201,14 +194,15 @@ The brief's workflow starts with "Alert → Detection". In CyberSOC AI, **detect
 
 ### 4.1 Dependency-first engineering
 
-The project follows this high-level order:
+The current execution order is:
 
 ```
-Foundation + Contracts  →  SOC Lab MVP + Evaluation Data  →  Baseline SLM + FastAPI
-→ Vector RAG (+ threat-intel ingestion)  →  Knowledge Graph  →  Graph RAG  →  Hybrid RAG
-→ Agentic Workflow (single → multi-agent)  →  LLM Security + HITL + Sandbox
-→ Inference Optimization + LLMOps Maturity  →  Frontend
-→ End-to-End Validation + Final Benchmark  →  Documentation + Demo Freeze
+Ahmed's B0: fresh shared data + contracts + runtime → No-RAG → small Vector RAG
+→ independent reproduction and accepted handoff
+→ parallel expanded data / Graph RAG / API / evaluation → Hybrid RAG
+→ agents (single → six-role multi-agent), approved sandbox and dashboard integration
+→ required model / fine-tuning / inference / security experiments
+→ final regression and benchmark → report, demo and feature freeze
 ```
 
 ### 4.2 Core-before-orchestration rule
@@ -217,7 +211,7 @@ Agents must orchestrate working components; they must not hide unfinished compon
 
 ### 4.3 API-first / contract-first rule
 
-Frontend implementation is intentionally late. During early and middle phases the system is validated through FastAPI OpenAPI documentation, automated tests, curl / HTTP clients and Python integration tests. The React application is implemented after the main backend response contracts are stable enough to avoid repeated rework.
+After B0, frontend preparation may use stable API contracts and representative responses in parallel with backend work. During early phases the system is validated through OpenAPI, automated tests, curl / HTTP clients and Python integration tests. Final React acceptance requires the real backend, evidence, agent and approval/execution paths; fixture views alone are not integration proof.
 
 ### 4.4 Correctness-before-optimization rule
 
@@ -432,6 +426,8 @@ Compare 1) No-RAG, 2) Vector-RAG, 3) Graph-RAG, 4) Hybrid-RAG, using Recall@K, P
 
 ### 9.3 Fine-tuning benchmark
 
+Current execution: [required R4 fine-tuning issue](https://github.com/CyberSOC-ai/cybersoc-ai/issues/106), final official comparison in R5. Original Sx task IDs below are historical trace identifiers.
+
 The brief requires a **Base vs Fine-tuned** comparison, so one minimal fine-tuning experiment is a required deliverable. It stays off the critical path of the platform (nothing else depends on its outcome) and is kept small and time-boxed so that it cannot threaten the schedule:
 
 ```
@@ -439,7 +435,7 @@ Base SLM  →  RAG-enabled baseline  →  Error analysis (S5-T05)  →  QLoRA fi
 ```
 
 - **Scope:** one SLM, the triage task (verdict, severity, MITRE mapping), one QLoRA adapter, time-box of three working days, trained on cloud GPU.
-- **Data hygiene:** training uses only the `soc-eval-v1` train split (S1-T02); the frozen test split is never seen during training or prompt tuning. Indexed SOC logs exclude test-split incidents (§9.8).
+- **Data hygiene:** training uses only the approved training-eligible subset of development data, with an explicit split manifest; the frozen test split is never seen during training or prompt tuning. Indexed SOC logs exclude test-split incidents (§9.8).
 - **Evaluation:** official reference environment (S5-T01), same prompts and metrics as the base model.
 - **Outcome rule:** the experiment is complete when the comparison is reported, **whether the adapter improves, degrades or leaves the results unchanged** — a negative result with analysis is valid; not running the experiment is not.
 
@@ -608,10 +604,10 @@ The root `README.md` is the **consolidated final project report** and must not b
 
 Two formal consolidation checkpoints are planned:
 
-- **S5-T07** — consolidate the early report sections from Sprint 0–5 documentation: context, architecture, SOC Lab, data/compute strategy, baseline models, retrieval and Knowledge Graph results;
-- **S6-T07** — consolidate agentic workflow, LLM security, inference optimization, LLMOps, frontend progress and the demo storyboard.
+- **R2 checkpoint (historical S5-T07)** — consolidate the early report sections from Sprint 0–5 documentation: context, architecture, SOC Lab, data/compute strategy, baseline models, retrieval and Knowledge Graph results;
+- **R3 checkpoint (historical S6-T07)** — consolidate agentic workflow, LLM security, inference optimization, LLMOps, frontend progress and the demo storyboard.
 
-Sprint 8 therefore focuses on final synthesis, consistency review, figures, conclusions and submission quality rather than reconstructing project history.
+R6 therefore focuses on final synthesis, consistency review, figures, conclusions and submission quality rather than reconstructing project history. The original Sprint 8 label remains historical lineage.
 
 ### 11.6 Sprint documentation & contribution traceability
 
@@ -632,7 +628,7 @@ docs/sprints/
 └── sprint-08/README.md
 ```
 
-Every sprint README is initialized with the same fixed sections:
+The original Sprint 0–8 files below remain historical journals. New execution uses `revised-b0`, `revised-r1` through `revised-r6`, linked from [the sprint index](sprints/README.md); each retains the five fixed member sections and shared evidence. Member headings are contribution slots, not assignments. Every sprint README is initialized with the same fixed sections:
 
 ```markdown
 # Sprint X — <Title>
@@ -700,9 +696,9 @@ This model provides one clear document per sprint, preserves individual contribu
 
 Ahmed · Soulaiman · Anas · Achraf · Oussama
 
-### 12.2 No permanent technical roles
+### 12.2 Capability ownership and knowledge continuity
 
-A member may lead one area in one sprint and move to another in the next.
+Ahmed owns the initial B0 foundation/No-RAG/Vector delivery. After the handoff, Ahmed assigns end-to-end capability owners and reviewers. Maintain ownership through a coherent deliverable; walkthroughs and independent reproduction provide shared learning. Rotation does not force artificial handoffs.
 
 ### 12.3 Primary + reviewer rule
 
@@ -773,295 +769,33 @@ Tasks use one of these labels in planning. Every Issue must include a Dependenci
 
 ## 17. Sprint Plan — Dependency-First Execution
 
-Dates are baseline planning dates and can move slightly, but the final feature freeze must remain before the deadline. “Rev.” denotes the reviewer.
+The [baseline-first roadmap](ROADMAP.md) is the current execution mapping authorized on 11 November 2026. The original Sprint 0–8 journals preserve history; their task owners, dates and status tables do not assign current work. All brief requirements in §§2–10 and §§24–26 remain. Appendix D maps every original task to its new delivery.
 
-```mermaid
-gantt
-    dateFormat YYYY-MM-DD
-    axisFormat %d %b
-    section Foundation
-    S0 Governance and Contracts        :s0, 2026-10-08, 2026-10-12
-    S1 Platform and No-RAG Baseline    :s1, 2026-10-13, 2026-10-25
-    section Retrieval
-    S2 Vector RAG + Threat Intel       :s2, 2026-10-26, 2026-11-08
-    S3 Knowledge Graph and Hybrid RAG  :s3, 2026-11-09, 2026-11-22
-    section Agents and Optimization
-    S4 Agents (LangGraph), Security, HITL :s4, 2026-11-23, 2026-12-06
-    S5 Optimization, LLMOps, Fine-tuning :s5, 2026-12-07, 2026-12-13
-    section Delivery
-    S6 Frontend                        :s6, 2026-12-14, 2026-12-20
-    S7 E2E, Security, Final Benchmark  :s7, 2026-12-21, 2026-12-26
-    S8 Docs, Demo and Freeze           :s8, 2026-12-27, 2026-12-28
-    Buffer (critical fixes only)       :s9, 2026-12-29, 2026-12-31
-    Deadline 01 Jan 2027               :milestone, 2027-01-01, 0d
-```
+| Stage | Outcome | Owner / reviewer |
+|---|---|---|
+| B0 | Ahmed: foundation, No-RAG and small Vector RAG | Ahmed; reviewer unassigned |
+| R1 | Expanded data, Graph RAG and platform | Unassigned; Ahmed will choose |
+| R2 | Hybrid RAG and retrieval comparison | Unassigned; Ahmed will choose |
+| R3 | Agents, controlled response and dashboard | Unassigned; Ahmed will choose |
+| R4 | Required model, optimization and security experiments | Unassigned; Ahmed will choose |
+| R5 | Final validation and release candidate | Unassigned; Ahmed will choose |
+| R6 | Final report, demo and feature freeze | Unassigned; Ahmed will choose |
 
-### Sprint 0 — Governance, Architecture, Contracts & Planning
-
-**Dates:** 08 Oct → 12 Oct 2026  
-**Goal:** Remove ambiguity before implementation.
-
-| Task | Owner · Reviewer | Type · Priority | Blocked by |
-|---|---|---|---|
-| **S0-T01 — GitHub governance and workflow**<br>• Repository workflow; Project statuses, priorities and domains<br>• Branch naming and Pull Request rules<br>• Issue template; Definition of Ready / Done | **Ahmed**<br>Rev. Soulaiman | Parallel-safe<br>P1 | — |
-| **S0-T02 — Architecture and component boundaries**<br>• Component diagram and service boundaries<br>• Ownership-independent interfaces<br>• Critical path | **Soulaiman**<br>Rev. Anas | Parallel-safe<br>P0 | — |
-| **S0-T03 — Incident, retrieval, response and trace contracts**<br>• Normalized incident schema; retrieval request/response schema<br>• Investigation result schema; response-action schema<br>• Agent trace-record schema (agent trajectories, §6.5) | **Oussama**<br>Rev. Ahmed | Blocking<br>P0 | S0-T02 |
-| **S0-T04 — Security, secrets and HITL policy**<br>• Secret-handling and least-privilege rules<br>• Human-approval boundary; sandbox-only response rule | **Achraf**<br>Rev. Oussama | Blocking<br>P0 | S0-T02 |
-| **S0-T05 — Data, knowledge-source and benchmark inventory**<br>• MITRE / CVE / CWE / threat-intel source inventory, incl. the threat-intel feed(s) that will actually be ingested (S2-T08)<br>• SOC-log sources: lab-generated logs and alerts to be indexed for retrieval (S2-T01)<br>• Candidate SOC datasets; evaluation-case requirements (incl. triage labels)<br>• Dataset licensing / usage notes<br>• **SLM shortlist** (Qwen-family and Phi-family models in a size range that fits the available GPUs, plus other compact candidates), with licence and memory fit; final choice recorded in ADR-002<br>*Note: v2.2 — adds SOC-log sources and the model shortlist.* | **Oussama**<br>Rev. Anas | Blocking<br>P1 | S0-T02 |
-| **S0-T06 — Experiment and version-tracking convention**<br>• Experiment ID and model / prompt / dataset version conventions<br>• Benchmark result format; official benchmark environment template<br>• Agent-trajectory (trace) versioning convention<br>• **Metric definitions of §9.8** (faithfulness, response quality, action correctness, security metrics) and the dev / test split rule<br>• **Experiment-tracking tool selected (ADR-010)** among self-hostable or free options (e.g. MLflow, Langfuse, Weights & Biases free tier)<br>*Note: v2.2 — adds metric definitions and the tracking-tool decision.* | **Anas**<br>Rev. Ahmed | Blocking<br>P1 | S0-T05 |
-| **S0-T07 — SOC Lab architecture and scenario plan**<br>• Minimum lab topology; required VMs / containers<br>• Initial attack / test scenarios; response-sandbox boundary | **Achraf**<br>Rev. Soulaiman | Blocking<br>P1 | S0-T02, S0-T04 |
-| **S0-T08 — Initialize sprint documentation structure**<br>• Create `docs/sprints/sprint-00` through `sprint-08`<br>• Initialize one `README.md` per sprint with fixed sections for Ahmed, Soulaiman, Anas, Achraf and Oussama<br>• Add shared sprint integration, exit-criteria and retrospective sections<br>• Document editing / merge rules from §11.6 | **Ahmed**<br>Rev. Oussama | Parallel-safe<br>P1 | S0-T01 |
-
-> **Exit criteria**
->
-> - CDC accepted by all five members
-> - Architecture and contracts reviewed
-> - Security and lab boundaries understood
-> - Project board ready
-> - Sprint 0–8 README templates are initialized, committed and contain the five fixed member sections
-> - Experiment versioning begins before the first benchmark
-> - Supervisor has confirmed, or the team has recorded in ADR-009, the interpretation points: detection boundary (§3.3), six-agent target with reduced fallback (S4-T07), required minimal fine-tuning (§9.3)
-
-### Sprint 1 — Platform Baseline, SOC Lab MVP & No-RAG Baseline
-
-**Dates:** 13 Oct → 25 Oct 2026  
-**Goal:** Produce the first reproducible, end-to-end baseline without RAG.
-
-| Task | Owner · Reviewer | Type · Priority | Blocked by |
-|---|---|---|---|
-| **S1-T01 — Reproducible local environment + Docker + basic CI**<br>• Python / Node version conventions; Docker / Compose baseline<br>• .env.example; lint / test CI; setup documentation | **Ahmed**<br>Rev. Achraf | Blocking<br>P0 | S0-T01, S0-T04 |
-| **S1-T02 — Evaluation dataset v1 and evaluation protocol**<br>• Fixed evaluation cases with expected labels: triage verdict (true / false positive), severity, MITRE technique, expected action<br>• Dataset version soc-eval-v1 with a **development split and a frozen test split** (§9.8)<br>• **Faithfulness protocol**: claim-level evidence check, judge prompt, and a manually double-labelled validation subset<br>• **Response-quality rubric** (four criteria, 1–5) and action-correctness matching rules<br>*Note: v2.2 — adds the evaluation protocol that gives hallucination / faithfulness and response quality an operational definition.* | **Anas**<br>Rev. Oussama | Blocking<br>P0 | S0-T03, S0-T05, S0-T06 |
-| **S1-T03 — Baseline SLM runner**<br>• Model-loading abstraction; structured prompting<br>• First Qwen / Phi baseline runs; metrics stored with the S0-T06 convention | **Soulaiman**<br>Rev. Anas | Blocking<br>P0 | S1-T02 |
-| **S1-T04 — FastAPI core + incident ingestion**<br>• Health endpoint; incident validation<br>• Baseline investigation endpoint; OpenAPI documentation | **Oussama**<br>Rev. Soulaiman | Blocking<br>P0 | S0-T03, S1-T01 |
-| **S1-T05 — SOC Lab MVP**<br>• Minimal SOC / SIEM service with at least one endpoint<br>• One repeatable alert-generating scenario | **Achraf**<br>Rev. Ahmed | Blocking<br>P1 | S0-T07, S1-T01 |
-| **S1-T06 — SOC alert normalizer**<br>• Raw lab alert → normalized incident contract<br>• Sample normalized fixtures; tests | **Ahmed**<br>Rev. Oussama | Blocking<br>P1 | S0-T03, S1-T05 |
-| **S1-T07 — No-RAG end-to-end baseline**<br>• SOC Lab Alert → Normalizer → FastAPI → Baseline SLM → Structured Result | **Anas**<br>Rev. Ahmed | Integration<br>P0 | S1-T03, S1-T04, S1-T06 |
-
-> **Exit criteria**
->
-> - Project starts reproducibly
-> - Lab generates at least one valid incident
-> - Normalized incident reaches the backend
-> - Baseline SLM produces a structured result
-> - Baseline metrics are recorded
-> - `soc-eval-v1` and its evaluation protocol (faithfulness, quality rubric, dev / test split) are versioned and reviewed
-
-### Sprint 2 — Vector RAG & Threat-Intelligence Ingestion
-
-**Dates:** 26 Oct → 08 Nov 2026  
-**Goal:** Add evidence-grounded semantic retrieval, ingest real threat-intelligence data, and prove that retrieval quality is measurable.
-
-| Task | Owner · Reviewer | Type · Priority | Blocked by |
-|---|---|---|---|
-| **S2-T01 — Cybersecurity knowledge normalization / ingestion**<br>• Normalized MITRE ATT&CK and CVE / CWE records; reproducible ingestion scripts<br>• **SOC-log corpus**: normalized lab alerts / log excerpts and historical lab incidents prepared for retrieval, excluding test-split evaluation incidents<br>• Source provenance recorded for every record (RAG-poisoning control)<br>*Note: v2.2 — adds SOC logs as a retrieval source (brief: MITRE, CVE/CWE, threat intelligence and SOC logs).* | **Ahmed**<br>Rev. Soulaiman | Blocking<br>P1 | S0-T05, S1-T06 |
-| **S2-T02 — Chunking, embeddings and vector index**<br>• Chunking strategy, embedding model and vector index (config recorded)<br>• Separate collections for knowledge (MITRE, CVE / CWE) and for SOC logs / past incidents, with provenance metadata and filters | **Soulaiman**<br>Rev. Ahmed | Blocking<br>P0 | S2-T01 |
-| **S2-T03 — Retriever evaluation**<br>• Retrieval evaluated independently before generation (Recall@K, Precision@K, MRR) | **Ahmed**<br>Rev. Anas | Blocking<br>P1 | S1-T02, S2-T02 |
-| **S2-T04 — Vector-RAG generation pipeline**<br>• Evidence-grounded generation with structured output and cited evidence | **Anas**<br>Rev. Oussama | Blocking<br>P0 | S1-T03, S2-T02, S2-T03 |
-| **S2-T05 — RAG API integration**<br>• Vector-RAG exposed through the FastAPI investigation endpoint | **Oussama**<br>Rev. Anas | Integration<br>P0 | S1-T04, S2-T04 |
-| **S2-T06 — No-RAG vs Vector-RAG experiment**<br>• First retrieval ablation with stored metrics and written conclusion | **Achraf**<br>Rev. Soulaiman | Integration<br>P1 | S2-T05 |
-| **S2-T07 — SOC Lab scenario set v1**<br>• Multiple repeatable incidents for later regression | **Oussama**<br>Rev. Ahmed | Parallel-safe<br>P1 | S1-T05, S1-T06 |
-| **S2-T08 — Threat-intelligence ingestion**<br>• At least one threat-intelligence source (offline snapshot / export of an IOC feed, licence permitting) normalized into IOC records: IP, domain, hash, malware family, tags, confidence<br>• IOC records loaded into the vector store and the structured store; IOC lookup function following the retrieval contract; fixtures and tests<br>• No internet-wide crawling: snapshots are versioned in artifact storage<br>*Note: Added in v2.0 — closes the Threat-Intelligence data gap.* | **Ahmed**<br>Rev. Oussama | Parallel-safe<br>P1 | S0-T05, S2-T01 |
-
-> **Exit criteria**
->
-> - Ingestion is reproducible (knowledge and threat intelligence)
-> - Retriever quality is measured separately
-> - Vector RAG works through the backend
-> - No-RAG vs Vector-RAG results are recorded
-
-### Sprint 3 — Knowledge Graph, Graph RAG & Hybrid RAG
-
-**Dates:** 09 Nov → 22 Nov 2026  
-**Goal:** Add structured cyber relationships and combine graph + vector evidence.
-
-| Task | Owner · Reviewer | Type · Priority | Blocked by |
-|---|---|---|---|
-| **S3-T01 — Knowledge Graph ontology / schema**<br>• Node and relationship types: users, hosts, IPs, alerts, vulnerabilities, malware, ATT&CK techniques, threat indicators | **Achraf**<br>Rev. Ahmed | Blocking<br>P0 | S0-T03, S0-T05 |
-| **S3-T02 — Graph ingestion / ETL**<br>• Reproducible ETL from knowledge sources, threat-intel IOCs and lab incidents into the graph model | **Soulaiman**<br>Rev. Ahmed | Blocking<br>P0 | S3-T01, S2-T08 |
-| **S3-T03 — Neo4j population + Cypher validation**<br>• Populated Neo4j instance; validated Cypher queries | **Oussama**<br>Rev. Soulaiman | Blocking<br>P0 | S3-T02 |
-| **S3-T04 — Graph retrieval service**<br>• Graph retrieval following the retrieval contract | **Anas**<br>Rev. Oussama | Blocking<br>P0 | S3-T03 |
-| **S3-T05 — Graph-RAG pipeline**<br>• Graph-grounded generation pipeline | **Achraf**<br>Rev. Anas | Blocking<br>P0 | S1-T03, S3-T04 |
-| **S3-T06 — Hybrid RAG orchestration**<br>• Vector + graph evidence fusion and ranking | **Anas**<br>Rev. Ahmed | Integration<br>P0 | S2-T04, S3-T05 |
-| **S3-T07 — Retrieval comparison experiment**<br>• No-RAG vs Vector vs Graph vs Hybrid on the same dataset, same SLM, same environment | **Oussama**<br>Rev. Achraf | Integration<br>P1 | S3-T06 |
-
-> **Exit criteria**
->
-> - Graph schema documented
-> - Graph populated reproducibly
-> - Graph queries validated
-> - Graph RAG and Hybrid RAG work
-> - Comparison metrics are stored
-
-### Sprint 4 — Agentic Workflow (LangGraph), LLM Security, HITL & Response Sandbox
-
-**Dates:** 23 Nov → 06 Dec 2026  
-**Goal:** Transform working primitives into a controlled SOC workflow, delivering both the single-agent baseline and the multi-agent workflow.
-
-| Task | Owner · Reviewer | Type · Priority | Blocked by |
-|---|---|---|---|
-| **S4-T01 — Agent state model + structured agent contracts (LangGraph)**<br>• LangGraph state schema and typed node input / output contracts<br>• Agent trace-record implementation (§6.5); ADR-004 confirming LangGraph<br>*Note: LangGraph named explicitly in v2.0.* | **Soulaiman**<br>Rev. Achraf | Blocking<br>P0 | S0-T03, S3-T06 |
-| **S4-T02 — RAG / KG / threat-intel tool adapters**<br>• Three tool adapters (Hybrid RAG, graph, threat-intel IOC lookup) with validated schemas and allowlists | **Ahmed**<br>Rev. Soulaiman | Blocking<br>P0 | S2-T05, S2-T08, S3-T04 |
-| **S4-T03 — Single orchestrated investigation baseline**<br>• One LangGraph workflow with a single agent calling the three tools — the comparison baseline | **Anas**<br>Rev. Ahmed | Blocking<br>P0 | S4-T01, S4-T02 |
-| **S4-T04 — Prompt-injection, jailbreak, tool-validation and output-validation controls**<br>• Untrusted-content handling; tool-argument and output schema validation<br>• First abuse-case suite (backend level) with **at least five cases per threat class** and a jailbreak suite (role-play, instruction override, multi-turn, system-prompt extraction)<br>• Results measured with mitigations off vs on (ASR, block rate, false-refusal rate on a benign control set, §10)<br>*Note: v2.2 — adds quantitative security metrics and jailbreak coverage.* | **Achraf**<br>Rev. Oussama | Blocking<br>P0 | S4-T01, S4-T02 |
-| **S4-T05 — Human approval state + audit model**<br>• Approval state machine; append-only audit log of prompts, context, decisions, tool calls and actions | **Oussama**<br>Rev. Achraf | Blocking<br>P0 | S4-T01, S4-T04 |
-| **S4-T06 — Response sandbox action execution**<br>• Approved actions executed only against isolated test targets | **Ahmed**<br>Rev. Oussama | Blocking<br>P0 | S0-T07, S4-T05 |
-| **S4-T07 — Multi-agent LangGraph workflow**<br>• **Target: the six agents of the brief** — Triage, Investigation, RAG, Knowledge Graph, Threat Intelligence and Response — as LangGraph nodes / sub-graphs with supervisor routing<br>• Same contracts, validation, approval and audit controls as the single-agent baseline<br>• Fallback rule: if the sprint slips, the topology may be reduced (minimum: Triage, Investigation, Response; RAG, Knowledge Graph and Threat Intelligence calls then stay inside the Investigation agent). Any reduction must be declared in ADR-004, in the sprint README and in the final report as a deviation from the brief — and the single vs multi-agent comparison is never dropped<br>*Note: v2.2 — six agents are the target; three is a reported fallback only.* | **Soulaiman**<br>Rev. Anas | Integration<br>P1 · Required | S4-T03, S4-T04, S4-T05 |
-| **S4-T08 — Agent / action correctness benchmark (single vs multi-agent)**<br>• Task correctness, tool-call failures, action correctness, latency, trace complexity — single vs multi-agent | **Achraf**<br>Rev. Soulaiman | Integration<br>P1 | S4-T03, S4-T05, S4-T06, S4-T07 |
-
-> **Exit criteria**
->
-> - Safe demonstration of: Incident → Triage → Evidence Retrieval → Investigation → Recommendation → Human Approval → Sandbox Execution → Audit
-> - Single-agent baseline and multi-agent workflow both functional and compared
-> - No unrestricted autonomous execution is allowed
-
-### Sprint 5 — Inference Optimization, LLMOps Maturity & Fine-Tuning
-
-**Dates:** 07 Dec → 13 Dec 2026  
-**Goal:** Optimize a stable baseline, make experiments operationally observable, run the required minimal fine-tuning comparison, and start the written report.
-
-> **Early-start rule (v2.2).** S5-T05 (error analysis) starts as soon as the single-agent baseline and the retrieval comparison exist (end of Sprint 4), and QLoRA *training* in S5-T06 may start before S5-T01 on cloud GPU. Only the *official evaluation* of the adapter waits for the frozen environment. This keeps the seven-day sprint feasible.
-
-| Task | Owner · Reviewer | Type · Priority | Blocked by |
-|---|---|---|---|
-| **S5-T01 — Official benchmark environment freeze**<br>• Reference environment recorded (hardware, OS, runtimes, versions, commit SHA) | **Ahmed**<br>Rev. Anas | Blocking<br>P0 | S0-T06, S4-T08 |
-| **S5-T02 — Inference optimization benchmark A: quantization, KV cache, batching**<br>• FP16 vs INT8 vs INT4; with vs without KV cache; single vs batched requests<br>• TTFT, tokens/second, total latency, memory, quality degradation on the `soc-eval-v1` test split; staged ablation (no full Cartesian product)<br>*Note: v2.2 — split in two; FlashAttention, prefix caching and vLLM moved to S5-T08.* | **Soulaiman**<br>Rev. Achraf | Blocking<br>P1 | S5-T01 |
-| **S5-T03 — Advanced tracing / experiment tracking incl. agent trajectories**<br>• Versioned traces of agent trajectories (steps, tool calls, failures); experiment tracking dashboard using the tool selected in ADR-010 | **Anas**<br>Rev. Ahmed | Parallel-safe<br>P1 | S0-T06, S4-T03, S4-T07 |
-| **S5-T04 — Runtime metrics and logging pipeline**<br>• Structured logs and runtime metrics (latency, errors, tool-call failures)<br>• Quality monitoring: sampled faithfulness / hallucination checks and response-quality scores on live and replayed incidents, using the §9.8 protocol<br>*Note: v2.2 — adds quality / hallucination monitoring required by the brief's LLMOps item.* | **Oussama**<br>Rev. Anas | Parallel-safe<br>P1 | S4-T03, S1-T02 |
-| **S5-T05 — Error analysis and fine-tuning target selection**<br>• Categorised errors of the RAG-enabled baseline on the development split<br>• Written decision of *what* to fine-tune (task, data, hyper-parameter envelope) and what the expected effect is; the fine-tuning itself is not optional (§9.3)<br>*Note: v2.2 — go / no-go gate replaced by a target-selection step.* | **Achraf**<br>Rev. Soulaiman | Blocking<br>P1 | S3-T07, S4-T03 |
-| **S5-T06 — QLoRA fine-tuning experiment (minimal, required)**<br>• One SLM, triage task, one QLoRA adapter, three-working-day time-box, trained on the development split only<br>• Base vs fine-tuned evaluated on the `soc-eval-v1` test split in the official environment: accuracy / precision / recall / F1, faithfulness, latency and memory<br>• Adapter versioned in artifact storage; the result is reported whether positive, negative or neutral<br>*Note: v2.2 — promoted from Optional / Stretch (P3) to Required (P1); the brief lists Base vs Fine-tuned as a controlled experiment.* | **Oussama**<br>Rev. Achraf | Integration<br>P1 · Required | S5-T05 (training); S5-T01 (official evaluation) |
-| **S5-T07 — Documentation checkpoint #1 — consolidate Sprint 0–5 evidence into root report**<br>• Consolidate approved sprint README content into the root README: context, architecture, SOC Lab, data/compute strategy, baseline models, retrieval and KG results<br>• Verify Sprint 0–5 member sections are complete and traceable to Issues / PRs<br>*Note: Updated in v2.1 — sprint READMEs are the detailed execution journal; root README is the consolidated report.* | **Anas**<br>Rev. Soulaiman | Parallel-safe<br>P1 | S2-T06, S3-T07 |
-| **S5-T08 — Serving-stack benchmark B: FlashAttention, prefix caching, vLLM**<br>• FlashAttention on / off and prefix caching on / off where hardware and runtime support them — otherwise documented as unsupported, with evidence (e.g. GPU generation lacking FlashAttention-2 support)<br>• Baseline serving vs optimized serving with vLLM (continuous batching, prefix caching, KV-cache management)<br>• TTFT, tokens/second, total latency, memory; serving decision recorded in ADR-005<br>*Note: v2.2 — split out of S5-T02 to remove the single-owner overload.* | **Ahmed**<br>Rev. Soulaiman | Blocking<br>P1 | S5-T01 |
-
-> **Exit criteria**
->
-> - Official benchmark environment recorded
-> - Inference optimization results reproducible
-> - Traces and logging available
-> - The minimal QLoRA fine-tuning experiment is completed and Base vs Fine-tuned results are reported on the `soc-eval-v1` test split (positive or negative)
-> - Report skeleton and early sections drafted
-
-### Sprint 6 — Frontend / Analyst Experience
-
-**Dates:** 14 Dec → 20 Dec 2026  
-**Goal:** Build the UI only after core API contracts are stable.
-
-| Task | Owner · Reviewer | Type · Priority | Blocked by |
-|---|---|---|---|
-| **S6-T01 — Frontend architecture + typed API client**<br>• React / TypeScript structure; typed client generated from the OpenAPI contract | **Ahmed**<br>Rev. Soulaiman | Blocking<br>P0 | S1-T04, S2-T05, S4-T05 |
-| **S6-T02 — Incident list/detail and investigation view**<br>• Incident list, detail and investigation views | **Soulaiman**<br>Rev. Oussama | Parallel-safe<br>P1 | S6-T01 |
-| **S6-T03 — Evidence / RAG / KG visualization**<br>• Evidence panel; knowledge-graph exploration | **Anas**<br>Rev. Ahmed | Parallel-safe<br>P1 | S6-T01, S3-T06 |
-| **S6-T04 — Risk / recommendation / approval UI**<br>• Risk level, recommended actions, approve / reject controls | **Achraf**<br>Rev. Anas | Parallel-safe<br>P0 | S4-T05, S6-T01 |
-| **S6-T05 — Audit / execution status UI**<br>• Audit history; sandbox execution status | **Oussama**<br>Rev. Achraf | Parallel-safe<br>P1 | S4-T06, S5-T04, S6-T01 |
-| **S6-T06 — Frontend/backend integration tests**<br>• Automated tests of the main analyst workflow | **Ahmed**<br>Rev. Oussama | Integration<br>P0 | S6-T02, S6-T03, S6-T04, S6-T05 |
-| **S6-T07 — Documentation checkpoint #2 — consolidate later technical sections + demo storyboard**<br>• Consolidate approved Sprint 4–6 README evidence into root report sections: agents, inference optimization, LLM security, LLMOps and frontend
-• Verify current sprint member sections are complete and traceable to Issues / PRs
-• Demo storyboard v1 aligned with the 5-minute target (§25)
-*Note: Updated in v2.1.* | **Soulaiman**<br>Rev. Achraf | Parallel-safe<br>P1 | S4-T08, S5-T02, S5-T08, S5-T07 |
-
-> **Exit criteria**
->
-> - A user can complete the main analyst workflow from the dashboard without using developer-only API tools
-> - Report sections drafted; demo storyboard ready
-
-### Sprint 7 — End-to-End Validation, Security Hardening & Final Benchmark
-
-**Dates:** 21 Dec → 26 Dec 2026  
-**Goal:** Produce a release candidate.
-
-| Task | Owner · Reviewer | Type · Priority | Blocked by |
-|---|---|---|---|
-| **S7-T01 — End-to-end SOC Lab regression suite**<br>• Automated end-to-end regression over all lab scenarios | **Oussama**<br>Rev. Ahmed | Integration<br>P0 | S2-T07, S4-T06, S6-T06 |
-| **S7-T02 — LLM security / abuse-case testing**<br>• Abuse cases for all nine threats of §10 (at least five per class); UI-level cases complete the backend suite started in S4-T04<br>• Final results table: ASR with mitigations off vs on, block rate and false-refusal rate per threat class; all residual failures tracked as Issues | **Soulaiman**<br>Rev. Achraf | Integration<br>P0 | S4-T04, S6-T06 |
-| **S7-T03 — RAG / KG regression**<br>• Retrieval and graph regression on fixed datasets | **Ahmed**<br>Rev. Anas | Integration<br>P1 | S3-T07, S6-T06 |
-| **S7-T04 — Final SLM / retrieval / agent / fine-tuning / security benchmark**<br>• Final integrated benchmark in the official environment, including Base vs Fine-tuned and the security results table; results frozen | **Anas**<br>Rev. Soulaiman | Integration<br>P0 | S5-T02, S5-T08, S5-T06, S7-T01, S7-T02, S7-T03 |
-| **S7-T05 — Release CI + clean reproducible deployment**<br>• Release pipeline; clean-machine setup verified | **Achraf**<br>Rev. Oussama | Integration<br>P0 | S6-T06 |
-| **S7-T06 — Final critical bug / security fixes**<br>• Fixes assigned per issue; only P0 / P1 | **Team (per issue)** | Integration<br>P0 | S7-T01 to S7-T05 |
-
-> **Planning note**
->
-> Early-start rule: the backend-level abuse-case suite (S4-T04), the RAG / KG regression harness and the final-benchmark harness are prepared during Sprints 4–6, so Sprint 7 only executes, completes and freezes them.
-
-> **Exit criteria**
->
-> - End-to-end demo succeeds
-> - Critical tests pass
-> - No known critical security issue
-> - Benchmark results are frozen
-> - Clean setup is reproducible
-
-### Sprint 8 — Documentation, Demo & Feature Freeze
-
-**Dates:** 27 Dec → 28 Dec 2026  
-**Goal:** Finalize the written report, record the demo, and freeze the project while preserving buffer time.
-
-| Task | Lead | Type · Priority | Blocked by |
-|---|---|---|---|
-| **S8-T01 — Root README finalization (full project report in Markdown)**<br>• Consolidate and polish the final root `README.md` from sprint READMEs, ADRs, experiment results and approved project evidence | **Ahmed**<br>Review: entire team | Parallel-safe<br>P0 | S5-T07, S6-T07 |
-| **S8-T02 — Architecture / API / setup documentation**<br>• Architecture, API and setup documentation | **Soulaiman**<br>Review: entire team | Parallel-safe<br>P1 | S6-T07 |
-| **S8-T03 — Experimental results / figures / conclusions**<br>• Final results, figures and written conclusions with limitations | **Anas**<br>Review: entire team | Parallel-safe<br>P0 | S7-T04 |
-| **S8-T04 — Security / DevSecOps / LLMOps documentation**<br>• LLM-security analysis, mitigations, DevSecOps and LLMOps evidence | **Achraf**<br>Review: entire team | Parallel-safe<br>P1 | S6-T07, S7-T02 |
-| **S8-T05 — Demo scenario + rehearsal (recorded 5-minute demo)**<br>• Final demo script, rehearsal and recorded video (maximum 5 minutes) | **Oussama**<br>Review: entire team | Parallel-safe<br>P0 | S6-T07, S7-T01 |
-
-> **Freeze rule**
->
-> After Sprint 8: no new features; only P0 / P1 fixes; benchmark numbers do not change unless a documented critical correction is required; focus moves to report, demo and submission.
-
-### Buffer — 29 Dec → 31 Dec 2026
-
-Reserved only for critical bugs, environment / reproducibility failures, report corrections, demo / video issues and final submission checks. **Deadline: 01 January 2027.**
+No calendar dates for B0/R1–R5 are invented. Estimate B0 and replan remaining capacity; keep feature freeze 28 December 2026, 29–31 December correction buffer and 1 January 2027 submission. The required minimal QLoRA/Base-vs-Fine-tuned experiment is in R4, with final held-out evaluation in R5; it is not optional and does not block product functionality.
 
 ## 18. Critical Path
 
-The spine of the project is shown below. After the architecture and contracts are approved, the Sprint 1 foundation tasks (evaluation dataset, development environment, SOC Lab MVP, baseline SLM, FastAPI core, normalizer) run largely in parallel and converge in the No-RAG baseline.
+Fresh shared foundation → No-RAG → small complete Vector RAG → accepted B0 reproduction/handoff → parallel expanded data / Graph / API / evaluation → Hybrid → real single/six-agent integration plus approved sandbox/UI → required experiments and final regression → report/demo/freeze.
 
-```mermaid
-graph TD
-    A[Architecture + Contracts] --> B[Evaluation Dataset v1]
-    A --> C[SOC Lab Architecture]
-    A --> D[Reproducible Dev Environment]
-    C --> E[SOC Lab MVP]
-    D --> E
-    B --> F[Baseline SLM]
-    D --> G[FastAPI Core]
-    E --> H[Alert Normalizer]
-    F --> I[No-RAG Baseline]
-    G --> I
-    H --> I
-    I --> J[Vector RAG + Threat Intel]
-    J --> K[Knowledge Graph / Graph RAG]
-    K --> L[Hybrid RAG]
-    L --> M[Agentic Workflow: single-agent then multi-agent]
-    M --> N[Security + HITL]
-    N --> O[Response Sandbox]
-    O --> P[Optimization + LLMOps]
-    P --> Q[Frontend]
-    Q --> R[E2E + Security + Final Benchmark]
-    R --> S[Freeze + Demo]
-```
-
-| Branch | Joins the spine at | Note |
-|---|---|---|
-| Evaluation dataset v1 (S1-T02) | Baseline SLM → No-RAG baseline | Also feeds retriever evaluation (S2-T03) |
-| SOC Lab MVP → normalizer (S1-T05, T06) | No-RAG baseline | Scenario set v1 (S2-T07) continues in parallel |
-| Threat-intel ingestion (S2-T08) | Graph ETL (S3-T02) and tool adapters (S4-T02) | Parallel-safe once S2-T01 exists |
-| Knowledge-graph modelling (S3-T01) | Starts once Vector RAG interfaces are stable | Parallel with S2 completion |
-| Tracing and runtime metrics (S5-T03, T04) | Frontend audit UI (S6-T05) | Parallel with inference optimization |
-| Report checkpoints (S5-T07, S6-T07) | README finalization (S8-T01) | Parallel-safe — protects the compressed S7–S8 window |
+The initial gate is deliberate: Ahmed proves the reusable workflow before teammates implement downstream capabilities. B0 is bounded; it does not demand large-scale indexing or perfect model accuracy. Fine-tuning stays off the application critical path, but its required comparison must finish before final release.
 
 ## 19. Parallel-Safe Work Examples
 
-The plan is dependency-driven, not purely sequential. For example, after shared contracts are approved, these can proceed in parallel:
-
-```
-                      ┌─ Development environment / CI
-Architecture ─────────┼─ Evaluation dataset
-                      ├─ SOC Lab MVP preparation
-                      └─ Baseline model setup
-```
-
-Similarly, once Vector RAG is stable, Knowledge Graph modelling, threat-intelligence ingestion and additional SOC Lab scenario creation can continue in parallel. During Sprints 5–6, tracing, metrics, report drafting and frontend components proceed in parallel.
+Before B0 handoff, teammates may support labels, source/license checks, interface review and planning. They do not start the downstream implementation phase. After B0, Graph RAG, data expansion, backend and evaluation can run in parallel; UI, approval/executor and agent preparation overlap once their specific interfaces are stable. Real integration acceptance waits for the actual dependencies. Tracking, security cases and documentation evolve with each component rather than waiting for the final sprint.
 
 ## 20. Risk Register
+
+Original Sx references below identify requirement lineage; use [ROADMAP.md](ROADMAP.md) for current stages/ownership. Initial gate risk: B0 can concentrate waiting on Ahmed. Bound it to the small reusable release, estimate it explicitly, involve a reproduction partner chosen later and keep large-scale processing/optimization downstream. Do not silently waive scope to fit dates.
 
 | ID | Risk | L | I | Mitigation |
 |---|---|---|---|---|
@@ -1156,20 +890,22 @@ If relevant.
 
 ## 23. Architecture Decision Records
 
+Historic ADR owners/dates are evidence, not new assignments. Storage and tracking decisions are validated during B0; downstream decision owners are selected by Ahmed.
+
 Important technical decisions are documented under `docs/adr/`. Each ADR contains context, considered options, decision, consequences, date and participants.
 
-| ADR | Decision | Due |
+| ADR | Decision | Current delivery stage |
 |---|---|---|
-| ADR-001 | Select vector database | Sprint 2 |
-| ADR-002 | Select baseline SLM (from the S0-T05 shortlist) | Sprint 1 |
-| ADR-003 | Define Neo4j schema | Sprint 3 |
-| ADR-004 | Define agent architecture — LangGraph, single-agent baseline and multi-agent topology | Sprint 4 (S4-T01) |
-| ADR-005 | Select inference serving strategy (incl. vLLM, FlashAttention, prefix caching) | Sprint 5 |
-| ADR-006 | Select artifact / model storage | Sprint 1 |
-| ADR-007 | Select official benchmark environment | Sprint 5 (S5-T01) |
-| ADR-008 | Select threat-intelligence sources and offline snapshot policy | Sprint 2 (S2-T08) |
-| ADR-009 | Scope interpretations confirmed with the supervisor: detection boundary, six-agent target and reported fallback, required minimal fine-tuning | Sprint 0 |
-| ADR-010 | Select experiment-tracking / LLMOps tool | Sprint 0 (S0-T06) |
+| ADR-001 | Select vector database | B0 |
+| ADR-002 | Select baseline SLM and record later Qwen/Phi comparison | B0; expanded study R4 |
+| ADR-003 | Define Neo4j schema | R1 |
+| ADR-004 | Define agent architecture — LangGraph, single-agent baseline and multi-agent topology | R3 |
+| ADR-005 | Select inference serving strategy (incl. vLLM, FlashAttention, prefix caching) | R4 |
+| ADR-006 | Select artifact / model storage | B0 |
+| ADR-007 | Select official benchmark environment | R1 preparation; pinned before R4/R5 official measurement |
+| ADR-008 | Select threat-intelligence sources and offline snapshot policy | B0 representative release; R1 expanded ingestion |
+| ADR-009 | Scope interpretations confirmed with the supervisor: detection boundary, six-agent target and reported fallback, required minimal fine-tuning | Preserve evidence; verify unresolved interpretations during B0 |
+| ADR-010 | Select experiment-tracking / LLMOps tool | B0 tested initial integration; R3 mature traces |
 
 ## 24. Final Deliverables
 
@@ -1179,7 +915,7 @@ The final project must include at minimum:
 2. GitHub repository;
 3. clear CDC and technical documentation;
 4. **full project report in Markdown (`README.md`) explaining all steps followed during the project;**
-5. **complete Sprint 0–8 documentation journal (`docs/sprints/sprint-XX/README.md`) with fixed sections for Ahmed, Soulaiman, Anas, Achraf and Oussama;**
+5. **preserved historical Sprint 0–8 journals plus complete revised B0–R6 delivery journals, each with fixed sections for Ahmed, Soulaiman, Anas, Achraf and Oussama;**
 6. reproducible setup instructions;
 7. React / TypeScript dashboard;
 8. FastAPI backend;
@@ -1262,6 +998,8 @@ Every requirement of the six-page brief is mapped to the CDC sections and tasks 
 
 ## Appendix B — Change Log (v1.0 → v2.2)
 
+**v2.3 execution reset — 11 November 2026:** baseline-first B0 owned by Ahmed; future assignments cleared; R1–R6 capability milestones; all original requirements retained; current mapping in ROADMAP.md. No artifacts deleted or application behavior changed by this planning revision.
+
 | # | Change | Where |
 |---|---|---|
 | C1 | FlashAttention, prefix caching and vLLM added to the inference study; staged-ablation table | §2.2, §3.1, §9.4, S5-T02, ADR-005 |
@@ -1288,91 +1026,8 @@ Every requirement of the six-page brief is mapped to the CDC sections and tasks 
 
 ## Appendix C — Ownership & Domain Exposure Matrix
 
-Ownership update (2026-11-04): Ahmed authorized exchanging S2-T03 and S3-T01.
-Ahmed owns S2-T03 (Anas reviews); Achraf owns S3-T01 (Ahmed reviews).
-The sprint tables, registry and matrix below reflect that exchange.
-
-**Counting rule (v2.2).** Computed from the task registry of Appendix D, which lists every task with its owner, reviewer and one domain tag. Each task counts once as *primary* for its owner (Sprint 8 leads included) and once as *reviewer* for its named reviewer. Sprint 8 tasks are reviewed by the entire team and S7-T06 is assigned per issue to the team, so neither is counted as a review. Cells show **primary / reviewer**; `·` means no task. Total tasks counted: 63 (primary 63, reviews 58).
-
-| Member | SOC | SLM | RAG | KG | AGT | API | UI | OPS | MLO | SEC | TST | DOC | Total |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Ahmed | 3/2 | 0/1 | 2/2 | 0/2 | 1/1 | 0/1 | 1/1 | 4/0 | 0/2 | · | 2/1 | 2/0 | 15/13 |
-| Soulaiman | 0/1 | 2/2 | 1/2 | 1/1 | 2/2 | 1/1 | 1/1 | 0/2 | · | 1/0 | · | 2/1 | 11/13 |
-| Anas | · | 3/1 | 2/3 | 1/0 | 1/1 | 0/2 | 1/1 | 0/1 | 2/1 | · | 0/1 | 2/0 | 12/11 |
-| Achraf | 2/0 | 1/2 | 2/1 | 1/0 | 1/1 | · | 1/1 | 1/1 | · | 2/2 | · | 1/1 | 12/9 |
-| Oussama | 1/3 | 1/1 | 2/1 | 1/1 | · | 3/0 | 1/1 | 0/1 | 1/0 | 1/2 | 1/1 | 1/1 | 13/12 |
-
-Legend: SOC = soc · SLM = ai-slm · RAG = rag · KG = knowledge-graph · AGT = agents · API = backend · UI = frontend · OPS = devops · MLO = llmops · SEC = llm-security · TST = testing · DOC = documentation.
-
-Distinct domains touched per member (primary or reviewer): Ahmed 11, Soulaiman 10, Anas 10, Achraf 9, Oussama 11. Every member touches at least 9 of the 12 domains, which satisfies the team-learning objective of §2.4.
+Current assignment: **Ahmed (@ElrhAhmed) owns B0 only** (shared data, model runtime, No-RAG and Vector RAG). All downstream primary owners and reviewers are intentionally **unassigned**, for Ahmed to choose. No exposure totals or future reviewer names are fabricated. Historical counts/owners remain in Git and original journals; knowledge transfer, independent reproduction and cross-domain participation remain requirements.
 
 ## Appendix D — Task Registry
 
-One domain tag per task (the main domain of the work). This table is the source for Appendix C; any change to an owner, reviewer or domain updates both.
-
-| Task | Title | Owner | Reviewer | Domain |
-|---|---|---|---|---|
-| S0-T01 | GitHub governance and workflow | Ahmed | Soulaiman | OPS |
-| S0-T02 | Architecture and component boundaries | Soulaiman | Anas | API |
-| S0-T03 | Incident, retrieval, response and trace contracts | Oussama | Ahmed | API |
-| S0-T04 | Security, secrets and HITL policy | Achraf | Oussama | SEC |
-| S0-T05 | Data, knowledge-source and benchmark inventory | Oussama | Anas | RAG |
-| S0-T06 | Experiment and version-tracking convention | Anas | Ahmed | MLO |
-| S0-T07 | SOC Lab architecture and scenario plan | Achraf | Soulaiman | SOC |
-| S0-T08 | Initialize sprint documentation structure | Ahmed | Oussama | DOC |
-| S1-T01 | Reproducible local environment + Docker + basic CI | Ahmed | Achraf | OPS |
-| S1-T02 | Evaluation dataset v1 and evaluation protocol | Anas | Oussama | SLM |
-| S1-T03 | Baseline SLM runner | Soulaiman | Anas | SLM |
-| S1-T04 | FastAPI core + incident ingestion | Oussama | Soulaiman | API |
-| S1-T05 | SOC Lab MVP | Achraf | Ahmed | SOC |
-| S1-T06 | SOC alert normalizer | Ahmed | Oussama | SOC |
-| S1-T07 | No-RAG end-to-end baseline | Anas | Ahmed | SLM |
-| S2-T01 | Cybersecurity knowledge normalization / ingestion | Ahmed | Soulaiman | RAG |
-| S2-T02 | Chunking, embeddings and vector index | Soulaiman | Ahmed | RAG |
-| S2-T03 | Retriever evaluation | Ahmed | Anas | RAG |
-| S2-T04 | Vector-RAG generation pipeline | Anas | Oussama | RAG |
-| S2-T05 | RAG API integration | Oussama | Anas | API |
-| S2-T06 | No-RAG vs Vector-RAG experiment | Achraf | Soulaiman | RAG |
-| S2-T07 | SOC Lab scenario set v1 | Oussama | Ahmed | SOC |
-| S2-T08 | Threat-intelligence ingestion | Ahmed | Oussama | SOC |
-| S3-T01 | Knowledge Graph ontology / schema | Achraf | Ahmed | KG |
-| S3-T02 | Graph ingestion / ETL | Soulaiman | Ahmed | KG |
-| S3-T03 | Neo4j population + Cypher validation | Oussama | Soulaiman | KG |
-| S3-T04 | Graph retrieval service | Anas | Oussama | KG |
-| S3-T05 | Graph-RAG pipeline | Achraf | Anas | RAG |
-| S3-T06 | Hybrid RAG orchestration | Anas | Ahmed | RAG |
-| S3-T07 | Retrieval comparison experiment | Oussama | Achraf | RAG |
-| S4-T01 | Agent state model + structured agent contracts (LangGraph) | Soulaiman | Achraf | AGT |
-| S4-T02 | RAG / KG / threat-intel tool adapters | Ahmed | Soulaiman | AGT |
-| S4-T03 | Single orchestrated investigation baseline | Anas | Ahmed | AGT |
-| S4-T04 | Prompt-injection, jailbreak, tool-validation and output-validation controls | Achraf | Oussama | SEC |
-| S4-T05 | Human approval state + audit model | Oussama | Achraf | SEC |
-| S4-T06 | Response sandbox action execution | Ahmed | Oussama | SOC |
-| S4-T07 | Multi-agent LangGraph workflow | Soulaiman | Anas | AGT |
-| S4-T08 | Agent / action correctness benchmark (single vs multi-agent) | Achraf | Soulaiman | AGT |
-| S5-T01 | Official benchmark environment freeze | Ahmed | Anas | OPS |
-| S5-T02 | Inference optimization benchmark A: quantization, KV cache, batching | Soulaiman | Achraf | SLM |
-| S5-T03 | Advanced tracing / experiment tracking incl. agent trajectories | Anas | Ahmed | MLO |
-| S5-T04 | Runtime metrics and logging pipeline | Oussama | Anas | MLO |
-| S5-T05 | Error analysis and fine-tuning target selection | Achraf | Soulaiman | SLM |
-| S5-T06 | QLoRA fine-tuning experiment (minimal, required) | Oussama | Achraf | SLM |
-| S5-T07 | consolidate Sprint 0–5 evidence into root report | Anas | Soulaiman | DOC |
-| S5-T08 | Serving-stack benchmark B: FlashAttention, prefix caching, vLLM | Ahmed | Soulaiman | OPS |
-| S6-T01 | Frontend architecture + typed API client | Ahmed | Soulaiman | UI |
-| S6-T02 | Incident list/detail and investigation view | Soulaiman | Oussama | UI |
-| S6-T03 | Evidence / RAG / KG visualization | Anas | Ahmed | UI |
-| S6-T04 | Risk / recommendation / approval UI | Achraf | Anas | UI |
-| S6-T05 | Audit / execution status UI | Oussama | Achraf | UI |
-| S6-T06 | Frontend/backend integration tests | Ahmed | Oussama | TST |
-| S6-T07 | consolidate later technical sections + demo storyboard | Soulaiman | Achraf | DOC |
-| S7-T01 | End-to-end SOC Lab regression suite | Oussama | Ahmed | TST |
-| S7-T02 | LLM security / abuse-case testing | Soulaiman | Achraf | SEC |
-| S7-T03 | RAG / KG regression | Ahmed | Anas | TST |
-| S7-T04 | Final SLM / retrieval / agent / fine-tuning / security benchmark | Anas | Soulaiman | SLM |
-| S7-T05 | Release CI + clean reproducible deployment | Achraf | Oussama | OPS |
-| S8-T01 | Root README finalization (full project report in Markdown) | Ahmed | Entire team | DOC |
-| S8-T02 | Architecture / API / setup documentation | Soulaiman | Entire team | DOC |
-| S8-T03 | Experimental results / figures / conclusions | Anas | Entire team | DOC |
-| S8-T04 | Security / DevSecOps / LLMOps documentation | Achraf | Entire team | DOC |
-| S8-T05 | Demo scenario + rehearsal (recorded 5-minute demo) | Oussama | Entire team | DOC |
-| S7-T06 | Final critical bug / security fixes | Team (per issue) | Team | — |
+The complete original-task-to-current-issue mapping is in [the roadmap migration table](ROADMAP.md#original-task-and-issue-migration). This supersedes original future assignments and dependency chains while preserving every requirement and historical completion record. Current issue state is on GitHub; milestone membership alone does not mean Ready or Done.

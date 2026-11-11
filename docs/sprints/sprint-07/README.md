@@ -1,5 +1,7 @@
 # Sprint 7 — End-to-End Validation, Security Hardening & Final Benchmark
 
+> Historical Sprint 0–8 journal. Original assignments, dates and task statuses below are preserved as evidence, not current instructions. Use [the baseline-first roadmap](../../ROADMAP.md) and [current stage journals](../README.md) for new work.
+
 ## Sprint Information
 - Dates: 2026-12-21 → 2026-12-26
 - Main objective: Produce a release candidate.

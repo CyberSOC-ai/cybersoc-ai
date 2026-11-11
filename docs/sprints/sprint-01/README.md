@@ -1,5 +1,7 @@
 # Sprint 1 — Platform Baseline, SOC Lab MVP & No-RAG Baseline
 
+> Historical Sprint 0–8 journal. Original assignments, dates and task statuses below are preserved as evidence, not current instructions. Use [the baseline-first roadmap](../../ROADMAP.md) and [current stage journals](../README.md) for new work.
+
 ## Sprint Information
 - Dates: 2026-10-13 → 2026-10-25
 - Main objective: Produce the first reproducible, end-to-end baseline without RAG.

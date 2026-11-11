@@ -1,5 +1,7 @@
 # Sprint 0 — Governance, Architecture, Contracts & Planning
 
+> Historical Sprint 0–8 journal. Original assignments, dates and task statuses below are preserved as evidence, not current instructions. Use [the baseline-first roadmap](../../ROADMAP.md) and [current stage journals](../README.md) for new work.
+
 ## Sprint Information
 - Dates: 2026-10-08 → 2026-10-12
 - Main objective: Remove ambiguity before implementation.

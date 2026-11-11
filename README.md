@@ -2,7 +2,9 @@
 
 Intelligent Cybersecurity SOC Assistant — Master Project 2026. This is the living consolidated final report required by [CDC v2.2](docs/CDC.md).
 
-**Deadline:** 01 January 2027. **Status:** Planning / Sprint 0 bootstrap.
+**Deadline:** 01 January 2027. **Status:** Baseline-first roadmap reset; B0 delivery pending.
+
+Current execution: [baseline-first roadmap](docs/ROADMAP.md) · [GitHub roadmap](https://github.com/CyberSOC-ai/cybersoc-ai/issues/94). Ahmed delivers shared foundation, No-RAG and small complete Vector RAG before the downstream handoff. All later assignments are left for Ahmed. Original sprint journals preserve contribution history.
 
 ## Project overview
 
@@ -83,6 +85,8 @@ Ahmed · Soulaiman · Anas · Achraf · Oussama
 > To be completed from validated sprint evidence.
 
 ## Sprint documentation
+
+[Current revised-stage journals](docs/sprints/README.md). The Sprint 0–8 links below are historical execution records; their old owners/status tables do not assign current work.
 
 - [Sprint 0](docs/sprints/sprint-00/README.md)
 - [Sprint 1](docs/sprints/sprint-01/README.md)

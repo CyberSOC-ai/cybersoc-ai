@@ -1,5 +1,7 @@
 # Sprint 3 — Knowledge Graph, Graph RAG & Hybrid RAG
 
+> Historical Sprint 0–8 journal. Original assignments, dates and task statuses below are preserved as evidence, not current instructions. Use [the baseline-first roadmap](../../ROADMAP.md) and [current stage journals](../README.md) for new work.
+
 ## Sprint Information
 - Dates: 2026-11-09 → 2026-11-22
 - Main objective: Add structured cyber relationships and combine graph + vector evidence.
