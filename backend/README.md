@@ -1,9 +1,30 @@
-# Sprint 1 API — Issue #12
+# Backend investigation API — Issues #12 and #20
 
 For saved Wazuh exports, first use the [SOC alert normalizer](normalizer/README.md)
 to produce incident v1 JSON suitable for `POST /incidents`.
 
-The FastAPI boundary validates normalized incidents, stores them in SQLite and dispatches No-RAG investigations through an injectable runner. [Existing v1 contracts](contracts/README.md) remain unchanged. [Runner interface](RUNNER_INTERFACE.md) was documented before dispatch implementation, then approved by Soulaiman and successfully exercised with Qwen in a Linux in-process ASGI smoke. See the [scoped integration evidence](../ai/baseline/API_INTEGRATION.md). A missing real runner is an explicit 503, not a successful synthetic answer.
+The FastAPI boundary validates normalized incidents, stores them in SQLite and dispatches No-RAG or experimental Vector-RAG investigations through injected runners. [Existing v1 contracts](contracts/README.md) remain unchanged. The [No-RAG runner interface](RUNNER_INTERFACE.md) was approved by Soulaiman and exercised with Qwen in a Linux in-process ASGI smoke. See the [scoped integration evidence](../ai/baseline/API_INTEGRATION.md). A missing real runner is an explicit 503, not a successful synthetic answer.
+
+## Issue #20: selecting an investigation mode
+
+The existing `POST /incidents/{incident_id}/investigate` route accepts no body, `{}`, `{"mode":"no_rag"}`, or `{"mode":"vector_rag"}`. The first three choose No-RAG for existing clients. `vector_rag` selects the injected [VectorPipeline adapter](vector_adapter.py). Other modes, extra fields and non-string mode values fail with 422. The HTTP name `vector_rag` maps to the existing v1 result/trace mode `vector` and retrieval-request mode `vector`; the public JSON contracts were not changed. The caller cannot choose a model, index path, policy, filter, timeout or `top_k`.
+
+```sh
+curl -i -X POST http://127.0.0.1:8000/incidents/INC-001/investigate \
+  -H 'Content-Type: application/json' --data-binary '{"mode":"no_rag"}'
+curl -i -X POST http://127.0.0.1:8000/incidents/INC-001/investigate \
+  -H 'Content-Type: application/json' --data-binary '{"mode":"vector_rag"}'
+```
+
+The default Compose `api` has no inference runners and returns 503 for either mode. To enable Vector-RAG, trusted Linux deployment code must initialize and verify the local Qdrant `Retriever` with its receipt, chunk/vector artifacts and pinned BGE model; configure a local inference generator and disabled-execution proposal policy; and build `VectorPipeline(retriever, generator, root)` and `VectorAPIAdapter(pipeline, policy, versions)` **once before serving requests**. Pass it as `create_app(vector_runner=vector_adapter, runner=no_rag_adapter, settings=Settings(...))`; `runner` may be omitted for a vector-only deployment. Keep both clients and their artifacts alive for the app lifetime, then close the retriever and model service during trusted shutdown. This API does not load model weights or indexes from HTTP inputs. The optional BGE/PyTorch runtime is not in the generic development image; use the separately pinned inference environment in [vector setup](../rag/vector/README.md). A Qdrant server in a separate Compose container is not reachable at `127.0.0.1` from the default API container; the current Qdrant client accepts only loopback, so an enabled deployment must use a shared loopback network namespace or another reviewed local composition. No live deployment is claimed here.
+
+`VectorAPIAdapter` builds a closed v1 retrieval request using the stored incident description (first 4,000 characters, the contract query limit), a backend-issued request ID, the backend-issued trace ID, configured `top_k=5` and configured source/snapshot filters. The complete incident still reaches generation. It passes the same monotonic deadline and investigation ID into `VectorPipeline`; the pipeline shares that budget across retrieval, Qdrant calls and generation. Both modes use one non-queuing `RunnerPool` and its configured concurrency limit. The default is one call and 30 seconds; the trusted CPU configuration can set 180 seconds as in the existing No-RAG helper. A late result is discarded, while the underlying Python thread retains its slot until it exits. Qdrant request timeouts are phase/inactivity limits and do not guarantee immediate server-side cancellation.
+
+Successful vector results retain the pipeline's exact evidence IDs, source record IDs, snapshot references, scores and citation text. Before responding, the API validates the existing v1 result schema, backend-issued IDs, unique vector evidence IDs, citation ID membership and proposed-only actions. It saves the result with a correlated v1 trace in one SQLite transaction. The trace's single `inference` step measures the whole retrieval-plus-generation call; it does not invent separate stage timings. Version metadata comes from the trusted adapter. Citation ID membership and exact quotation rendering do **not** prove semantic claim support.
+
+Missing or unconfigured vector dependencies return 503; a configured retriever reporting an unavailable/changed index returns a persisted 503 failure. Expired deadlines return a persisted 504 failure. Empty retrieval, malformed retrieval/generation output and invalid citations return a persisted 502 failure. A busy pool returns immediate 503 without starting a run. Errors contain no raw incident, reference passage, model output or exception detail; there is no fallback to No-RAG and no automatic retry. All response actions remain proposals and are never executed by this route.
+
+The merged [PR #90](https://github.com/CyberSOC-ai/cybersoc-ai/pull/90) is an **experimental baseline**. Its full-incident records show unsupported T1078, an incorrect destination-as-source IP selection and incomplete semantic grounding. These are unresolved; [Issue #19](https://github.com/CyberSOC-ai/cybersoc-ai/issues/19) remains open. A valid API response or passing offline test does not repair those model-quality failures. No real Vector-RAG request through this API, live Wazuh ingestion, or externally served inference is verified by Issue #20's controlled tests.
 
 ## Run locally
 
@@ -63,9 +84,9 @@ Stop the service with `docker compose stop api`. Restart with `docker compose st
 |---|---|---|
 | GET `/health` | 200 API/storage health, separate runner-configuration fields | 503 if persistent storage is unavailable |
 | POST `/incidents` | 201 new event; 200 identical duplicate | 409 conflicting identity; 422 invalid contract/version |
-| POST `/incidents/{incident_id}/investigate` | 200 validated/persisted No-RAG result | 404 unknown incident; 503 missing/busy/unavailable runner; 504 deadline; 502 invalid output/runner failure |
+| POST `/incidents/{incident_id}/investigate` | 200 validated/persisted No-RAG or experimental Vector-RAG result | 404 unknown incident; 422 invalid mode; 503 missing/busy/unavailable dependency; 504 deadline; 502 empty retrieval/invalid output |
 
-POST `/incidents` requires `application/json`. Investigation accepts an empty body or `{}` only: clients cannot override mode, timeout, model/configuration, identity or policy. Versioned incident validation uses `jsonschema` Draft 2020-12, format checking and a closed offline schema registry, not Pydantic coercion. Unsupported versions use `unsupported_version`; malformed JSON uses 400 `validation_error`; wrong media type uses 415. Duplicate JSON keys, NaN/Infinity/overflowed numbers, invalid UTF-8 and nesting above 32 levels are rejected. API IDs, dates, typed entities and unknown fields retain their strict contract rules.
+POST `/incidents` requires `application/json`. Investigation accepts only the bodies listed above; clients cannot override timeout, model/configuration, identity, policy, filters or `top_k`. Versioned incident validation uses `jsonschema` Draft 2020-12, format checking and a closed offline schema registry, not Pydantic coercion. Unsupported versions use `unsupported_version`; malformed JSON uses 400 `validation_error`; wrong media type uses 415. Duplicate JSON keys, NaN/Infinity/overflowed numbers, invalid UTF-8 and nesting above 32 levels are rejected. API IDs, dates, typed entities and unknown fields retain their strict contract rules.
 
 All requests are bounded to 65536 body bytes, including chunked bodies and absent/lying Content-Length; excess is 413. Body receipt has a five-second deadline (408). Model output is bounded to 131072 serialized UTF-8 bytes before schema validation. Default inference deadline is 30 seconds and concurrency is one per process, with no waiting queue. These limits are deployment settings supplied to `create_app`, not request parameters. Only one Uvicorn worker is supported for the laptop; using more processes would multiply concurrency.
 
