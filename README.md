@@ -70,6 +70,8 @@ Issue → Ready → branch → implementation → tests → Pull Request → CI 
 
 [Development setup and checks](docs/development.md): Docker prerequisites, build and test commands, configuration, secret scanning and troubleshooting.
 
+[Shared development data — shared-dev-v1](docs/data/shared-dev-v1.md): Google Drive download, release hashes, incident/reference/evaluation boundaries and versioning. [ADR-006](docs/adr/ADR-006.md) records the storage decision. This is initial development data; B0 acceptance remains pending.
+
 > To be completed from validated sprint evidence.
 
 ## Team
