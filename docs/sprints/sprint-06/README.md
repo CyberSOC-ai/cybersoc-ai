@@ -1,5 +1,7 @@
 # Sprint 6 — Frontend / Analyst Experience
 
+> Historical Sprint 0–8 journal. Original assignments, dates and task statuses below are preserved as evidence, not current instructions. Use [the baseline-first roadmap](../../ROADMAP.md) and [current stage journals](../README.md) for new work.
+
 ## Sprint Information
 - Dates: 2026-12-14 → 2026-12-20
 - Main objective: Build the UI only after core API contracts are stable.

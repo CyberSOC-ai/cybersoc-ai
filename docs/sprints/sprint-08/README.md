@@ -1,5 +1,7 @@
 # Sprint 8 — Documentation, Demo & Feature Freeze
 
+> Historical Sprint 0–8 journal. Original assignments, dates and task statuses below are preserved as evidence, not current instructions. Use [the baseline-first roadmap](../../ROADMAP.md) and [current stage journals](../README.md) for new work.
+
 ## Sprint Information
 - Dates: 2026-12-27 → 2026-12-28
 - Main objective: Finalize the written report, record the demo, and freeze the project while preserving buffer time.

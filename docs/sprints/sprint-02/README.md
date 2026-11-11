@@ -1,5 +1,7 @@
 # Sprint 2 — Vector RAG & Threat-Intelligence Ingestion
 
+> Historical Sprint 0-8 journal. Original assignments, dates and task statuses below are preserved as evidence, not current instructions. Use [the baseline-first roadmap](../../ROADMAP.md) and [current stage journals](../README.md) for new work.
+
 ## Sprint Information
 - Dates: 2026-10-26 → 2026-11-08
 - Main objective: Add evidence-grounded semantic retrieval, ingest real threat-intelligence data, and prove that retrieval quality is measurable.

@@ -1,5 +1,7 @@
 # Sprint 5 — Inference Optimization, LLMOps Maturity & Fine-Tuning
 
+> Historical Sprint 0–8 journal. Original assignments, dates and task statuses below are preserved as evidence, not current instructions. Use [the baseline-first roadmap](../../ROADMAP.md) and [current stage journals](../README.md) for new work.
+
 ## Sprint Information
 - Dates: 2026-12-07 → 2026-12-13
 - Main objective: Optimize a stable baseline, make experiments operationally observable, run the required minimal fine-tuning comparison, and start the written report.

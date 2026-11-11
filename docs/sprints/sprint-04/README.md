@@ -1,5 +1,7 @@
 # Sprint 4 — Agentic Workflow (LangGraph), LLM Security, HITL & Response Sandbox
 
+> Historical Sprint 0–8 journal. Original assignments, dates and task statuses below are preserved as evidence, not current instructions. Use [the baseline-first roadmap](../../ROADMAP.md) and [current stage journals](../README.md) for new work.
+
 ## Sprint Information
 - Dates: 2026-11-23 → 2026-12-06
 - Main objective: Transform working primitives into a controlled SOC workflow, delivering both the single-agent baseline and the multi-agent workflow.
