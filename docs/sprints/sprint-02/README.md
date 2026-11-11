@@ -477,9 +477,14 @@ S2-T05, S2-T07. This entry covers only S2-T05 / Issue #20.
 investigation endpoint on `feature/20-rag-api-integration`. Empty-body and
 explicit `no_rag` calls retain the No-RAG behavior. Explicit `vector_rag` calls
 use the merged experimental VectorPipeline. Results and correlated traces are
-validated and stored in SQLite before a success response. This is local
-implementation evidence; PR review, hosted CI, merge and issue closure await
-separate authorization.
+validated and stored in SQLite before a success response.
+
+2026-11-11 — [PR #92](https://github.com/CyberSOC-ai/cybersoc-ai/pull/92)
+merged into `main` at `cdf3f4ae6574c8f1f59baa5863d8913d06cf459b`.
+[Anas approved the final head](https://github.com/CyberSOC-ai/cybersoc-ai/pull/92#pullrequestreview-5861259037)
+after reproducing the citation fix. Required PR CI and post-merge main CI
+passed. Issue #20 implementation and technical acceptance criteria are
+complete; the linked issue and Project record formal closure.
 
 ## Technical approach
 
@@ -487,8 +492,9 @@ A trusted `VectorAPIAdapter` receives a preinitialized pipeline, fixed disabled-
 execution policy, trace versions, K and filters. The backend creates the retrieval
 request, investigation/trace IDs and one monotonic deadline. Both modes share the
 same bounded worker pool. Strict v1 schemas and relational checks reject malformed
-results, duplicate vector evidence IDs and unknown citation IDs. The API never
-executes proposed actions. Missing dependencies, expired deadlines and invalid
+results, duplicate vector evidence IDs and unknown or malformed terminal
+`[[evidence_id]]` citation markers while preserving ordinary brackets and
+Markdown links in source text. The API never executes proposed actions. Missing dependencies, expired deadlines and invalid
 outputs receive sanitized, typed errors with failed result/trace persistence once
 a run starts. The HTTP `vector_rag` name maps to v1 `mode: vector` without changing
 public contracts. Query text is capped at the retrieval contract's 4,000-character
@@ -507,12 +513,17 @@ schemas, Anas's RAG generation/retrieval and grounding behavior remain unchanged
 Controlled API tests cover both modes, legacy empty bodies, strict mode rejection,
 missing/unavailable or changed retrieval dependencies, empty evidence, invalid
 model output, deadline forwarding and expiry, shared concurrency, result/trace
-persistence and evidence integrity. Full offline suite: 302 tests (contracts 20,
-evaluation 59, backend 29, normalizer 16, ingestion 44, vector 107, baseline 27).
-Ruff, repository integrity (284 tracked text files), staged whitespace and
-Gitleaks 8.30.1 staged secret scanning passed with zero leaks. Tests used the
-existing Python 3.12 development image offline; no model download, real inference
-or index rebuild was performed. Hosted CI remains pending an authorized PR.
+persistence and evidence integrity. The final pre-merge local offline suite
+passed 305 tests (contracts 20, evaluation 59, backend 32, normalizer 16,
+ingestion 44, vector/generation 107, baseline 27). Ruff, repository integrity
+(284 tracked text files), staged whitespace and Gitleaks 8.30.1 staged secret
+scanning passed with zero leaks. Tests used the existing Python 3.12
+development image offline with controlled retrieval and inference; no model
+download, real inference or index rebuild was performed.
+[PR CI](https://github.com/CyberSOC-ai/cybersoc-ai/actions/runs/43044656976)
+passed on the final head; [post-merge main CI](https://github.com/CyberSOC-ai/cybersoc-ai/actions/runs/43060146180)
+passed on the merge commit, including backend, contract, vector, baseline,
+repository integrity, lint and secret-scanning checks.
 
 ## Results / metrics
 
@@ -520,10 +531,13 @@ The tests demonstrate contract-valid Vector-RAG API wiring with controlled
 retrieval/generation, not semantic grounding or measured model quality. PR #90
 merged as experimental baseline at `f6d84db0d5c1c4913d79a6d965d7e99805c9c75f`;
 its required and post-merge CI passed. Issue #19 stays open. Unsupported T1078,
-incorrect source/destination IP and incomplete semantic grounding remain known
-limitations documented in `rag/generation/README.md` and the P01 evidence packets.
-No real Vector-RAG API request, live Wazuh ingest or external model deployment has
-been verified for Issue #20.
+incorrect source/destination IP, incomplete semantic grounding and potentially
+incorrect proposed response actions remain known limitations documented in
+`rag/generation/README.md` and the P01 evidence packets. Actions remain
+proposals only and are never executed by this API. No live SLM/Qdrant
+Vector-RAG API run, live Wazuh/SOC ingest or external model deployment has
+been verified for Issue #20. Controlled API integration tests do not establish
+semantic support for generated claims or real-world action correctness.
 
 ## Problems encountered
 
@@ -534,6 +548,15 @@ real-model validation. A timed-out Python worker is not forcibly cancelled; its
 pool slot stays occupied until it exits. The source/destination and grounding
 failures from #19 are intentionally not corrected by API integration.
 
+Anas found that the API applied broad citation validation to the entire
+rendered summary, so ordinary square brackets in incident observations and
+Markdown links in exact retrieved quotations caused HTTP 502. Commit
+`1cd34242abd7532b996e4ab77920291fe00047ed` checks the pipeline's one
+terminal citation marker against the returned evidence IDs. Controlled
+endpoint regressions now accept both ordinary bracketed incident text and
+Markdown links in quotations with HTTP 200 and matching persisted result/trace,
+while unknown, malformed, trailing and duplicate markers remain rejected.
+
 ## Decisions made
 
 Keep one endpoint and a single mode-routed worker pool. Keep retrieval parameters
@@ -543,10 +566,12 @@ of evidence-grounded claims.
 
 ## Related Issues / Pull Requests
 
-[Issue #20](https://github.com/CyberSOC-ai/cybersoc-ai/issues/20), merged
-[PR #90](https://github.com/CyberSOC-ai/cybersoc-ai/pull/90), open
-[Issue #19](https://github.com/CyberSOC-ai/cybersoc-ai/issues/19).
-Publication PR for #20 is pending user approval.
+[Issue #20](https://github.com/CyberSOC-ai/cybersoc-ai/issues/20) technical
+acceptance is complete; [PR #92](https://github.com/CyberSOC-ai/cybersoc-ai/pull/92)
+merged at `cdf3f4ae6574c8f1f59baa5863d8913d06cf459b`. The upstream
+[PR #90](https://github.com/CyberSOC-ai/cybersoc-ai/pull/90) remains an
+experimental baseline, and [Issue #19](https://github.com/CyberSOC-ai/cybersoc-ai/issues/19)
+is open for its unmet grounding criterion.
 
 ## Learning outcome
 
