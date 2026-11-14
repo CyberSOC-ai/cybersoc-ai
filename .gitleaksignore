@@ -60,3 +60,16 @@
 1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-live-catalogue-20261109-01/evidence.json:generic-api-key:843
 # File SHA-256; ai/baseline/api_adapter.py.
 1d044853134073fcff6895c2df257edb0ecc1deb:rag/generation/evidence/P01-live-catalogue-20261109-01/evidence.json:generic-api-key:848
+
+# Exact reviewed occurrences from baseline PR #112, 2026-11-14.
+# Three file SHA-256 values verified against local source/model bytes; one prose
+# match describes embedding dimensions. No credentials or broad path exemptions.
+# Scope: only these immutable locations in commit 3c4d614; future occurrences scan normally.
+# SHA-256 of ai/no_rag/api_adapter.py in the layout source lock.
+3c4d614c85505ec836dc90148d85e8068fe22c23:ai/no_rag/configs/local-layout-v2.lock.json:generic-api-key:11
+# SHA-256 of the pinned BGE special_tokens_map.json.
+3c4d614c85505ec836dc90148d85e8068fe22c23:rag/vector/config.json:generic-api-key:16
+# SHA-256 of the pinned BGE tokenizer_config.json.
+3c4d614c85505ec836dc90148d85e8068fe22c23:rag/vector/config.json:generic-api-key:18
+# Ordinary prose: 384-dimensional normalized embeddings after 32-token overlap.
+3c4d614c85505ec836dc90148d85e8068fe22c23:docs/adr/ADR-001.md:generic-api-key:217
