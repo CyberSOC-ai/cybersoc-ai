@@ -2,6 +2,12 @@
 
 This guide covers the S1-T01 development environment and checks. Start commands from the repository root. The current container provides Python tools; it does not start the application or SOC lab.
 
+For actual investigation pipelines, begin with the shared
+[runtime setup](../ai/runtime/README.md), then [No-RAG](../ai/no_rag/README.md) or
+[Vector RAG](../rag/vector/README.md). The [data guide](../datasets/README.md) owns
+source additions and release activation. The instructions below prepare the
+software-check environment, not model/data downloads.
+
 ## 1. Prerequisites
 
 Install Git and Docker with Compose. Start Docker before continuing. Linux can use Docker Engine with the Compose plugin; Windows uses Docker Desktop with WSL 2. The commands below are verified on Linux x86_64; other platforms still need team validation.
@@ -39,9 +45,15 @@ Python 3.12 is recorded in [.python-version](../.python-version). Node.js 24 is 
 ```sh
 docker compose run --rm -T dev ruff check --no-cache .
 docker compose run --rm -T dev python -B -m unittest discover -s tests/contracts -v
+docker compose run --rm -T dev python -B -m unittest discover -s tests/evaluation -v
+docker compose run --rm -T dev python -B -m unittest discover -s tests/backend -v
+docker compose run --rm -T dev python -B -m unittest discover -s tests/normalizer -v
+docker compose run --rm -T dev python -B -m unittest discover -s tests/no_rag -v
+docker compose run --rm -T dev python -B -m unittest discover -s tests/runtime -v
+docker compose run --rm -T dev python -B -m unittest discover -s tests/vector -v
 ```
 
-Run the commands in order. Ruff reports common Python mistakes without editing files; expect `All checks passed!`. The second command runs the contract tests; the current suite has 17 test methods and should finish with `OK`.
+Run the commands in order. Ruff reports common Python mistakes without editing files; expect `All checks passed!`. The suites check contracts, dataset-independent metrics, backend behavior, normalization, No-RAG and the fresh Vector RAG boundaries. The old ingestion/vector suites were retired with their implementation. The new offline vector tests use controlled adapters; real retrieval/model evidence is recorded separately in [Vector RAG evaluation](../rag/vector/EVALUATION.md).
 
 | Option | Meaning |
 |---|---|

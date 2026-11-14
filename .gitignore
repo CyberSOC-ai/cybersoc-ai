@@ -32,5 +32,7 @@ build/
 CyberSOC_AI_CDC_v2_2_Final.md
 CyberSOC_AI_CDC_v2_2_Final.pdf
 
-# Downloaded inference software, model weights and local run artifacts
-/artifacts/local-inference/
+# Source releases, staging, downloaded runtimes and generated runs stay outside Git
+/artifacts/
+/datasets/releases/
+/datasets/staging/

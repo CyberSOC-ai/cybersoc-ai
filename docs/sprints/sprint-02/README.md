@@ -36,8 +36,8 @@ S2-T08 IOC-feed ingestion remains Backlog.
 
 2026-11-04 — S2-T03: completed the first bounded development retrieval evaluation
 on `codex/18-retriever-evaluation`. Added the hash-pinned
-[replay release](../../../datasets/evaluation/retrieval-dev-v1/README.md),
-[technical audit](../../../datasets/evaluation/retrieval-dev-v1/AUDIT.md), reusable
+[replay release](../../history/reset-2026-11-13/datasets/evaluation/retrieval-dev-v1/README.md),
+[technical audit](../../history/reset-2026-11-13/datasets/evaluation/retrieval-dev-v1/AUDIT.md), reusable
 `ai.evaluation.retrieval` scorer/CLI and regression tests. The same pinned CPU
 BGE/Qdrant index supplied 100 passage candidates per query; document deduplication
 precedes K=5. All ten revised development queries succeeded: Precision@5 0.18,
@@ -57,7 +57,7 @@ and requests Anas's review. Ahmed authorized the technical audit, branch publica
 and finalization if checks pass. Hosted CI, review handling, merge and linked issue
 closure are tracked on that PR; no independent Anas approval is claimed.
 
-2026-10-29 — Completed the expanded local [knowledge-ingestion implementation](../../../rag/ingestion/README.md)
+2026-10-29 — Completed the expanded local [knowledge-ingestion implementation](../../history/reset-2026-11-13/rag/ingestion/README.md)
 on `feature/16-knowledge-ingestion`. The user approved including bulk CVE/NVD,
 CISA KEV, Sigma, playbooks and selected OTRF/Splunk examples alongside ATT&CK,
 CWE and existing lab history. The user subsequently authorized adding the 2025
@@ -95,7 +95,7 @@ integrity, exact vulnerability joins, input-corpus tampering, source revision pi
 Git LFS identity, safe YAML and real external event formats/split exclusion.
 The 44 ingestion tests passed again for the three-year selection update; its
 code/schemas are unchanged. Full-source replay and final check details are in the
-[validation record](../../../datasets/knowledge/VALIDATION.md). CI for the previously
+[validation record](../../history/reset-2026-11-13/datasets/knowledge/VALIDATION.md). CI for the previously
 published draft does not validate later commits; use PR #86 checks for the
 final published head.
 
@@ -128,8 +128,8 @@ stack emits an HTTP-client deprecation warning; tests pass.
 
 ## Decisions made
 
-Use [the explicit source plan](../../../datasets/knowledge/sources.json) and
-[coverage rationale](../../../datasets/knowledge/SOURCE_SELECTION.md). Preserve
+Use the explicit source plan (retired path: `datasets/knowledge/sources.json`) and
+[coverage rationale](../../history/reset-2026-11-13/datasets/knowledge/SOURCE_SELECTION.md). Preserve
 NVD/CNA/ADP/KEV provenance separately and cite claims to the correct snapshot.
 Keep source text as untrusted data. Both local SSH observations and the selected
 external SSH run share `G-SSH`; network-discovery examples share their own family.
@@ -177,8 +177,8 @@ Done still requires the PR/CI/review/closure workflow.
 incremental preparation, preserving the previous index and reusing unchanged
 passage spans and embedding text. Corpus additions, edits and omissions produce
 a new verified release with parent hashes and work counters. Added the
-[incremental guide](../../../rag/vector/INCREMENTAL.md) and
-[local validation record](../../../rag/vector/INCREMENTAL_VALIDATION.md).
+[incremental guide](../../history/reset-2026-11-13/rag/vector/INCREMENTAL.md) and
+[local validation record](../../history/reset-2026-11-13/rag/vector/INCREMENTAL_VALIDATION.md).
 Publication and CI are tracked in
 [PR #88](https://github.com/CyberSOC-ai/cybersoc-ai/pull/88). The original S2-T02
 implementation remains in PR #87.
@@ -215,7 +215,7 @@ review have not been claimed from local tests.
 All 220 project tests passed, including 50 vector tests. All 380 filter-value checks
 passed before/after container recreation; snapshot recovery reproduced all 406
 points and settings. Six real query cases and reader reload passed. See the
-[final validation record](../../../rag/vector/VALIDATION.md).
+[final validation record](../../history/reset-2026-11-13/rag/vector/VALIDATION.md).
 
 ## Results / metrics
 
@@ -255,7 +255,7 @@ sanitized validation records; keep acquired data/model/index artifacts outside G
 `codex/17-chunking-embeddings-vector-index`. Reviewer: Ahmed (`ElrhAhmed`), review
 requested. Hosted checks are tracked on the PR; merge/issue closure remain pending.
 Achraf can start S2-T03 integration using the
-[evaluator setup guide](../../../rag/vector/EVALUATOR_SETUP.md).
+[evaluator setup guide](../../history/reset-2026-11-13/rag/vector/EVALUATOR_SETUP.md).
 
 ## Learning outcome
 
@@ -320,8 +320,8 @@ roughly71s inspection,175 output tokens/EOS/not truncated. No abstention: source
 remained destination10.77.0.20. Quotation remained the relevant SSH definition;
 unsupported T1078 and all action text remained byte-identical. No observed decision
 correction; no general causal or accuracy claim. No repairs or retries.
-[Source-first assessment and reproduction](../../../rag/generation/evidence/P01-direction-20261110-01/README.md)
-and [complete packet](../../../rag/generation/evidence/P01-direction-20261110-01/evidence.json)
+[Source-first assessment and reproduction](../../history/reset-2026-11-13/rag/generation/evidence/P01-direction-20261110-01/README.md)
+and [complete packet](../../history/reset-2026-11-13/rag/generation/evidence/P01-direction-20261110-01/evidence.json)
 preserve comparisons and every field. The checked definition snapshot's154 scoped
 tests/Ruff/integrity/whitespace passed; final docs/artifact checks are separate.
 All prior failures remain. No further implementation, model attempt, commit,
@@ -350,8 +350,8 @@ was retained unchanged. true_positive/medium does not establish successful acces
 Clean-export checks:292 tests passed, including106 vector/29 generation and all27
 baseline tests; actual integrity/Ruff/whitespace passed. The same nine adjudicated
 non-credential scanner findings retain failure exits, without suppressions.
-[Every-field assessment and reproduction](../../../rag/generation/evidence/P01-boundary-20261110-01/README.md)
-and [complete packet](../../../rag/generation/evidence/P01-boundary-20261110-01/evidence.json)
+[Every-field assessment and reproduction](../../history/reset-2026-11-13/rag/generation/evidence/P01-boundary-20261110-01/README.md)
+and [complete packet](../../history/reset-2026-11-13/rag/generation/evidence/P01-boundary-20261110-01/evidence.json)
 preserve before/after evidence. Semantic relevance generally, correct mappings,
 role-aware action validation, final CI and assigned review remain unresolved.
 No further experiment, answer repair, commit, push or merge occurred.
@@ -372,8 +372,8 @@ worked, while T1078/T1098 and destination-as-source blocking remained unsupporte
 or wrong; undetermined abstains on the attack attempt and medium risk is defensible.
 No answer repair or shared-validator change followed. No response was executed.
 
-The [review record](../../../rag/generation/evidence/P01-live-catalogue-20261109-01/README.md)
-and [complete synthetic evidence packet](../../../rag/generation/evidence/P01-live-catalogue-20261109-01/evidence.json)
+The [review record](../../history/reset-2026-11-13/rag/generation/evidence/P01-live-catalogue-20261109-01/README.md)
+and [complete synthetic evidence packet](../../history/reset-2026-11-13/rag/generation/evidence/P01-live-catalogue-20261109-01/evidence.json)
 preserve inputs, actual passages/IDs, raw and structured outputs, recorder source,
 versions and every-field assessment. Full snapshot/logs remain at
 `.local/P01-live-catalogue-20261109-01/`. Previous P01 failures remain unchanged,

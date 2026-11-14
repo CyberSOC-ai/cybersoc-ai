@@ -1,8 +1,0 @@
-FROM cybersocai-dev:latest
-USER root
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends libgomp1 libzstd1 \
-    && rm -rf /var/lib/apt/lists/*
-USER dev
-WORKDIR /workspace
-CMD ["python", "--version"]

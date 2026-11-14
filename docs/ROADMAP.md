@@ -4,6 +4,14 @@ Authorized by Ahmed on 11 November 2026. This replaces the execution order, futu
 
 GitHub tracking: [roadmap #94](https://github.com/CyberSOC-ai/cybersoc-ai/issues/94) · [project board](https://github.com/orgs/CyberSOC-ai/projects/1).
 
+## Approved implementation reset — 13 November 2026
+
+Ahmed authorized retiring previous prepared datasets and the old RAG pipeline,
+while preserving frozen shared-dev-v1, shared-v1 No-RAG, backend foundations,
+models/runtime and historical evidence. Rebuild small Vector RAG from scratch
+within B0; downstream gates and full CDC requirements remain. See
+[the incremental reset](data/cleanup-reset.md) and [data workflow](data/workflow.md).
+
 ## Initial delivery and ownership
 
 **Ahmed (@ElrhAhmed) owns only B0, [#95](https://github.com/CyberSOC-ai/cybersoc-ai/issues/95): fresh shared foundation → complete No-RAG → complete small reusable Vector RAG → independent reproduction and walkthrough.** These ordered checkpoints are one initial task, delivered through small PRs. Downstream implementation starts after the complete B0 handoff is accepted. Teammates may support labels, source/license checks, review and planning earlier.

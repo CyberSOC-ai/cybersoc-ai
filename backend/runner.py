@@ -39,19 +39,6 @@ class BaselineRunner(Protocol):
     def run(self, request: RunnerRequest) -> dict: ...
 
 
-class ModeRouter:
-    """Keep both inference modes inside one shared bounded pool."""
-
-    def __init__(self, baseline: BaselineRunner | None, vector: BaselineRunner | None):
-        self.baseline, self.vector = baseline, vector
-
-    def run(self, request: RunnerRequest) -> dict:
-        runner = {'no_rag': self.baseline, 'vector_rag': self.vector}.get(request.mode)
-        if runner is None:
-            raise RunnerUnavailable()
-        return runner.run(request)
-
-
 class RunnerPool:
     def __init__(self, runner: BaselineRunner, concurrency: int):
         self.runner = runner

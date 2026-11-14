@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "incident_id": "INC-UNIT-SSH",
+  "timestamp": "2026-11-13T09:00:00Z",
+  "source": "synthetic-unit-test",
+  "source_event_id": "EVT-UNIT-SSH",
+  "description": "Synthetic software fixture: SSH failures from 192.0.2.10 to 10.77.0.20 on linux-01. No SOC label or model quality claim.",
+  "severity": "medium",
+  "entities": [
+    {
+      "type": "host",
+      "value": "linux-01"
+    },
+    {
+      "type": "ip",
+      "value": "192.0.2.10"
+    },
+    {
+      "type": "ip",
+      "value": "10.77.0.20"
+    }
+  ],
+  "ingestion_kind": "synthetic"
+}

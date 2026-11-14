@@ -123,7 +123,7 @@ schema. This pre-merge schema extension requires Soulaiman's handoff review.
 
 KEV/CNA enrichment remains attached to CVE records with source provenance chains;
 consumers must cite supplemental claims to their own snapshots. Dataset split
-metadata is not model evidence. See the [source-selection rationale](../../datasets/knowledge/SOURCE_SELECTION.md).
+metadata is not model evidence. See the [source-selection rationale](../../docs/history/reset-2026-11-13/datasets/knowledge/SOURCE_SELECTION.md).
 
 ## S2-T02 request-filter alignment — 2026-10-29
 

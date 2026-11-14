@@ -69,6 +69,18 @@ class APITest(unittest.TestCase):
     def investigate(self, client, incident_id='INC-001'):
         return client.post(f'/incidents/{incident_id}/investigate')
 
+    def test_retired_vector_mode_never_falls_back_to_baseline(self):
+        runner = ControlledRunner()
+        client = self.client(runner)
+        self.assertEqual(self.ingest(client).status_code, 201)
+        response = client.post('/incidents/INC-001/investigate', json={'mode': 'vector_rag'})
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.json()['error']['code'], 'dependency_unavailable')
+        self.assertEqual(runner.seen, [])
+        self.assertEqual(self.rows(), [])
+        self.assertEqual(self.investigate(client).status_code, 200)
+        self.assertEqual(len(runner.seen), 1)
+
     def rows(self):
         with self.repo.connection() as db:
             return [(json.loads(r), json.loads(t)) for r, t in db.execute(

@@ -1,1 +1,1 @@
-"""Local, provenance-preserving preparation for vector retrieval."""
+"""Versioned local Vector RAG."""

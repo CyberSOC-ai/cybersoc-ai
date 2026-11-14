@@ -1,30 +1,23 @@
-# Backend investigation API — Issues #12 and #20
+# Backend investigation API
 
-For saved Wazuh exports, first use the [SOC alert normalizer](normalizer/README.md)
-to produce incident v1 JSON suitable for `POST /incidents`.
+The FastAPI boundary validates normalized incidents, stores them in SQLite and
+runs No-RAG through an explicitly injected runner. Existing [v1 contracts](contracts/README.md)
+and the [normalizer](normalizer/README.md) remain. The default API has no runner
+and returns 503 for investigations; it never supplies synthetic success.
 
-The FastAPI boundary validates normalized incidents, stores them in SQLite and dispatches No-RAG or experimental Vector-RAG investigations through injected runners. [Existing v1 contracts](contracts/README.md) remain unchanged. The [No-RAG runner interface](RUNNER_INTERFACE.md) was approved by Soulaiman and exercised with Qwen in a Linux in-process ASGI smoke. See the [scoped integration evidence](../ai/baseline/API_INTEGRATION.md). A missing real runner is an explicit 503, not a successful synthetic answer.
+## Investigation modes after the reset
 
-## Issue #20: selecting an investigation mode
+No body, `{}` or `{"mode":"no_rag"}` selects No-RAG. The recognized
+`{"mode":"vector_rag"}` request returns 503 while RAG is rebuilt, even when
+No-RAG is configured. There is no fallback. Other modes/extra fields return 422.
+The previous Vector adapter, pipeline, citation grammar and Qdrant Compose profile
+were removed on 13 November 2026. Public v1 result/trace schemas retain future
+mode values; they do not imply an implemented RAG capability.
 
-The existing `POST /incidents/{incident_id}/investigate` route accepts no body, `{}`, `{"mode":"no_rag"}`, or `{"mode":"vector_rag"}`. The first three choose No-RAG for existing clients. `vector_rag` selects the injected [VectorPipeline adapter](vector_adapter.py). Other modes, extra fields and non-string mode values fail with 422. The HTTP name `vector_rag` maps to the existing v1 result/trace mode `vector` and retrieval-request mode `vector`; the public JSON contracts were not changed. The caller cannot choose a model, index path, policy, filter, timeout or `top_k`.
-
-```sh
-curl -i -X POST http://127.0.0.1:8000/incidents/INC-001/investigate \
-  -H 'Content-Type: application/json' --data-binary '{"mode":"no_rag"}'
-curl -i -X POST http://127.0.0.1:8000/incidents/INC-001/investigate \
-  -H 'Content-Type: application/json' --data-binary '{"mode":"vector_rag"}'
-```
-
-The default Compose `api` has no inference runners and returns 503 for either mode. To enable Vector-RAG, trusted Linux deployment code must initialize and verify the local Qdrant `Retriever` with its receipt, chunk/vector artifacts and pinned BGE model; configure a local inference generator and disabled-execution proposal policy; and build `VectorPipeline(retriever, generator, root)` and `VectorAPIAdapter(pipeline, policy, versions)` **once before serving requests**. Pass it as `create_app(vector_runner=vector_adapter, runner=no_rag_adapter, settings=Settings(...))`; `runner` may be omitted for a vector-only deployment. Keep both clients and their artifacts alive for the app lifetime, then close the retriever and model service during trusted shutdown. This API does not load model weights or indexes from HTTP inputs. The optional BGE/PyTorch runtime is not in the generic development image; use the separately pinned inference environment in [vector setup](../rag/vector/README.md). A Qdrant server in a separate Compose container is not reachable at `127.0.0.1` from the default API container; the current Qdrant client accepts only loopback, so an enabled deployment must use a shared loopback network namespace or another reviewed local composition. No live deployment is claimed here.
-
-`VectorAPIAdapter` builds a closed v1 retrieval request using the stored incident description (first 4,000 characters, the contract query limit), a backend-issued request ID, the backend-issued trace ID, configured `top_k=5` and configured source/snapshot filters. The complete incident still reaches generation. It passes the same monotonic deadline and investigation ID into `VectorPipeline`; the pipeline shares that budget across retrieval, Qdrant calls and generation. Both modes use one non-queuing `RunnerPool` and its configured concurrency limit. The default is one call and 30 seconds; the trusted CPU configuration can set 180 seconds as in the existing No-RAG helper. A late result is discarded, while the underlying Python thread retains its slot until it exits. Qdrant request timeouts are phase/inactivity limits and do not guarantee immediate server-side cancellation.
-
-Successful vector results retain the pipeline's exact evidence IDs, source record IDs, snapshot references, scores and citation text. Before responding, the API validates the existing v1 result schema, backend-issued IDs, unique vector evidence IDs, citation ID membership and proposed-only actions. It saves the result with a correlated v1 trace in one SQLite transaction. The trace's single `inference` step measures the whole retrieval-plus-generation call; it does not invent separate stage timings. Version metadata comes from the trusted adapter. Citation ID membership and exact quotation rendering do **not** prove semantic claim support.
-
-Missing or unconfigured vector dependencies return 503; a configured retriever reporting an unavailable/changed index returns a persisted 503 failure. Expired deadlines return a persisted 504 failure. Empty retrieval, malformed retrieval/generation output and invalid citations return a persisted 502 failure. A busy pool returns immediate 503 without starting a run. Errors contain no raw incident, reference passage, model output or exception detail; there is no fallback to No-RAG and no automatic retry. All response actions remain proposals and are never executed by this route.
-
-The merged [PR #90](https://github.com/CyberSOC-ai/cybersoc-ai/pull/90) is an **experimental baseline**. Its full-incident records show unsupported T1078, an incorrect destination-as-source IP selection and incomplete semantic grounding. These are unresolved; [Issue #19](https://github.com/CyberSOC-ai/cybersoc-ai/issues/19) remains open. A valid API response or passing offline test does not repair those model-quality failures. No real Vector-RAG request through this API, live Wazuh ingestion, or externally served inference is verified by Issue #20's controlled tests.
+Trusted code may inject the retained No-RAG adapter using `create_app(runner=...)`.
+Model lifecycle, verified policy and trace versions remain composition responsibilities.
+HTTP callers cannot select models, paths, policies or configuration. See the
+[runner interface](RUNNER_INTERFACE.md) and [cleanup record](../docs/data/cleanup-reset.md).
 
 ## Run locally
 
@@ -52,10 +45,10 @@ For a configured **Linux host Python environment**, run:
 uvicorn backend.app:create_app --factory --host 127.0.0.1 --port 8000 --workers 1
 ```
 
-There is no environment variable or HTTP parameter that dynamically imports a runner. S1-T03 supplies the [composition helper](../ai/baseline/api_adapter.py) calling `create_app(runner=real_adapter)`; never attach a test runner to the deployed service. After trusted model loading and policy/version setup, a Python composition entry point can explicitly use:
+There is no environment variable or HTTP parameter that dynamically imports a runner. S1-T03 supplies the [composition helper](../ai/no_rag/api_adapter.py) calling `create_app(runner=real_adapter)`; never attach a test runner to the deployed service. After trusted model loading and policy/version setup, a Python composition entry point can explicitly use:
 
 ```python
-from ai.baseline.api_adapter import compose_api
+from ai.no_rag.api_adapter import compose_api
 
 app = compose_api(core, policy, versions, runtime_dir, timeout_seconds=180)
 ```
@@ -104,7 +97,7 @@ docker compose run --rm -T dev ruff check --no-cache .
 python3 -B infrastructure/ci/check_repository.py
 ```
 
-Backend tests use controlled runners exclusively; they cover successful and failed dispatch, strict input/output validation, local OpenAPI references, persistence, concurrent deduplication, sanitation, timeout/late-result/cancellation behavior and body limits. CI explicitly discovers backend tests alongside the existing suites. Passing API tests does not establish model quality, actual GPU fit or the full lab-to-model pipeline. Soulaiman's [integration report](../ai/baseline/API_INTEGRATION.md) and [PR comment](https://github.com/CyberSOC-ai/cybersoc-ai/pull/79#issuecomment-6353520974) additionally report one successful real Qwen **in-process ASGI** request with SQLite result/trace persistence and a 103-test combined Linux run against backend snapshot `d1957f7`. This is historical owner-reported evidence; the runner checkout was dirty and detailed artifacts remain local, so it is not an independently reproduced official benchmark. Backend files were unchanged between that snapshot and the approved final PR head. The [formal approval](https://github.com/CyberSOC-ai/cybersoc-ai/pull/79#pullrequestreview-5633412190) agrees the tested interface.
+Backend tests use controlled runners exclusively; they cover successful and failed dispatch, strict input/output validation, local OpenAPI references, persistence, concurrent deduplication, sanitation, timeout/late-result/cancellation behavior and body limits. CI explicitly discovers backend tests alongside the existing suites. Passing API tests does not establish model quality, actual GPU fit or the full lab-to-model pipeline. Soulaiman's [integration report](../docs/history/reset-2026-11-13/ai/baseline/API_INTEGRATION.md) and [PR comment](https://github.com/CyberSOC-ai/cybersoc-ai/pull/79#issuecomment-6353520974) additionally report one successful real Qwen **in-process ASGI** request with SQLite result/trace persistence and a 103-test combined Linux run against backend snapshot `d1957f7`. This is historical owner-reported evidence; the runner checkout was dirty and detailed artifacts remain local, so it is not an independently reproduced official benchmark. Backend files were unchanged between that snapshot and the approved final PR head. The [formal approval](https://github.com/CyberSOC-ai/cybersoc-ai/pull/79#pullrequestreview-5633412190) agrees the tested interface.
 
 The original backend smoke tested a Uvicorn loopback listener with **no real runner**. The separate Qwen integration used an ASGI client **without a Uvicorn TCP listener**. These two checks do not jointly prove an externally served real-model deployment. Phi-through-API, real-model external clients, live Wazuh integration, authentication and multi-client deployment remain unverified. Live normalized alerts and the full end-to-end baseline remain #14/#15 work; model quality and remaining S1-T03 acceptance remain #11 work. They are not additional Issue #12 acceptance criteria. This documentation follow-up downloads no models and runs no new model inference, benchmarks, training, RAG or response execution.
 
