@@ -20,7 +20,7 @@ from starlette.exceptions import HTTPException
 from starlette.concurrency import run_in_threadpool
 
 from backend.repository import Conflict, Repository, SQLiteRepository
-from backend.runner import (BaselineRunner, ModeRouter, RunnerBusy, RunnerPool,
+from backend.runner import (BaselineRunner, RunnerBusy, RunnerPool,
                             RunnerRequest, RunnerTimeout, RunnerUnavailable)
 from backend.validation import (ID_VALIDATOR, SCHEMAS, VERSIONS_VALIDATOR,
                                 public_schema, validate)
@@ -156,20 +156,6 @@ def utc_now():
     return datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
 
 
-def check_vector_citation(summary, evidence):
-    """Validate the pipeline's one terminal marker, not literal source brackets."""
-    from rag.generation.pipeline import MARKER
-
-    matches = list(MARKER.finditer(summary))
-    if len(matches) != 1:
-        raise ValueError('Invalid vector citation count')
-    match = matches[0]
-    prefix = summary[:match.start()]
-    if (match.end() != len(summary) or '[[' in prefix or ']]' in prefix
-            or match.group(1) not in {item['evidence_id'] for item in evidence}):
-        raise ValueError('Invalid vector citation')
-
-
 def check_candidate(candidate, invocation, limit):
     # Bound serialization and validate shape before using any candidate fields.
     if len(json.dumps(candidate, allow_nan=False, ensure_ascii=False).encode('utf-8')) > limit:
@@ -178,14 +164,8 @@ def check_candidate(candidate, invocation, limit):
     if (candidate['incident_id'] != invocation.incident['incident_id']
             or candidate['investigation_id'] != invocation.investigation_id
             or candidate['trace_id'] != invocation.trace_id
-            or candidate['mode'] != ('vector' if invocation.mode == 'vector_rag' else 'no_rag')):
+            or invocation.mode != 'no_rag' or candidate['mode'] != 'no_rag'):
         raise ValueError('Candidate identity mismatch')
-    if invocation.mode == 'vector_rag' and candidate['status'] == 'ok':
-        evidence = candidate['evidence']
-        if (not evidence or len({e['evidence_id'] for e in evidence}) != len(evidence)
-                or any(e['retrieval_method'] != 'vector' for e in evidence)):
-            raise ValueError('Invalid vector evidence')
-        check_vector_citation(candidate['summary'], evidence)
     actions = candidate['recommended_actions']
     if len({a['action_id'] for a in actions}) != len(actions):
         raise ValueError('Repeated action identity')
@@ -194,13 +174,12 @@ def check_candidate(candidate, invocation, limit):
 
 
 def create_app(*, settings: Settings | None = None, runner: BaselineRunner | None = None,
-               vector_runner: BaselineRunner | None = None,
                repository: Repository | None = None) -> FastAPI:
     settings = settings or Settings(Path(os.environ.get(
         'CYBERSOC_RUNTIME_DIR', f'/tmp/cybersoc-ai-{os.getuid()}')))
     repository = repository if repository is not None else SQLiteRepository(settings.runtime_dir)
     versions = {'no_rag': deepcopy(runner.versions) if runner is not None else None,
-                'vector_rag': deepcopy(vector_runner.versions) if vector_runner is not None else None}
+                'vector_rag': None}
     for value in versions.values():
         if value is not None:
             VERSIONS_VALIDATOR.validate(value)
@@ -210,8 +189,8 @@ def create_app(*, settings: Settings | None = None, runner: BaselineRunner | Non
     async def lifespan(app):
         nonlocal pool
         await run_in_threadpool(repository.initialize)
-        pool = (RunnerPool(ModeRouter(runner, vector_runner), settings.inference_concurrency)
-                if runner is not None or vector_runner is not None else None)
+        pool = (RunnerPool(runner, settings.inference_concurrency)
+                if runner is not None else None)
         try:
             yield
         finally:
@@ -220,7 +199,7 @@ def create_app(*, settings: Settings | None = None, runner: BaselineRunner | Non
 
     app = FastAPI(title='CyberSOC AI — Investigation API', version='0.2.0',
                   description='Local development API. Inference is unavailable unless a real '
-                              'runner is injected. Vector-RAG is experimental. '
+                              'runner is injected. Vector-RAG is unavailable during rebuild. '
                               'All response actions are proposals only.',
                   lifespan=lifespan)
     app.add_middleware(BoundedBody, max_bytes=settings.max_body_bytes,
@@ -261,7 +240,7 @@ def create_app(*, settings: Settings | None = None, runner: BaselineRunner | Non
                              'created': created}, status_code=201 if created else 200)
 
     @app.post('/incidents/{incident_id}/investigate',
-              summary='Run a bounded No-RAG or experimental Vector-RAG investigation')
+              summary='Run a bounded No-RAG investigation; Vector-RAG is unavailable')
     async def investigate(incident_id: str, request: Request):
         try:
             ID_VALIDATOR.validate(incident_id)
@@ -276,12 +255,11 @@ def create_app(*, settings: Settings | None = None, runner: BaselineRunner | Non
         incident = await stored(repository.get, incident_id)
         if incident is None:
             raise APIError(404, 'validation_error', 'Incident not found.')
-        selected = runner if mode == 'no_rag' else vector_runner
+        selected = runner if mode == 'no_rag' else None
         if selected is None:
             message = ('No baseline runner is configured.' if mode == 'no_rag'
-                       else 'No Vector-RAG runner is configured.')
+                       else 'Vector-RAG is unavailable during rebuild.')
             raise APIError(503, 'dependency_unavailable', message, True)
-        baseline = mode == 'no_rag'
         invocation = RunnerRequest(incident, 'INV-' + uuid4().hex, 'TRACE-' + uuid4().hex,
                                    time.monotonic() + settings.inference_timeout, mode)
         started, clock = utc_now(), time.monotonic()
@@ -298,30 +276,27 @@ def create_app(*, settings: Settings | None = None, runner: BaselineRunner | Non
                 raise ValueError('Runner reported failure')
             result = deepcopy(candidate)
         except RunnerBusy:
-            message = 'Baseline runner is busy.' if baseline else 'Vector-RAG runner is busy.'
+            message = 'Baseline runner is busy.'
             raise APIError(503, 'dependency_unavailable', message, True) from None
         except RunnerUnavailable:
-            message = ('Baseline runner is unavailable.' if baseline
-                       else 'Vector-RAG dependency is unavailable.')
+            message = 'Baseline runner is unavailable.'
             failure = {'code': 'dependency_unavailable', 'message': message,
                        'retryable': True}
             status = 503
         except RunnerTimeout:
-            message = ('Baseline inference deadline exceeded.' if baseline
-                       else 'Vector-RAG investigation deadline exceeded.')
+            message = 'Baseline inference deadline exceeded.'
             failure = {'code': 'timeout', 'message': message,
                        'retryable': True}
             status = 504
         except Exception:
-            message = ('Baseline runner returned no valid result.' if baseline
-                       else 'Vector-RAG investigation produced no valid result.')
+            message = 'Baseline runner returned no valid result.'
             failure = {'code': 'invalid_output', 'message': message,
                        'retryable': False}
             status = 502
         if failure:
             result = {'schema_version': '1.0.0', 'investigation_id': invocation.investigation_id,
                       'incident_id': incident_id, 'trace_id': invocation.trace_id,
-                      'mode': 'vector' if mode == 'vector_rag' else 'no_rag',
+                      'mode': 'no_rag',
                       'status': 'error', 'evidence': [], 'recommended_actions': [], 'error': failure}
         step = {'step': 1, 'component': 'inference', 'input_ref': f'incident:{incident_id}',
                 'status': result['status'], 'latency_ms': (time.monotonic() - clock) * 1000}
@@ -331,7 +306,7 @@ def create_app(*, settings: Settings | None = None, runner: BaselineRunner | Non
             step['output_ref'] = f'investigation:{invocation.investigation_id}'
         trace = {'schema_version': '1.0.0', 'trace_id': invocation.trace_id,
                  'incident_id': incident_id, 'workflow': 'baseline',
-                 'mode': 'vector' if mode == 'vector_rag' else 'no_rag',
+                 'mode': 'no_rag',
                  'versions': versions[mode], 'started_at': started, 'finished_at': utc_now(),
                  'status': result['status'], 'steps': [step]}
         if failure:

@@ -1,0 +1,59 @@
+{
+  "baseline_id": "shared-no-rag-aligned-v1",
+  "format_version": "1.0.0",
+  "frozen_before_run_utc": "2026-11-13T16:13:33.592679+00:00",
+  "purpose": "general task-definition alignment; no case-specific answers",
+  "execution_files_sha256": {
+    "ai/baseline/shared.py": "b1a34139a3e211e9877a17693d9f1ba70131da2350605715aeeebce3d5e5f566",
+    "ai/baseline/terminal.py": "4502b7d23b9d4abfe9a7464b176ccf11625e262db938bd942f675315c3cb2bf2",
+    "ai/baseline/runner.py": "17187e460f239da8d14efc9df0b6ed7e4a112aff0d911e956a2d45aab0ebb452",
+    "ai/baseline/runtime.py": "cbadaea8af8fa2acde9589cef7588cfb7e69e168e4e0c2a36581a034a587b382",
+    "ai/baseline/llama_server.py": "f67f59d8744542fd772382960fe86b9e6a5494993965e3e1023ce204c06430b1",
+    "ai/baseline/prompt.txt": "139cb6ba561a429c439f9e24b57b389621d1aa7993cd3dc3e66062735353cee7",
+    "requirements.txt": "f67f82e811a2fbfd7274301396171d8e62192cf494412f464a9d697964149c4a",
+    "pyproject.toml": "d1dac380ab1e612ef5e798e1ce022663edbdacb73fde1febd6c3218f3dd4e4ac",
+    "ai/baseline/configs/qwen-cpu-linux.json": "31d4080219d4829e452e98287743e56ac51b123e89509814e00faf5e3b0bc551",
+    "ai/baseline/configs/shared-dev-v1-policy.json": "ff856fe21825ef31de28e11c09700b8c1a27648da5288c5b942e211e790703ea",
+    "infrastructure/run-no-rag.sh": "5683482b6abfa4ec9981a435ed90cc3727f5ee6ef6b11fa24ee8a643efa36a9f",
+    "backend/contracts/v1/common.schema.json": "3cd8a480a71776d8227a6b8687d89768ff451910a35b9fc7d55f641d68ab0d62",
+    "backend/contracts/v1/incident.schema.json": "c5a5eb693bfc1efbf9251970d11f5d3209f4b7e3347c69e8fc425f75b7a99461",
+    "backend/contracts/v1/investigation-result.schema.json": "fbbc95d91a571d309b31006fcfdd9f3e730a5be89196ad94998f0ae7029f8167",
+    "backend/contracts/v1/response-action.schema.json": "5cb16adba694c7ca796b806e5d18da3e1453e1749532531ccc293faec25de514",
+    "backend/contracts/v1/retrieval-request.schema.json": "709786ace27c2b14939d3803ae670db1a49cb4779e77fef0c842d19dc6200ecb",
+    "backend/contracts/v1/retrieval-response.schema.json": "fb65717d711378435c2b88d6e4895df09f4508135197e64b32220143efdc5b73",
+    "backend/contracts/v1/trace.schema.json": "d0270c13585d3aa2c19e5cf60559b28ec7eccaf87bb16f54005fdeed275aaeb8"
+  },
+  "source_release": "shared-dev-v1",
+  "source_manifest_sha256": "8376256e0d5bfa6733fc6d045ffa42f23be779fe51a1d23a8fae0a79315ef88e",
+  "evaluator_manifest_sha256": "4ab925f6fec36c077fe8c2ed933b1770b4953e5ca608f80995b0071f20a4e8b8",
+  "model_sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+  "runtime_sha256": "92ff7abb8a59c94a98acdbca4f50aaf54d2cb08a05fad57b254587a101366aac",
+  "inference_image_id": "sha256:3f1fc28da92c04f52ba621ac8837e010297c82982c04f13be86afd97301232b4",
+  "generation": {
+    "temperature": 0,
+    "seed": 42,
+    "max_input_tokens": 3072,
+    "max_output_tokens": 512,
+    "context_tokens": 4096,
+    "timeout_seconds": 180,
+    "cache_prompt": false,
+    "n_keep": 0,
+    "json_schema_constrained": true
+  },
+  "resources": {
+    "cpus": 2,
+    "memory_bytes": 3221225472,
+    "swap_enabled": false,
+    "threads": 4,
+    "external_network": false,
+    "response_execution": false
+  },
+  "preflight_sha256": "faec55874aaf0b005881f43a18c63308d5af8ad19e2ff3851b24877b2d204960",
+  "preflight_summary": {
+    "cases": 7,
+    "min_input_tokens": 1672,
+    "max_input_tokens": 1879,
+    "completion_called": false
+  },
+  "enforcement": "Explicit before/after source checks for this recorded experiment; launcher does not automatically load this lock."
+}

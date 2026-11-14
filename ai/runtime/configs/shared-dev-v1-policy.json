@@ -1,0 +1,34 @@
+{
+  "policy_version": "shared-dev-v1-proposal-policy-v2",
+  "environment_id": "synthetic-shared-development",
+  "target_inventory_revision": "shared-dev-v1-linux-ssh-v1",
+  "execution_enabled": false,
+  "targets": [
+    "b0-linux-a"
+  ],
+  "action_type": "block_ip",
+  "ssh_containment": {
+    "port": 22,
+    "protocol": "tcp",
+    "duration_seconds": {
+      "min": 300,
+      "max": 3600
+    },
+    "default_duration_seconds": 300
+  },
+  "response_defaults": {
+    "schema_version": "1.0.0",
+    "revision": 1,
+    "requires_approval": true,
+    "status": "proposed"
+  },
+  "source_role_annotations": {
+    "B0-LNX-SSH-001": {
+      "incident_sha256": "912b3088d8a6dc41818506eb8b2a61fdaf90e1b8b37b77e178393e37040f9101",
+      "target": "b0-linux-a",
+      "source_ip": "198.51.100.24",
+      "destination_ip": "192.0.2.10",
+      "service": "ssh"
+    }
+  }
+}

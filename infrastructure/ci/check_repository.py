@@ -1,4 +1,4 @@
-"""Check tracked text for merge conflicts and Markdown links to missing files."""
+"""Check current tracked/new text for conflicts and missing Markdown links."""
 
 from pathlib import Path
 import re
@@ -10,12 +10,14 @@ from urllib.parse import unquote, urlsplit
 def main():
     root = Path(__file__).resolve().parents[2]
     tracked = subprocess.check_output(
-        ["git", "ls-files", "-z"], cwd=root
+        ["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"], cwd=root
     ).decode().split("\0")
     errors = []
     checked = 0
     for name in filter(None, tracked):
         path = root / name
+        if not path.exists():  # Unstaged deletions are absent from the worktree.
+            continue
         try:
             content = path.read_text(encoding="utf-8")
         except UnicodeDecodeError:
@@ -40,7 +42,7 @@ def main():
     if errors:
         print("\n".join(errors), file=sys.stderr)
         return 1
-    print(f"Repository integrity passed: {checked} tracked text files checked.")
+    print(f"Repository integrity passed: {checked} current tracked/new text files checked.")
     return 0
 
 

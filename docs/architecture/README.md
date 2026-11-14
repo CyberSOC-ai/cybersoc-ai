@@ -1,5 +1,14 @@
 # S0-T02 — Architecture and component boundaries
 
+> Implementation status, 14 November 2026: backend foundations, incident-only
+> [No-RAG](../../ai/no_rag/README.md), fresh standalone
+> [Vector RAG](../../rag/vector/README.md), a shared
+> [runtime](../../ai/runtime/README.md) and versioned
+> [data workflow](../../datasets/README.md) are implemented locally. Backend RAG
+> integration and Graph/Hybrid/agent/UI/response components remain future scope.
+> The diagrams and original S0 status below describe the wider proposed design.
+
+
 Status: **Locally verified by Soulaiman; pending assigned-reviewer review and PR workflow. Not implemented.**
 Author: Soulaiman · Assigned reviewer: Anas · Draft date: 2026-10-12
 

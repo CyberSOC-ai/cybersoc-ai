@@ -1,8 +1,14 @@
 **
 !requirements.txt
-!requirements-embeddings.txt
 !infrastructure/
 !infrastructure/docker/
 !infrastructure/docker/Dockerfile.dev
-!infrastructure/docker/Dockerfile.embeddings
-!infrastructure/docker/Dockerfile.inference
+
+!rag/
+!rag/vector/
+!rag/vector/requirements.txt
+!rag/vector/Dockerfile
+
+!ai/
+!ai/runtime/
+!ai/runtime/Dockerfile

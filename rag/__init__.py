@@ -1,1 +1,1 @@
-"""Retrieval preparation and, in later tasks, retrieval implementations."""
+"""Retrieval pipelines."""

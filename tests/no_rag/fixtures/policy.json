@@ -1,0 +1,26 @@
+{
+  "policy_version": "unit-test-v1",
+  "environment_id": "unit-test",
+  "target_inventory_revision": "unit-test-v1",
+  "execution_enabled": false,
+  "targets": [
+    "linux-01"
+  ],
+  "action_type": "block_ip",
+  "ssh_containment": {
+    "port": 22,
+    "protocol": "tcp",
+    "duration_seconds": {
+      "min": 300,
+      "max": 3600
+    },
+    "default_duration_seconds": 300
+  },
+  "response_defaults": {
+    "schema_version": "1.0.0",
+    "revision": 1,
+    "requires_approval": true,
+    "status": "proposed"
+  },
+  "id_policy": "Generate unique IDs per proposal."
+}

@@ -1,0 +1,99 @@
+{
+  "implementation_id": "local-layout-v2",
+  "created_on": "2026-11-14",
+  "purpose": "Source layout and shared runtime refactor; not a new model-quality evaluation",
+  "predecessor_no_rag_lock_sha256": "93f24a961dc89563206acf003f5c3cdf4f513fdb2b2f52bc28ffac3506391684",
+  "predecessor_rag_run_freeze_sha256": "1cbaabf77ea888535faff46a4f2994bf07a3ff8d026c98736f5b970a07947b11",
+  "source_release_id": "shared-dev-v1",
+  "source_manifest_sha256": "8376256e0d5bfa6733fc6d045ffa42f23be779fe51a1d23a8fae0a79315ef88e",
+  "execution_files_sha256": {
+    "ai/no_rag/__init__.py": "4f5e2e4ac986dbc1dca1f2801b8deb8bb41bf53e1073e45a4d3d9a3d3faa90ee",
+    "ai/no_rag/api_adapter.py": "2126db100b13696913a9e2e06f3bf4cb7b72990bff7d48d7104b8398ef61a05d",
+    "ai/no_rag/prompt.txt": "139cb6ba561a429c439f9e24b57b389621d1aa7993cd3dc3e66062735353cee7",
+    "ai/no_rag/run.py": "20335f7381d0ddc865ec212745fff7bc71a0be81b06e09ecbd831cdb342d38e2",
+    "ai/no_rag/runner.py": "dbfa95ac17d7769ca38204ef69795f05511c03e302d66f480e345ff123154296",
+    "ai/no_rag/terminal.py": "c3abb98336777376f4abc93f7d909d2291b396677f0421761c0a3d44a80138e6",
+    "ai/runtime/Dockerfile": "633316b8f713067c10372d7c1a73423f16324dababd872233e658f3ca3b588bf",
+    "ai/runtime/__init__.py": "70f9b5a38d4dc25d9d3aea6d4e5f7663ef73a3ba9fa06812fa80bacb13e0c4fd",
+    "ai/runtime/configs/qwen-cpu-linux.json": "31d4080219d4829e452e98287743e56ac51b123e89509814e00faf5e3b0bc551",
+    "ai/runtime/configs/shared-dev-v1-policy.json": "ff856fe21825ef31de28e11c09700b8c1a27648da5288c5b942e211e790703ea",
+    "ai/runtime/configuration.py": "437da0df03e7bbbb342eafaa9b066bc112cf42aa3618f355705c384ea0d55b93",
+    "ai/runtime/contracts.py": "c9ca58e391b1b5ec6cfa17445f969af36165a4bb5a63c108e44e39f2e61b231a",
+    "ai/runtime/lifecycle.py": "c288d9b7cc15bb0321856fd5e251dcc97a3ec1681395fd632f8590295ebc0159",
+    "ai/runtime/llama_server.py": "1a389e7cfde9211ae74d9c6a66f60c3f9d14a6a485ed9f65c89d1d9b3b358b4b",
+    "ai/runtime/policy.py": "e998aa3fff3502116fb0d096f7f1637d76e8d3f1643c7224147cb29a7ca1046f",
+    "ai/runtime/provenance.py": "c8aafef2b185c5f5f16dfb629a15f7a0bae2e989144c654dd36055cf25aa3683",
+    "ai/runtime/smoke.py": "73b2557235c65807bcafbfccd95258c12e19643e7713b8dda99cf9c4b1886193",
+    "backend/contracts/v1/common.schema.json": "3cd8a480a71776d8227a6b8687d89768ff451910a35b9fc7d55f641d68ab0d62",
+    "backend/contracts/v1/incident.schema.json": "c5a5eb693bfc1efbf9251970d11f5d3209f4b7e3347c69e8fc425f75b7a99461",
+    "backend/contracts/v1/investigation-result.schema.json": "fbbc95d91a571d309b31006fcfdd9f3e730a5be89196ad94998f0ae7029f8167",
+    "backend/contracts/v1/response-action.schema.json": "5cb16adba694c7ca796b806e5d18da3e1453e1749532531ccc293faec25de514",
+    "backend/contracts/v1/retrieval-request.schema.json": "709786ace27c2b14939d3803ae670db1a49cb4779e77fef0c842d19dc6200ecb",
+    "backend/contracts/v1/retrieval-response.schema.json": "fb65717d711378435c2b88d6e4895df09f4508135197e64b32220143efdc5b73",
+    "backend/contracts/v1/trace.schema.json": "d0270c13585d3aa2c19e5cf60559b28ec7eccaf87bb16f54005fdeed275aaeb8",
+    "infrastructure/run-no-rag.sh": "500d05abaf6e7744894e65c055726fbc06f8510ecf03be81a34e9c468ae99fc6",
+    "infrastructure/run-vector.sh": "834bdaad3ff797c954aa7f57b0574d22d5ef6bc9fcfc65a2149ecfe618542eb8",
+    "pyproject.toml": "d1dac380ab1e612ef5e798e1ce022663edbdacb73fde1febd6c3218f3dd4e4ac",
+    "rag/__init__.py": "f68ab0aa16216022287a9ce274f2f8a4aae06b83216d29a7bc55a973cd753567",
+    "rag/vector/Dockerfile": "662d451c3aeb59668344629a4a98a9ee7e4b2f27235650e22828e54cd34f222b",
+    "rag/vector/__init__.py": "072f8461a87aa123599c6aa223e877aba5bda39c19fbad7f5b135697500be086",
+    "rag/vector/config.json": "945ad9e8e92b05c8060864f6240dec7970269b2541a067406abf297601e70ca6",
+    "rag/vector/data.py": "f80342cae136ffdfa03a7c34b08db4d058a3daca86fcc4eed17bd0c850143231",
+    "rag/vector/generation.py": "3edabb9544787cdf15a14527855a4a744a2f851b00f34b8b1c83416ebc33e898",
+    "rag/vector/index.py": "6e63829f84fa792836aa51b0d674bdd5e9dd71f3ca817e7ce2b18c76134ffd54",
+    "rag/vector/prompt.txt": "729ca9cfdec48ef623da9ab23dcd28e338c75e42902f6c461b1cb5b1d3ed86e2",
+    "rag/vector/requirements.txt": "30a0f088e3b62f8170f40f0638f88bda57f090aa3533c0269eab2f7ba3b9094f",
+    "rag/vector/retrieval.py": "34834c2502effc443206d22d49eb510ad2f62badc2ff934b52c253cc48d738cb",
+    "rag/vector/run.py": "06364258db06165738932a06ce1bc20fe733e5e6b8389756a6d1567f37c92719",
+    "requirements.txt": "f67f82e811a2fbfd7274301396171d8e62192cf494412f464a9d697964149c4a"
+  },
+  "path_mapping": {
+    "ai/baseline/runner.py": [
+      "ai/no_rag/runner.py",
+      "ai/runtime/contracts.py",
+      "ai/runtime/policy.py"
+    ],
+    "ai/baseline/shared.py": [
+      "ai/no_rag/run.py",
+      "ai/runtime/configuration.py",
+      "ai/runtime/provenance.py",
+      "ai/runtime/policy.py"
+    ],
+    "ai/baseline/terminal.py": [
+      "ai/no_rag/terminal.py"
+    ],
+    "ai/baseline/api_adapter.py": [
+      "ai/no_rag/api_adapter.py"
+    ],
+    "ai/baseline/runtime.py": [
+      "ai/runtime/lifecycle.py"
+    ],
+    "ai/baseline/llama_server.py": [
+      "ai/runtime/llama_server.py"
+    ],
+    "ai/baseline/smoke.py": [
+      "ai/runtime/smoke.py"
+    ],
+    "ai/baseline/configs/qwen-cpu-linux.json": [
+      "ai/runtime/configs/qwen-cpu-linux.json"
+    ],
+    "ai/baseline/configs/shared-dev-v1-policy.json": [
+      "ai/runtime/configs/shared-dev-v1-policy.json"
+    ],
+    "docs/data/shared-dev-v1.md": [
+      "datasets/SHARED_DEV_V1.md"
+    ],
+    "docs/data/workflow.md": [
+      "datasets/README.md"
+    ],
+    "tests/baseline/": [
+      "tests/no_rag/",
+      "tests/runtime/"
+    ]
+  },
+  "frozen_quality_reference": {
+    "no_rag": "shared-no-rag-aligned-v1",
+    "rag": "RUN-15ec3ed1e59245bb8ea621ba21b7a35b"
+  },
+  "new_generation_evaluation_performed": false
+}

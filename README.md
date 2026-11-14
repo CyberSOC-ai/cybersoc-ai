@@ -1,10 +1,32 @@
 # CyberSOC AI
 
+Current local implementation (13 November 2026): shared-v1 No-RAG, backend
+foundations and a fresh standalone Vector RAG pipeline are available. Prior
+pilot implementations remain retired.
+See [cleanup progress](docs/data/cleanup-reset.md) and [data workflow](docs/data/workflow.md).
+
+
 Intelligent Cybersecurity SOC Assistant — Master Project 2026. This is the living consolidated final report required by [CDC v2.2](docs/CDC.md).
 
 **Deadline:** 01 January 2027. **Status:** Baseline-first roadmap reset; B0 delivery pending.
 
 Current execution: [baseline-first roadmap](docs/ROADMAP.md) · [GitHub roadmap](https://github.com/CyberSOC-ai/cybersoc-ai/issues/94). Ahmed delivers shared foundation, No-RAG and small complete Vector RAG before the downstream handoff. All later assignments are left for Ahmed. Original sprint journals preserve contribution history.
+
+## Local pipeline handoff
+
+| Area | Start here | Owns |
+|---|---|---|
+| No-RAG | [ai/no_rag](ai/no_rag/README.md) | Incident-only execution, prompt and evaluation |
+| Vector RAG | [rag/vector](rag/vector/README.md) | Preparation, retrieval, reference context and evaluation |
+| Data | [datasets](datasets/README.md) | Downloads, source additions, licenses, immutable releases and reuse |
+| Shared runtime | [ai/runtime](ai/runtime/README.md) | Model/server setup, transport, contracts and proposal policy |
+
+On a new machine, obtain the reviewed source revision, follow runtime setup and
+restore the pinned source release, then run No-RAG before preparing/restoring RAG.
+The guides provide explicit setup/run/check/restore steps. Large payloads remain
+outside Git. Current layout identity: `local-layout-v2`; historical seven-case
+scores retain their original source identities. Kaggle support, fresh-environment
+reproduction and full B0 handoff remain pending.
 
 ## Project overview
 
@@ -28,7 +50,11 @@ Current execution: [baseline-first roadmap](docs/ROADMAP.md) · [GitHub roadmap]
 
 ## RAG
 
-> To be completed from validated sprint evidence.
+[Vector RAG](rag/vector/README.md) provides verified source preparation, pinned
+BGE-small embeddings, persistent Qdrant retrieval, snapshot recovery and bounded
+local generation. Its [evaluation](rag/vector/EVALUATION.md) separates retrieval
+integrity from answer quality. Backend integration and complete B0 acceptance
+remain pending.
 
 ## Knowledge Graph
 
@@ -65,6 +91,14 @@ Current execution: [baseline-first roadmap](docs/ROADMAP.md) · [GitHub roadmap]
 ## DevSecOps workflow
 
 Issue → Ready → branch → implementation → tests → Pull Request → CI passes → merge → sprint documentation → Done. Request the assigned reviewer; approvals are advisory. If the reviewer is unavailable, record that in the PR and the author may merge after checking the changes and confirming CI passes. The full merge policy is in [CDC §11.3](docs/CDC.md#113-pull-request-flow), and the Definition of Done is in [CDC §14](docs/CDC.md#14-definition-of-done).
+
+## No RAG baseline
+
+[The No-RAG folder](ai/no_rag/README.md) contains the implementation, setup/run
+guide, [seven-case evaluation record](ai/no_rag/EVALUATION.md) and
+[improvement plan](ai/no_rag/IMPROVEMENTS.md). The evaluation record includes
+actual prompts and outputs with blank reviewer worksheets; it does not declare
+an overall quality pass.
 
 ## Reproducibility
 
